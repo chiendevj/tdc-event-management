@@ -1,0 +1,137 @@
+*{
+  margin: 0;padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --dark-bg: #221e26;
+  --blue: #19a0e4;
+}
+
+body {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-weight: 400;
+  width: 100%;
+  height: 100vh;
+}
+
+
+/* width */
+body::-webkit-scrollbar {
+  width: 6px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+/* Track */
+body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 100px;
+}
+
+/* Handle */
+body::-webkit-scrollbar-thumb {
+  background: #221e26;
+}
+
+/* Handle on hover */
+body::-webkit-scrollbar-thumb:hover {
+  background: rgb(85, 84, 84);
+}
+
+.has_child .child {
+  z-index: 10;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+.has_child:hover .child {
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.5s;
+}
+
+.system_analysis {
+  width: 100%;
+  padding: 20px;
+}
+
+.analysis_item {
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.analysis_item:before{
+  background-color: rgb(34 197 94);
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 95%;
+  left: -2px;
+  top: 50%;
+  border-radius: 10px;
+  transform: translateY(-50%);
+}
+
+.calender_table table th{
+  padding: 8px;
+  background: var(--dark-bg);
+  color: #fff;
+}
+
+.calender_table table {
+  border-collapse: collapse;
+  border: 1px solid var(--dark-bg);
+}
+
+.calender_table table td{
+  padding: 8px;
+  background: #fff;
+  color: #000;
+}
+
+.calender_table table tr td{
+  vertical-align: top;
+  border-right: 1px solid var(--dark-bg);
+}
+
+.calender_table table tr td:last-child{
+  border-right: none;
+}
+
+.day {
+  padding: 8px;
+  border-radius: 4px;
+  display: block;
+  text-align: right;
+}
+
+.day.active {
+  color: var(--blue);
+}
+
+.event_calender {
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+  background-color: var(--blue);
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.event_title{
+  max-width: 300px;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.event_desc{
+  max-width: 300px;
+  font-size: 14px;
+}
