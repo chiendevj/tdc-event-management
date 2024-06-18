@@ -87,6 +87,7 @@ body::-webkit-scrollbar-thumb:hover {
 .calender_table table {
   border-collapse: collapse;
   border: 1px solid var(--dark-bg);
+
 }
 
 .calender_table table td{
@@ -98,6 +99,7 @@ body::-webkit-scrollbar-thumb:hover {
 .calender_table table tr td{
   vertical-align: top;
   border-right: 1px solid var(--dark-bg);
+  border-bottom: 1px solid var(--dark-bg);
 }
 
 .calender_table table tr td:last-child{
@@ -105,14 +107,19 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .day {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
   padding: 8px;
   border-radius: 4px;
-  display: block;
-  text-align: right;
 }
 
 .day.active {
-  color: var(--blue);
+  color: #fff;
+  background: var(--blue);
 }
 
 .event_calender {
@@ -134,4 +141,17 @@ body::-webkit-scrollbar-thumb:hover {
 .event_desc{
   max-width: 300px;
   font-size: 14px;
+}
+
+.event{
+  padding: 8px;
+  border-radius: 8px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.lottie-container {
+  width: 400px;
+  height: 300px;
 }

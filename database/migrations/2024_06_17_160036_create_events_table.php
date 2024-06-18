@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('name');
             $table->text('location');
+            $table->text('event_photo');
             $table->timestamp('event_start')->useCurrent();
             $table->timestamp('event_end')->useCurrent();
             $table->integer('point')->default(4);

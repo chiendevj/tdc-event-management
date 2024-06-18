@@ -14,9 +14,9 @@ class EventSeeder extends Seeder
     public function run(): void
     {
         //
-        DB::table('events')->insert([
-            'name' => 'Workshop Github 2024',
-            'location' => '53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh'
-        ]);
+        // DB::table('events')->insert([
+        //     'name' => 'Workshop Github 2024',
+        //     'location' => '53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh'
+        // ]);
     }
 }

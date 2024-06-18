@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +18,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Route::get('/admin/dashboard', function () {
     return view('dashboards.admin.index');
-});
+})->name('admin.dashboard');
+
+
+// Event routes
+Route::get('/events/create', [EventController::class, 'create'])->name("events.create");
+Route::post('/events/store', [EventController::class, 'store'])->name("events.store");
+Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");
