@@ -17,7 +17,7 @@ class AuthController extends Controller
     public function showLogin()
     {
         if (auth()->user()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('a');
         }
         return view("auths.login");
     }
@@ -30,14 +30,6 @@ class AuthController extends Controller
         return view("auths.register");
     }
 
-    public function showVerify()
-    {
-        if (auth()->user()) {
-            return redirect()->route('dashboard');
-        }
-        return view("auths.verify");
-    }
-
     public function login(Request $request)
     {
         // Xác thực dữ liệu đầu vào
@@ -46,13 +38,12 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-
         $email = $request->input('email');
+
         $user = User::where('email', $email)->first();
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
-                // Kiểm tra xác thực email
-               
+                 
                 Auth::guard('web')->login($user);
                 $check = Session::get('unlogin');
                 if (isset($check)) {
@@ -75,30 +66,6 @@ class AuthController extends Controller
     {
         Auth::guard('web')->logout();
         return redirect('/auth/login');
-    }
-
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|unique:users,name',
-            'email' => 'required|string|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        $user = new User([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'email_verification_token' => Str::random(32),
-        ]);
-
-        $user->save();
-
-        return redirect()->back()->withErrors([
-            'name' => 'Please enter your username!',
-            'email' => 'Please enter your email!',
-            'password' => 'Please enter your password!',
-        ])->withInput($request->only('email'));
     }
 
     // Update all information of user

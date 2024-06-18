@@ -1,4 +1,4 @@
-@extends('layouts.link_script')
+@extends('layouts.login')
 
 {{-- Body --}}
 @section('content')
