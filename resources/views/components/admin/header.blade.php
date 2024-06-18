@@ -12,16 +12,16 @@
     {{-- Navbar start --}}
     <div class="h-full flex items-center justify-center">
       <ul class="flex rounded-tr-lg rounded-br-lg gap-4 text-white bg-[var(--dark-bg)]">
-        <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-purple-500 transition-all duration-100 ease-in"><a href="">Tài khoản quản lý</a></li>
-        <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-purple-500 transition-all duration-100 ease-in"><a href="">Sinh viên</a></li>
-        <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-purple-500 transition-all duration-100 ease-in"><a href="">Sự kiện</a></li>
-        <li class="border-b-2 has_child border-b-[var(--dark-bg)] hover:border-purple-500 transition-all duration-100 ease-in cursor-pointer relative">
-          Xem thêm <i class="fa-regular fa-chevron-down text-sm "></i>
-          <ul class="absolute child bg-white text-black top-[40px] shadow-lg rounded-sm p-4 min-w-[300px] flex flex-col gap-2">
-            <li class="border-b-2 border-b-white w-fit hover:border-purple-500 transition-all duration-100 ease-in"><a href="">Somthing</a></li>
-            <li class="border-b-2 border-b-white w-fit hover:border-purple-500 transition-all duration-100 ease-in"><a href="">Other</a></li>
-          </ul>
-        </li>
+          <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-purple-500 transition-all duration-100 ease-in"><a href="">Tài khoản quản lý</a></li>
+          <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-purple-500 transition-all duration-100 ease-in"><a href="">Sinh viên</a></li>
+          <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-purple-500 transition-all duration-100 ease-in"><a href="{{ route('events.index') }}">Sự kiện</a></li>
+          <li class="border-b-2 has_child border-b-[var(--dark-bg)] hover:border-purple-500 transition-all duration-100 ease-in cursor-pointer relative">
+            Xem thêm <i class="fa-regular fa-chevron-down text-sm "></i>
+            <ul class="absolute child bg-white text-black top-[40px] shadow-lg rounded-sm p-4 min-w-[300px] flex flex-col gap-2">
+              <li class="border-b-2 border-b-white w-fit hover:border-purple-500 transition-all duration-100 ease-in"><a href="">Somthing</a></li>
+              <li class="border-b-2 border-b-white w-fit hover:border-purple-500 transition-all duration-100 ease-in"><a href="">Other</a></li>
+            </ul>
+          </li>
       </ul>
     </div>
 
