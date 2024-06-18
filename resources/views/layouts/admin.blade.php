@@ -12,8 +12,6 @@
         rel="stylesheet">
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-    <link rel="stylesheet" data-purpose="Layout StyleSheet" title="Web Awesome"
-        href="/css/app-wa-d53d10572a0e0d37cb8d614a3f177a0c.css?vsn=d">
 
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.2/css/all.css">
 
@@ -24,6 +22,7 @@
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.2/css/sharp-regular.css">
 
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.2/css/sharp-light.css">
+
     <title>@yield('title', 'My Laravel App')</title>
 </head>
 

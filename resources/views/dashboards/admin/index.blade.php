@@ -73,13 +73,12 @@
         const displayDate = document.querySelector('.display_current_date');
         const btnChangeNextDate = document.querySelector('.icon_next_date');
         const btnChangePrevDate = document.querySelector('.icon_prev_date');
+        let events = [];
+        const colors = ["#eb4d4b", "#6ab04c", "#f0932b", "#0abde3", "#6c5ce7", "#38ada9"];
 
         // Get current date and display
         const currentDate = new Date();
         displayDate.textContent = `Tháng ${currentDate.getMonth() + 1} / ${currentDate.getFullYear()}`;
-
-
-
 
 
         btnChangeNextDate.addEventListener('click', () => {
@@ -139,10 +138,38 @@
 
                     if (started && date <= daysInMonth) {
                         day.textContent = date;
+                        cell.appendChild(day);
+
+                        events.forEach(event => {
+                            const eventStart = new Date(event.event_start);
+                            const eventEnd = new Date(event.event_end);
+                            // Check month and year of event match with current month and year in calendar
+                            if (eventStart.getMonth() === month && eventStart.getFullYear() === year) {
+                                if (eventStart.getDate() <= date && eventEnd.getDate() >= date) {
+                                    const eventEle = document.createElement('div');
+                                    const eventTitle = document.createElement('h4');
+                                    const eventDescription = document.createElement('p');
+                                    day.classList.add('active');
+                                    const color = colors[Math.floor(Math.random() * colors.length)];
+                                    eventEle.style.backgroundColor = color;
+                                    eventEle.classList.add('event');
+                                    eventTitle.classList.add('event_title');
+                                    eventDescription.classList.add('event_desc');
+
+
+                                    eventTitle.textContent = event.name;
+                                    eventDescription.textContent = event.location;
+                                    eventEle.appendChild(eventTitle);
+                                    eventEle.appendChild(eventDescription);
+                                    cell.appendChild(eventEle);
+                                }
+                            }
+                        });
+
+
                         date++;
                     }
 
-                    cell.appendChild(day);
                     row.appendChild(cell);
                 }
 
@@ -154,6 +181,20 @@
             }
         }
 
-        generateCalendar(5, 2024);
+        async function getEvents(params) {
+            const url = "/api/events";
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data.success) {
+                events = data.data;
+                return true;
+            }
+
+            return false;
+        }
+
+        getEvents().then(() => {
+            generateCalendar(currentDate.getMonth(), currentDate.getFullYear());
+        });
     </script>
 @endsection

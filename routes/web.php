@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,7 +19,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Route::get('/admin/dashboard', function () {
     return view('dashboards.admin.index');
 });
@@ -30,3 +30,8 @@ Route::get('/auth/register', [AuthController::class, "showRegister"])->name("reg
 Route::post('/auth/register', [AuthController::class, "register"])->name("handle_register");
 Route::post('/auth/logout', [AuthController::class, "logout"])->name("handle_logout");
 Route::post('/auth/update', [AuthController::class, "update"])->name("update_profile");
+
+// Event routes
+Route::get('/events/create', [EventController::class, 'create'])->name("events.create");
+Route::post('/events/store', [EventController::class, 'store'])->name("events.store");
+Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");

@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             EventSeeder::class,
             UserSeeder::class,
             EventCodeSeeder::class,
+            EventsTableSeeder::class,
         ]);
 
         // \App\Models\User::factory(10)->create();

@@ -1,7 +1,7 @@
 <header class="bg-[var(--dark-bg)]">
   <div class="container mx-auto w-full px-8 py-4 flex items-center justify-between">
     <h1 class="text-lg text-white font-semibold">
-      <a href="">
+      <a href="{{ route('admin.dashboard') }}">
         Dashboard
       </a>
     </h1>
