@@ -3,7 +3,6 @@
 @section('title', 'Create new Events')
 
 @section('content')
-
     <div class="container mx-auto mt-[40px]">
         <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit mb-[20px]">
             Tạo sự kiện mới</h3>
@@ -11,14 +10,14 @@
         <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div
-                class="border-2 border-dashed border-[var(--dark-bg)] choose_event_banner w-full flex items-center justify-center">
+                class="border-2 border-dashed border-[var(--dark-bg)] choose_event_banner w-full flex items-center flex-col justify-center">
                 <div class="banner_display">
                     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
                     <lottie-player src="https://lottie.host/4e363e08-db5c-4f9a-a357-dae55f4e24f1/qmLtQct7kp.json"
                         background="##FFFFFF" speed="1" style="width: 300px; height: 300px" loop autoplay direction="1"
                         mode="normal"></lottie-player>
                 </div>
-                <label for="event_photo" class="cursor-pointer">
+                <label for="event_photo" class="cursor-pointer my-4">
                     Tải ảnh banner của sự kiện tại đây <span class="text-sm text-red-500">*</span>
                     <input type="file" id="event_photo" name="event_photo" hidden>
                     @error('event_photo')
@@ -98,5 +97,24 @@
             </div>
         </form>
     </div>
+
+
+    <script>
+        const bannerDisplay = document.querySelector('.banner_display');
+        const inputPhoto = document.querySelector('#event_photo');
+
+        inputPhoto.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    const result = reader.result;
+                    bannerDisplay.innerHTML = "";
+                    bannerDisplay.innerHTML = `<img src="${result}" class="w-full h-full object-cover">`;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 
 @endsection

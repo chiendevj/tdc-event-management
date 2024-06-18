@@ -12,7 +12,7 @@
                         <i class="fa-light fa-user"></i>
                     </div>
                     <h4 class="text-sm font-semibold uppercase">Sinh viên đã tham gia sự kiện</h4>
-                    <h2 class="text-lg font-bold">132</h2>
+                    <h2 class="text-lg font-bold total_paticipant">0</h2>
                     <p class="text-sm text-gray-400">
                         Tổng số sinh viên đã tham gia sự kiện
                     </p>
@@ -23,7 +23,7 @@
                         <i class="fa-light fa-calendar-days"></i>
                     </div>
                     <h4 class="text-sm font-semibold uppercase">Sự kiện đã tổ chức</h4>
-                    <h2 class="text-lg font-bold">1024</h2>
+                    <h2 class="text-lg font-bold total_event">0</h2>
                     <p class="text-sm text-gray-400">
                         Tổng số sự kiện đã tổ chức
                     </p>
@@ -73,6 +73,8 @@
         const displayDate = document.querySelector('.display_current_date');
         const btnChangeNextDate = document.querySelector('.icon_next_date');
         const btnChangePrevDate = document.querySelector('.icon_prev_date');
+        const totalParticipant = document.querySelector('.total_paticipant');
+        const totalEvent = document.querySelector('.total_event');
         let events = [];
         const colors = ["#eb4d4b", "#6ab04c", "#f0932b", "#0abde3", "#6c5ce7", "#38ada9"];
 
@@ -195,6 +197,7 @@
 
         getEvents().then(() => {
             generateCalendar(currentDate.getMonth(), currentDate.getFullYear());
+            totalEvent.textContent = events.length;
         });
     </script>
 @endsection
