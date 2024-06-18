@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('link');
             $table->string('code');
             $table->integer('event_id');
-            $table->string('status');
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }
