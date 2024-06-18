@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.profile-option {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  
+  .profile:focus + .profile-option,
+  .profile-option:focus {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .profile-option form {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .profile-option button {
+    display: flex;
+    align-items: center;
+  }
+  

@@ -13,7 +13,7 @@ class EventsTableSeeder extends Seeder
             [
                 'name' => 'WORKSHOP Paper Talk - Hiểu Về Giấy',
                 'event_photo' => 'banner1.jpg',
-                'location' => '53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh, Trường Cao Đẳng Công Nghệ Thủ Đức, Hội trường B',
+                'location' => 'Hội trường B, 53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh, Trường Cao Đẳng Công Nghệ Thủ Đức',
                 'event_start' => Carbon::create('2024', '06', '01', '08', '00', '00'),
                 'event_end' => Carbon::create('2024', '06', '03', '12', '00', '00'),
                 'point' => 5,
@@ -26,7 +26,7 @@ class EventsTableSeeder extends Seeder
             [
                 'name' => 'WORKSHOP Xây Dưng Thương Hiệu Cá Nhân',
                 'event_photo' => 'banner2.jpg',
-                'location' => '53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh, Trường Cao Đẳng Công Nghệ Thủ Đức, Hội trường B',
+                'location' => 'Hội trường B, 53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh, Trường Cao Đẳng Công Nghệ Thủ Đức',
                 'event_start' => Carbon::create('2024', '06', '15', '09', '00', '00'),
                 'event_end' => Carbon::create('2024', '06', '15', '11', '00', '00'),
                 'point' => 4,
@@ -39,7 +39,7 @@ class EventsTableSeeder extends Seeder
             [
                 'name' => 'Cuộc thi web dev challenge',
                 'event_photo' => 'banner3.jpg',
-                'location' => '53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh, Trường Cao Đẳng Công Nghệ Thủ Đức, Hội trường B',
+                'location' => 'Hội trường B, 53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh, Trường Cao Đẳng Công Nghệ Thủ Đức',
                 'event_start' => Carbon::create('2024', '06', '20', '10', '00', '00'),
                 'event_end' => Carbon::create('2024', '06', '20', '14', '00', '00'),
                 'point' => 6,
@@ -52,7 +52,7 @@ class EventsTableSeeder extends Seeder
             [
                 'name' => 'Cuộc thi fit code challenges',
                 'event_photo' => 'banner4.jpg',
-                'location' => '53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh, Trường Cao Đẳng Công Nghệ Thủ Đức, Hội trường B',
+                'location' => 'Hội trường B, 53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh, Trường Cao Đẳng Công Nghệ Thủ Đức',
                 'event_start' => Carbon::create('2024', '07', '01', '08', '00', '00'),
                 'event_end' => Carbon::create('2024', '07', '03', '12', '00', '00'),
                 'point' => 5,

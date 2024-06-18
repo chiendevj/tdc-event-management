@@ -28,7 +28,7 @@
         <form method="POST" action="{{ route('handle_login') }}"
             class="min-w-[400px] shadow-lg overflow-hidden h-auto flex rounded-lg bg-gray-200 text-[var(--text)]  px-8 py-6 flex-col gap-4">
             @csrf
-            <h3 class="text-lg font-semibold">Log in</h3>
+            <h3 class="text-xl font-semibold">Login to Admin</h3>
 
             <label for="email" class="flex flex-col gap-[8px]">
                 <span class="text-sm text-gray-500">Email</span>
@@ -54,9 +54,8 @@
         </form>
 
         <div class="">
-            <p class="text-sm">Don't have account ? <a href="/auth/register"
-                    class="text-[var(--background)] underline">Create
-                    here</a></p>
+            <p class="text-sm"><a href="/"
+                    class="text-blue-600 underline">Back home</a></p>
         </div>
     </div>
 @endsection
