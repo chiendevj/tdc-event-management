@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 Route::get('/admin/dashboard', function () {
     return view('dashboards.admin.index');
-})->name('dashboards.admin');
+})->name("dashboard");
 
 //Auth
 Route::get('/auth/login', [AuthController::class, "showLogin"])->name("login");
@@ -32,6 +32,7 @@ Route::post('/auth/logout', [AuthController::class, "logout"])->name("handle_log
 Route::post('/auth/update', [AuthController::class, "update"])->name("update_profile");
 
 // Event routes
-Route::get('/events/create', [EventController::class, 'create'])->name("events.create");
-Route::post('/events/store', [EventController::class, 'store'])->name("events.store");
+Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
+Route::get('admin/dashboard/events/create', [EventController::class, 'create'])->name("events.create");
+Route::post('admin/dashboard/events/store', [EventController::class, 'store'])->name("events.store");
 Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");
