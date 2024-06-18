@@ -29,7 +29,7 @@
 
 <body>
     @include('components.admin.header')
-    <div class="container flex w-full h-full">
+    <div class="">
         @yield('content')
     </div>
     @include('components.admin.footer')
