@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->text('name');
             $table->text('location');
-            $table->string('event_start');
-            $table->string('event_end');
+            $table->timestamp('event_start')->useCurrent();
+            $table->timestamp('event_end')->useCurrent();
             $table->integer('point')->default(4);
-            $table->date('registration_start')->default(now());
-            $table->date('registration_end')->default(now());
+            $table->timestamp('registration_start')->useCurrent();
+            $table->timestamp('registration_end')->useCurrent();
             $table->integer('registration_count')->default(0);
             $table->timestamps();
         });

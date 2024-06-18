@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
 
         $user = User::factory()->create([
             'name' => 'Super Admin',
-            'email' => 'admin@tdc',
+            'email' => 'spadmin@gmsil.com',
             'password' => Hash::make('1234567'),
         ]);
 
@@ -42,6 +42,21 @@ class UserSeeder extends Seeder
             'created_at' => now()
         ]);
 
-        
+        $role = Role::create(['name' => 'manager']);
+        Permission::create(['name' => 'publish products']);
+        $role->givePermissionTo('publish products');
+        $user->assignRole($role);
+
+        $user = User::factory()->create([
+            'name' => 'Trần Thị B',
+            'email' => 'thib@tdc',
+            'password' => Hash::make('12345'),
+            'created_at' => now()
+        ]);
+
+        $role = Role::create(['name' => 'sales']);
+        Permission::create(['name' => 'edit products']);
+        $role->givePermissionTo('edit products');
+        $user->assignRole($role);
     }
 }
