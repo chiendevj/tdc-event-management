@@ -18,19 +18,18 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory(10)->create();
+        // \App\Models\User::factory(10)->create();
 
-        \App\Models\User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // \App\Models\User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
 
 
         $user = User::factory()->create([
             'name' => 'Super Admin',
             'email' => 'admin@tdc',
-            'password' => Hash::make('12345678'),
-            'created_at' => now()
+            'password' => Hash::make('1234567'),
         ]);
 
         $role = Role::create(['name' => 'super-admin']);
@@ -43,21 +42,6 @@ class UserSeeder extends Seeder
             'created_at' => now()
         ]);
 
-        $role = Role::create(['name' => 'manager']);
-        Permission::create(['name' => 'publish products']);
-        $role->givePermissionTo('publish products');
-        $user->assignRole($role);
-
-        $user = User::factory()->create([
-            'name' => 'Trần Thị B',
-            'email' => 'thib@tdc',
-            'password' => Hash::make('12345'),
-            'created_at' => now()
-        ]);
-
-        $role = Role::create(['name' => 'sales']);
-        Permission::create(['name' => 'edit products']);
-        $role->givePermissionTo('edit products');
-        $user->assignRole($role);
+        
     }
 }
