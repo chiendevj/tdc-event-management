@@ -40,3 +40,10 @@ Route::get('/auth/register', [AuthController::class, "showRegister"])->name("reg
 Route::post('/auth/register', [AuthController::class, "register"])->name("handle_register");
 Route::post('/auth/logout', [AuthController::class, "logout"])->name("handle_logout");
 Route::post('/auth/update', [AuthController::class, "update"])->name("update_profile");
+
+// Event routes
+Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
+Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
+Route::get('admin/dashboard/events/create', [EventController::class, 'create'])->name("events.create");
+Route::post('admin/dashboard/events/store', [EventController::class, 'store'])->name("events.store");
+Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");
