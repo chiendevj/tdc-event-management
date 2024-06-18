@@ -11,7 +11,7 @@ class EventController extends Controller
 
     public function create()
     {
-        return view('events.create');
+        return view('dashboards.admin.events.create');
     }
 
     public function getAllEvents()
@@ -98,5 +98,11 @@ class EventController extends Controller
         }
     }
 
-    
+    public function index()
+    {
+        $events = Event::all();
+        return view('dashboards.admin.events.index', ['events' => $events]);
+    }
+
+
 }
