@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 Route::get('/admin/dashboard', function () {
     return view('dashboards.admin.index');
-})->name('a');
+})->name('dashboards.admin');
 
 //Auth
 Route::get('/auth/login', [AuthController::class, "showLogin"])->name("login");
