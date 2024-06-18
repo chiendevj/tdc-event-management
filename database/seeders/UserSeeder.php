@@ -18,45 +18,29 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        Permission::create(['name' => 'view data']);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-
-        $user = User::factory()->create([
+        // Tạo người dùng Super Admin
+        $superAdmin = User::factory()->create([
             'name' => 'Super Admin',
-            'email' => 'spadmin@gmsil.com',
+            'email' => 'spadmin@gmail.com',
             'password' => Hash::make('1234567'),
         ]);
 
-        $role = Role::create(['name' => 'super-admin']);
-        $user->assignRole($role);
+        $superAdminRole = Role::create(['name' => 'super-admin']);
+        $superAdminRole->givePermissionTo(Permission::all());
+        $superAdmin->assignRole($superAdminRole);
 
-        $user = User::factory()->create([
+        // Tạo người dùng Students
+        $student = User::factory()->create([
             'name' => 'Nguyễn Văn A',
-            'email' => 'vana@tdc',
+            'email' => 'vana.student@gmail.com',
             'password' => Hash::make('12345'),
             'created_at' => now()
         ]);
 
-        $role = Role::create(['name' => 'manager']);
-        Permission::create(['name' => 'publish products']);
-        $role->givePermissionTo('publish products');
-        $user->assignRole($role);
-
-        $user = User::factory()->create([
-            'name' => 'Trần Thị B',
-            'email' => 'thib@tdc',
-            'password' => Hash::make('12345'),
-            'created_at' => now()
-        ]);
-
-        $role = Role::create(['name' => 'sales']);
-        Permission::create(['name' => 'edit products']);
-        $role->givePermissionTo('edit products');
-        $user->assignRole($role);
+        $studentRole = Role::create(['name' => 'student']);
+        $studentRole->givePermissionTo('view data');
+        $student->assignRole($studentRole);
     }
 }
