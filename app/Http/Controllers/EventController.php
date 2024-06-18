@@ -14,13 +14,11 @@ class EventController extends Controller
         return view('events.create');
     }
 
-
     public function getAllEvents()
     {
         $events = Event::all();
         return response()->json(["data" => $events, "success" => true, "message" => "Events retrieved successfully."]);
     }
-
 
     public function store(Request $request)
     {
@@ -29,11 +27,11 @@ class EventController extends Controller
             'name' => 'required',
             'event_photo' => 'required|image',
             'event_start' => 'required|date',
-            'event_end' => 'required|date|after:event_start',
+            'event_end' => 'required|date',
             'location' => 'required',
             'point' => 'required|integer',
             'registration_start' => 'required|date',
-            'registration_end' => 'required|date|after:registration_start',
+            'registration_end' => 'required|date',
         ];
 
         // Define custom error messages
@@ -66,7 +64,13 @@ class EventController extends Controller
 
         if (strtotime($request->registration_end) <= strtotime($request->registration_start)) {
             return redirect()->back()
-                ->withErrors(['event_end' => 'Thời gian đóng đăng ký tham gia sự kiện phải sau thời gian mở.'])
+                ->withErrors(['registration_end' => 'Thời gian đóng đăng ký tham gia sự kiện phải sau thời gian mở.'])
+                ->withInput();
+        }
+
+        if (strtotime($request->event_start) <= strtotime($request->registration_start)) {
+            return redirect()->back()
+                ->withErrors(['registration_start' => 'Thời gian mở đăng ký sự kiện phải trước thời gian bắt đầu sự kiện.'])
                 ->withInput();
         }
 
@@ -84,7 +88,15 @@ class EventController extends Controller
         // Create the event
         $event = Event::create($validatedData);
 
-        // Return a JSON response
-        return response()->json(["data" => $event, "success" => true, "message" => "Sự kiện đã được tạo thành công."]);
+        // Back to the previous page with a success message
+        // Check if the event was created successfully
+
+        if ($event) {
+            return redirect()->back()->with('success', 'Sự kiện đã được tạo thành công.');
+        } else {
+            return redirect()->back()->with('error', 'Có lỗi xảy ra khi tạo sự kiện.');
+        }
     }
+
+    
 }
