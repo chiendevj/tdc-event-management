@@ -32,6 +32,7 @@ Route::post('/auth/logout', [AuthController::class, "logout"])->name("handle_log
 Route::post('/auth/update', [AuthController::class, "update"])->name("update_profile");
 
 // Event routes
+Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
 Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
 Route::get('admin/dashboard/events/create', [EventController::class, 'create'])->name("events.create");
 Route::post('admin/dashboard/events/store', [EventController::class, 'store'])->name("events.store");
