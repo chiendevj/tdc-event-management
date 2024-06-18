@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
@@ -19,11 +18,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/admin/dashboard', function () {
-    return view('dashboards.admin.index');
-})->name("dashboard");
+// Group routes that require authentication
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('dashboards.admin.index');
+    })->name("dashboard");
 
-//Auth
+    // Event routes
+    Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
+    Route::get('admin/dashboard/events/create', [EventController::class, 'create'])->name("events.create");
+    Route::post('admin/dashboard/events/store', [EventController::class, 'store'])->name("events.store");
+});
+
+// Public routes
+Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");
+
+// Auth routes
 Route::get('/auth/login', [AuthController::class, "showLogin"])->name("login");
 Route::post('/auth/login', [AuthController::class, "login"])->name("handle_login");
 Route::get('/auth/register', [AuthController::class, "showRegister"])->name("register");
