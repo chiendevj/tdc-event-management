@@ -115,12 +115,20 @@ class EventController extends Controller
         ]);
     }
 
-
     public function show($id)
     {
         $event = Event::find($id);
         return view('dashboards.admin.events.show', ['event' => $event]);
     }
 
-
+    public function search(Request $request)
+    {
+        $search = $request->search;
+        $events = Event::where('name', 'like', '%' . $search . '%')->paginate(8);
+        return response()->json([
+            'data' => $events,
+            'success' => true,
+            'message' => 'Events retrieved successfully.'
+        ]);
+    }
 }
