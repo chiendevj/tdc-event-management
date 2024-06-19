@@ -5,7 +5,7 @@
 @section('content')
     <div class="w-full bg-[var(--dark-bg)] mx-auto">
         <div class="system_analysis p-4 bg-[var(--dark-bg)] container mx-auto w-full px-8 py-4">
-            <div class="grid grid-cols-4 gap-4 translate-y-[50%]">
+            <div class="grid lg:grid-cols-4 gap-4 sm:gird-cols-2">
                 <div class="relative analysis_item">
                     <div
                         class="absolute top-[-10px] w-[20px] h-[20px] right-[20px] bg-green-500 flex items-center justify-center text-white p-4 rounded-sm">
@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    <div class="mt-[100px] container mx-auto">
+    <div class="mt-[60px] container mx-auto px-8">
         <h3
             class="text-lg text-center uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit mx-auto">
             Lịch biểu sự kiện</h3>
@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <div class="calender_table mt-[20px] w-full">
+        <div class="calender_table mt-[20px] w-full mb-8">
             <table class="w-full">
                 <thead class="rounded-sm">
                     <th>Thứ 2</th>
@@ -62,7 +62,7 @@
                     <th>Thứ 7</th>
                     <th>Chủ Nhật</th>
                 </thead>
-                <tbody class="calender_body">
+                <tbody class="calender_body bg-[var(--table-calender-bg)]">
 
                 </tbody>
             </table>
@@ -76,7 +76,7 @@
         const totalParticipant = document.querySelector('.total_paticipant');
         const totalEvent = document.querySelector('.total_event');
         let events = [];
-        const colors = ["#eb4d4b", "#6ab04c", "#f0932b", "#0abde3", "#6c5ce7", "#38ada9"];
+        // const colors = ["#eb4d4b", "#6ab04c", "#f0932b", "#0abde3", "#6c5ce7", "#38ada9"];
 
         // Get current date and display
         const currentDate = new Date();
@@ -118,7 +118,7 @@
             calendarBody.innerHTML = '';
 
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const firstDay = new Date(year, month, 1).getDay(); // First month of year
+            const firstDay = new Date(year, month, 1).getDay(); // frist day of month
 
             let date = 1;
             let started = false;
@@ -129,11 +129,9 @@
                 for (let j = 1; j <= 7; j++) {
                     let cell = document.createElement('td');
                     let day = document.createElement('span');
+                    day.classList.add("day");
 
-                    day.classList.add("day")
-
-
-                    // Start position
+                    // first day of month
                     if (i === 0 && j === (firstDay === 0 ? 7 : firstDay)) {
                         started = true;
                     }
@@ -141,34 +139,7 @@
                     if (started && date <= daysInMonth) {
                         day.textContent = date;
                         cell.appendChild(day);
-
-                        events.forEach(event => {
-                            const eventStart = new Date(event.event_start);
-                            const eventEnd = new Date(event.event_end);
-                            // Check month and year of event match with current month and year in calendar
-                            if (eventStart.getMonth() === month && eventStart.getFullYear() === year) {
-                                if (eventStart.getDate() <= date && eventEnd.getDate() >= date) {
-                                    const eventEle = document.createElement('div');
-                                    const eventTitle = document.createElement('h4');
-                                    const eventDescription = document.createElement('p');
-                                    day.classList.add('active');
-                                    const color = colors[Math.floor(Math.random() * colors.length)];
-                                    eventEle.style.backgroundColor = color;
-                                    eventEle.classList.add('event');
-                                    eventTitle.classList.add('event_title');
-                                    eventDescription.classList.add('event_desc');
-
-
-                                    eventTitle.textContent = event.name;
-                                    eventDescription.textContent = event.location;
-                                    eventEle.appendChild(eventTitle);
-                                    eventEle.appendChild(eventDescription);
-                                    cell.appendChild(eventEle);
-                                }
-                            }
-                        });
-
-
+                        renderEventsForDay(cell, date, month, year, day);
                         date++;
                     }
 
@@ -182,6 +153,55 @@
                 }
             }
         }
+
+        function renderEventsForDay(cell, date, month, year, day) {
+            events.forEach(event => {
+                const eventStart = new Date(event.event_start);
+                const eventEnd = new Date(event.event_end);
+                const eventStartMonth = eventStart.getMonth();
+                const eventEndMonth = eventEnd.getMonth();
+
+                // Check if event is in the same year and month
+                if (eventStart.getFullYear() === year && eventEnd.getFullYear() === year) {
+                    if (eventStartMonth === eventEndMonth && eventStartMonth === month) {
+                        if (eventStart.getDate() <= date && date <= eventEnd.getDate()) {
+                            day.classList.add('active');
+                            createEventElement(event, cell);
+                        }
+                    } else if (eventStartMonth !== eventEndMonth && eventStartMonth === month) {
+                        // case event start in previous month and end in current month
+                        if (eventStart.getDate() <= date) {
+                            day.classList.add('active');
+                            createEventElement(event, cell);
+                        }
+                    } else if (eventEndMonth !== eventStartMonth && eventEndMonth === month) {
+                         // case event start in previous month and end in current month
+                        if (eventEnd.getDate() >= date) {
+                            day.classList.add('active');
+                            createEventElement(event, cell);
+                        }
+                    }
+                }
+            });
+        }
+
+        function createEventElement(event, cell) {
+            const eventEle = document.createElement('div');
+            const eventTitle = document.createElement('h4');
+            const eventDescription = document.createElement('p');
+            // const color = colors[Math.floor(Math.random() * colors.length)];
+
+            // eventEle.style.backgroundColor = color;
+            eventEle.classList.add('event');
+            eventTitle.classList.add('event_title');
+            eventDescription.classList.add('event_desc');
+            eventTitle.textContent = event.name;
+            eventDescription.textContent = event.location;
+            eventEle.appendChild(eventTitle);
+            eventEle.appendChild(eventDescription);
+            cell.appendChild(eventEle);
+        }
+
 
         async function getEvents(params) {
             const url = "/api/events";
