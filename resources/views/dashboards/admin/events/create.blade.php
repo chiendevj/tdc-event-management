@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Create new Events')
+@section('title', 'Thêm sự kiện')
 
 @section('content')
     <div class="container mx-auto mt-[40px] px-8 py-4">

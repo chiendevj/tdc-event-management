@@ -34,10 +34,11 @@ Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function ()
     Route::post('admin/dashboard/events/store', [EventController::class, 'store'])->name("events.store");
     Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
     Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
+    Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");
 });
 
 
-// Routes chỉ cho admin có quyền edit 
+// Routes chỉ cho admin có quyền edit
 Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () {
     Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
     Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
@@ -48,5 +49,5 @@ Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("event
 
 // Auth routes
 Route::get('/auth/login', [AuthController::class, "showLogin"])->name("login");
-Route::post('/auth/login', [AuthController::class, "login"])->name("handle_login"); 
+Route::post('/auth/login', [AuthController::class, "login"])->name("handle_login");
 Route::post('/auth/logout', [AuthController::class, "logout"])->name("handle_logout");
