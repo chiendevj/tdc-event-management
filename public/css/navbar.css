@@ -1,0 +1,138 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+#navbar {
+    transition: all 0.3s ease-in-out;
+}
+
+#navbar.show {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    transform: translateY(0);
+    z-index: 1000;
+}
+
+.navbar .nav-menu {
+    margin: 0;
+}
+.navbar .nav-menu .active {
+    color: #003b7a;
+}
+
+.navbar .nav-menu .active a::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #003b7a;
+    border-radius: 999px;
+}
+
+.navbar .nav-menu li a {
+    position: relative;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 100px;
+}
+
+.navbar .nav-menu li a:hover {
+    color: var(--blue);
+}
+
+.navbar .nav-menu li a:hover::after {
+    visibility: visible;
+    transform: scaleX(1);
+    transition: all 0.25s ease-out;
+}
+
+.navbar .nav-menu li a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--blue);
+    transform: scaleX(0);
+    visibility: hidden;
+    border-radius: 999px;
+}
+
+/* Sidebar styles */
+#sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 250px;
+    height: 100%;
+    background: white;
+    transition: right 0.3s ease;
+    z-index: 1000;
+}
+
+/* Sidebar open state */
+#sidebar.open {
+    right: 0;
+}
+
+/* Close button styles */
+#sidebar .close-btn {
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+}
+
+/* Overlay for sidebar */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+/* Overlay open state */
+#overlay.open {
+    display: block;
+}
+
+/* Hide the close button on larger screens and ensure menu is visible */
+@media (min-width: 768px) {
+    .navbar .nav-menu li a {
+        position: relative;
+        padding: 10px;
+    }
+
+    #sidebar {
+        position: static;
+        width: auto;
+        height: auto;
+        background: transparent;
+        transition: none;
+        display: flex;
+    }
+
+    #sidebar.open {
+        right: 0;
+    }
+
+    #sidebar .close-btn {
+        display: none;
+    }
+
+    #overlay {
+        display: none;
+    }
+
+    .nav-menu {
+        flex-direction: row;
+    }
+}

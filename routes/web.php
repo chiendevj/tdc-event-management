@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
@@ -15,8 +16,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
+
+Route::get('/tracuu', function () {
+    return view('search');
+});
+
+Route::get('/event/{id}', function () {
+    return view('detail');
+});
+
+Route::get('/calendar-event', [ScheduleController::class, 'index']);
 
 // Routes chỉ cho super-admin
 Route::middleware(['auth'])->group(function () {
