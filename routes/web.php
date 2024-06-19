@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
+
+Route::get('/tracuu', function () {
+    return view('search');
+});
+
+Route::get('/event/{id}', function () {
+    return view('detail');
+});
+
+Route::get('/calendar-event', [ScheduleController::class, 'index']);
 
 
 Route::get('/admin/dashboard', function () {
