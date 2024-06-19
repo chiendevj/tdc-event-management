@@ -22,44 +22,33 @@ class AuthController extends Controller
         return view("auths.login");
     }
 
-    public function showRegister()
-    {
-        if (auth()->user()) {
-            return redirect()->route('dashboard');
-        }
-        return view("auths.register");
-    }
-
+    // Xử lý yêu cầu đăng nhập
     public function login(Request $request)
     {
-        // Xác thực dữ liệu đầu vào
         $request->validate([
             'email' => 'required|string',
             'password' => 'required|string',
         ]);
 
         $email = $request->input('email');
-
         $user = User::where('email', $email)->first();
-        if ($user) {
-            if (Hash::check($request->password, $user->password)) {
-                 
-                Auth::guard('web')->login($user);
-                $check = Session::get('unlogin');
-                if (isset($check)) {
-                    Session::forget('unlogin');
-                    return redirect()->route('quizzes.create');
-                }
-                return redirect()->intended('home');
-            }
-        }
 
+        if ($user && Hash::check($request->password, $user->password)) {
+            Auth::guard('web')->login($user);
+            $check = Session::get('unlogin');
+            if (isset($check)) {
+                Session::forget('unlogin');
+                return redirect()->route('dashboard');
+            }
+            return redirect()->intended('admin/dashboard')->with('success', 'Đăng nhập thành công!');
+        }
 
         // Đăng nhập thất bại
         return redirect()->back()->withErrors([
-            'email|password' => 'Email or password was wrong.',
-        ])->withInput($request->only('email')); // Giữ lại email đăng nhập trong form
+            'email|password' => 'Vui lòng kiểm tra lại tài khoản hoặc mật khẩu của bạn.',
+        ]);
     }
+
 
     // Xử lý yêu cầu đăng xuất
     public function logout()

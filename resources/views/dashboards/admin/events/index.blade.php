@@ -8,16 +8,19 @@
             <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
                 Danh sách các sự kiện</h3>
             <div class="relative border flex items-center justify-start p-2">
-                <input type="text" placeholder="Tìm kiếm sự kiện" class=" outline-none rounded-sm min-w-[400px]">
-
+                <input type="text" placeholder="Tìm kiếm sự kiện" class="outline-none rounded-sm min-w-[400px]">
                 <div class="text-gray-400">
                     <i class="fa-light fa-magnifying-glass"></i>
                 </div>
             </div>
         </div>
         <div class="w-full flex items-center justify-end">
-            <a href="{{ route('events.create') }}"
-                class="block p-2 bg-[var(--dark-bg)] text-white rounded-sm ml-auto w-fit">Tạo sự kiện mới</a>
+            @can('create event')
+                <a href="{{ route('events.create') }}"
+                   class="block p-2 bg-[var(--dark-bg)] text-white rounded-sm ml-auto w-fit">
+                   Tạo sự kiện mới
+                </a>
+            @endcan
         </div>
         <div class="grid lg:grid-cols-4 sm:grid-cols-2 gap-4 mt-[20px] list_events">
             @foreach ($events as $event)
@@ -61,8 +64,7 @@
                         data.data.data.forEach(event => {
                             const eventItem = document.createElement('div');
                             const route = "{{ route('events.show', ':id') }}".replace(':id', event.id);
-                            eventItem.classList.add('event_item', 'border', 'rounded-sm',
-                                'overflow-hidden');
+                            eventItem.classList.add('event_item', 'border', 'rounded-sm', 'overflow-hidden');
                             eventItem.innerHTML = `
                                 <a href="${route}">
                                     <div class="overflow-hidden">
