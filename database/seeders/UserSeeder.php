@@ -1,10 +1,7 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Support\Facades\DB;
-
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -18,45 +15,32 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        // Create permissions
+        $editPermission = Permission::create(['name' => 'edit event']);
+        $viewPermission = Permission::create(['name' => 'view event']);
+        $createPermission = Permission::create(['name' => 'create event']);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-
-        $user = User::factory()->create([
+        // Create Super Admin user
+        $superAdmin = User::factory()->create([
             'name' => 'Super Admin',
-            'email' => 'spadmin@gmsil.com',
+            'email' => 'spadmin@gmail.com',
             'password' => Hash::make('1234567'),
         ]);
 
-        $role = Role::create(['name' => 'super-admin']);
-        $user->assignRole($role);
+        $superAdminRole = Role::create(['name' => 'super-admin']);
+        $superAdminRole->givePermissionTo(Permission::all());
+        $superAdmin->assignRole($superAdminRole);
 
-        $user = User::factory()->create([
-            'name' => 'Nguyễn Văn A',
-            'email' => 'vana@tdc',
-            'password' => Hash::make('12345'),
+        // Create Admin user
+        $admin = User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('1234567'),
             'created_at' => now()
         ]);
 
-        $role = Role::create(['name' => 'manager']);
-        Permission::create(['name' => 'publish products']);
-        $role->givePermissionTo('publish products');
-        $user->assignRole($role);
-
-        $user = User::factory()->create([
-            'name' => 'Trần Thị B',
-            'email' => 'thib@tdc',
-            'password' => Hash::make('12345'),
-            'created_at' => now()
-        ]);
-
-        $role = Role::create(['name' => 'sales']);
-        Permission::create(['name' => 'edit products']);
-        $role->givePermissionTo('edit products');
-        $user->assignRole($role);
+        $adminRole = Role::create(['name' => 'admin']);
+        $adminRole->givePermissionTo([$viewPermission, $editPermission]);
+        $admin->assignRole($adminRole);
     }
 }
