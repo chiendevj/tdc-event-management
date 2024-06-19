@@ -100,8 +100,19 @@ class EventController extends Controller
 
     public function index()
     {
-        $events = Event::all();
+        // Get event by pagination
+        $events = Event::paginate(8);
         return view('dashboards.admin.events.index', ['events' => $events]);
+    }
+
+    public function loadmore(Request $request) {
+        $limit = 8;
+        $events = Event::paginate($limit, ['*'], 'page', $request->page);
+        return response()->json([
+            'data' => $events,
+            'success' => true,
+            'message' => 'Events retrieved successfully.'
+        ]);
     }
 
 

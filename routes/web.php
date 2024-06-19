@@ -46,4 +46,5 @@ Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->nam
 Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
 Route::get('admin/dashboard/events/create', [EventController::class, 'create'])->name("events.create");
 Route::post('admin/dashboard/events/store', [EventController::class, 'store'])->name("events.store");
+Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
 Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");

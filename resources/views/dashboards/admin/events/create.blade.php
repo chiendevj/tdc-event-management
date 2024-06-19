@@ -3,7 +3,7 @@
 @section('title', 'Create new Events')
 
 @section('content')
-    <div class="container mx-auto mt-[40px]">
+    <div class="container mx-auto mt-[40px] px-8 py-4">
         <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit mb-[20px]">
             Tạo sự kiện mới</h3>
 
