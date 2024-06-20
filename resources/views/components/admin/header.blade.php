@@ -62,7 +62,7 @@
                         class="absolute child bg-white text-black top-[40px] shadow-lg rounded-sm p-4 min-w-[300px] flex flex-col gap-2">
                         <li
                             class="border-b-2 border-b-white w-fit hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
-                            <a href="">Somthing</a>
+                            <a href="">Thống kê</a>
                         </li>
                         <li
                             class="border-b-2 border-b-white w-fit hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">

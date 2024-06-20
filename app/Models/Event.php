@@ -18,4 +18,9 @@ class Event extends Model
         'registration_start',
         'registration_end',
     ];
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class);
+    }
 }
