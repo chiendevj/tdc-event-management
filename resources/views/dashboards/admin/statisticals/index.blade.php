@@ -33,7 +33,7 @@
                             {{ $event->students_count }}
                         </td>
                         <td class="px-6 py-4">
-                            <button class="text-blue-600 hover:underline dark:text-blue-500" onclick="showEventDetails({{ $event->id }})">Chi tiết</button>
+                            <button class="text-blue-600 hover:underline dark:text-blue-500" onclick="showEventDetails('{{ $event->id }}')">Chi tiết</button>
                         </td>
                     </tr>
                     @endforeach
@@ -54,6 +54,9 @@
             <div id="eventDetailsContent">
                 <!-- Nội dung chi tiết sự kiện sẽ được tải vào đây -->
             </div>
+            <div class="mt-4">
+                <button id="exportExcelBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Xuất Excel</button>
+            </div>
             <canvas id="eventChart" width="400" height="200"></canvas>
         </div>
     </div>
@@ -73,8 +76,8 @@
                 const chartContext = chartCanvas.getContext('2d');
 
                 if (data.event.students.length === 0) {
-                    // alert('Không có sinh viên nào tham gia sự kiện này.')
                     eventDetailsContent.innerHTML = `<p><em class="text-lg text-red-500">Không có sinh viên nào tham gia sự kiện này.</em></p>`;
+                    document.getElementById('exportExcelBtn').style.display = 'none'; // Ẩn nút xuất Excel nếu không có sinh viên
                     document.getElementById('eventDetailsModal').classList.remove('hidden');
                     return;
                 }
@@ -110,6 +113,10 @@
                     }
                 });
 
+                document.getElementById('exportExcelBtn').onclick = function() {
+                    window.location.href = `{{ route('events.export.excel', ['eventId' => ':eventId']) }}`.replace(':eventId', eventId);
+                };
+
                 document.getElementById('eventDetailsModal').classList.remove('hidden');
             })
             .catch(error => {
@@ -118,6 +125,7 @@
     }
 
     function closeModal() {
+        document.getElementById('exportExcelBtn').style.display = 'flex';
         document.getElementById('eventDetailsModal').classList.add('hidden');
         if (eventChart) {
             eventChart.destroy();

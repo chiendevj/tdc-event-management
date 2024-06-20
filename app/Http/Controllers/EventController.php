@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EventWithStudentsExport;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EventController extends Controller
 {
@@ -167,11 +169,20 @@ class EventController extends Controller
         ]);
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         return view('dashboards.admin.events.edit');
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         // Handle update events
     }
+
+        public function exportEventToExcel($eventId)
+        {
+            $event = Event::findOrFail($eventId);
+
+            return Excel::download(new EventWithStudentsExport($event->id), 'event_' . $event->id . '.xlsx');
+        }
 }
