@@ -22,6 +22,8 @@ return new class extends Migration
             $table->timestamp('registration_start')->useCurrent();
             $table->timestamp('registration_end')->useCurrent();
             $table->integer('registration_count')->default(0);
+            $table->text('content')->nullable();
+            $table->string('status')->default("Sắp diễn ra");
             $table->timestamps();
         });
     }

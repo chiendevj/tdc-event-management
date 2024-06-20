@@ -87,12 +87,12 @@
                         <h1 class="text-lg font-bold text-white">{{ auth()->user()->name }}</h1>
                         <p class="text-sm text-gray-500">Admin</p>
                     </div>
-                    <button class="menu-icon ms-4 btn_open_menu_mobile lg:hidden flex items-center justify-center">
+                    <button class="menu-icon lg:ms-4 btn_open_menu_mobile lg:hidden flex items-center justify-center">
                         <i class="fa-regular fa-bars text-white text-2xl"></i>
                     </button>
                 </div>
                 <div
-                    class="profile-option z-[99999] w-[220px] opacity-0 invisible p-5 rounded absolute top-[100%] bg-white flex items-center justify-center right-0 border-[#eee] bg-primary shadow">
+                    class="profile-option hidden z-[99999] w-[220px] opacity-0 invisible p-5 rounded absolute top-[100%] bg-white lg:flex items-center justify-center right-0 border-[#eee] bg-primary shadow">
                     <ul class="flex gap-3 flex-col">
                         <li>
                             <form action="{{ route('handle_logout') }}" method="POST">
