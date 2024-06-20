@@ -17,5 +17,7 @@ class Event extends Model
         'point',
         'registration_start',
         'registration_end',
+        'content',
+        'status',
     ];
 }

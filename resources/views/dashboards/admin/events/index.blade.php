@@ -10,7 +10,7 @@
             <div class="flex items-center w-full lg:w-fit justify-between gap-3">
                 <div class="relative border h-full w-full flex items-center justify-between p-2">
                     <input type="text" name="search" placeholder="Tìm kiếm sự kiện"
-                        class="outline-none rounded-sm min-w-[400px] min-h-[24px]">
+                        class="outline-none border-none p-0 rounded-sm min-w-[400px] min-h-[24px]">
                     <div class="text-gray-400">
                         <i class="fa-light fa-magnifying-glass"></i>
                     </div>
@@ -21,14 +21,16 @@
             <div class="flex items-center w-full lg:w-fit justify-start gap-3 flex-col lg:flex-row">
                 <div class="relative border lg:w-fit flex items-center h-full justify-start p-2 text-gray-400 w-full">
                     <label for="filter_date_start" class="">Ngày bắt đầu:</label>
-                    <input type="date" name="filter_date_start" id="filter_date_start" class="border-none outline-none flex-1 lg:w-fit">
+                    <input type="date" name="filter_date_start" id="filter_date_start"
+                        class="border-none outline-none p-0 flex-1 lg:w-fit">
                 </div>
                 <div class="relative w-full lg:w-fit border flex items-center h-full justify-start p-2 text-gray-400">
                     <label for="filter_date_end">Ngày kết thúc:</label>
-                    <input type="date" name="filter_date_end" id="filter_date_end" class="border-none flex-1 outline-none lg:w-fit">
+                    <input type="date" name="filter_date_end" id="filter_date_end"
+                        class="border-none p-0 flex-1 outline-none lg:w-fit">
                 </div>
                 <div class="relative border flex items-center h-full justify-start p-2 text-gray-400 w-full lg:w-fit">
-                    <select name="status" id="status" class="border-none outline-none min-h-[24px] w-full">
+                    <select name="status" id="status" class="border-none outline-none min-h-[24px] w-full p-0">
                         <option value="all">Tất cả</option>
                         <option value="Sắp diễn ra">Sắp diễn ra</option>
                         <option value="Đang diễn ra">Đang diễn ra</option>
@@ -37,7 +39,8 @@
                         <option value="oldest">Cũ nhất</option>
                     </select>
                 </div>
-                <button class="h-full p-2 bg-[var(--dark-bg)] w-full lg:w-fit text-white border-[var(--dark-bg)] rounded-sm btn_filter">Lọc
+                <button
+                    class="h-full p-2 bg-[var(--dark-bg)] w-full lg:w-fit text-white border-[var(--dark-bg)] rounded-sm btn_filter">Lọc
                     sự
                     kiện</button>
             </div>
@@ -60,7 +63,7 @@
                 <div class="dot-spinner__dot"></div>
             </div>
         </div>
-        <div class="grid lg:grid-cols-4 sm:grid-cols-2 gap-4 mt-[20px] list_events  relative">
+        <div class="grid lg:grid-cols-4 sm:grid-cols-2 gap-4 mt-[20px] list_events relative">
             {{-- @foreach ($events as $event)
                 <x-admin.event :event="$event" />
             @endforeach --}}
@@ -85,7 +88,7 @@
         function showSkeletons() {
             for (let i = 0; i < 8; i++) {
                 const skeleton = document.createElement('div');
-                skeleton.classList.add('skeleton', 'event_item', 'border', 'rounded-sm', 'overflow-hidden');
+                skeleton.classList.add('skeleton');
                 listEvents.appendChild(skeleton);
             }
         }
@@ -131,9 +134,6 @@
             const url = isSearching ?
                 `/api/events/search?search=${searchInput.value}&filter_date_start=${startDate}&filter_date_end=${endDate}&status=${status}&page=${searchPage}` :
                 `/api/events/more?page=${page}`;
-
-                console.log(url);
-
             try {
                 const response = await fetch(url, {
                     method: 'GET',
@@ -148,6 +148,7 @@
                 if (data.data.data.length > 0) {
                     data.data.data.forEach(event => {
                         const eventItem = createEventItem(event);
+                        console.log(eventItem.innerHTML);
                         listEvents.appendChild(eventItem);
                     });
                     lazyLoad();
@@ -170,22 +171,49 @@
         }
 
         function createEventItem(event) {
-            const eventItem = document.createElement('div');
             const route = "{{ route('events.show', ':id') }}".replace(':id', event.id);
+            const routeEdit = "{{ route('events.edit', ':id') }}".replace(':id', event.id);
+            const routeQR = "#"; // Chưa có route
+            const eventItem = document.createElement('div');
+            const link = document.createElement('a');
+
+            link.href = route;
+
+
             eventItem.classList.add('event_item', 'border', 'rounded-sm', 'overflow-hidden');
-            eventItem.innerHTML = `
-                <a href="${route}">
-                    <div class="overflow-hidden">
-                        <img data-src="${event.event_photo}" alt="" class="w-full overflow-hidden hover:scale-105 transition-all duration-100 ease-in lazy">
+
+            link.innerHTML = `
+                    <div class="overflow-hidden relative">
+                        <img src="${event.event_photo}" alt="" class="w-full overflow-hidden hover:scale-105 transition-all event_img duration-100 ease-in" >
+                        <div class="action_hover absolute top-0 left-0 bottom-0 flex items-center justify-center right-0 bg-[rgba(0,0,0,0.2)]" style="backdrop-filter: blur(5px)">
+                            <div class="flex items-center justify-center gap-2">
+                                <a href="${routeEdit}" class="btn_edit btn_action relative flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
+                                    <i class="fa-light fa-pen-to-square"></i>
+                                    <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
+                                        Chỉnh sửa sự kiện
+                                        <div class="tooltip-arrow absolute bottom-0"></div>
+                                    </div>
+                                </a>
+                                <a href="${routeQR}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
+                                    <i class="fa-light fa-qrcode"></i>
+                                    <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
+                                        Mã QR của sự kiện
+                                        <div class="tooltip-arrow absolute bottom-0"></div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-2">
                         <h3 class="text-lg font-semibold uppercase">${event.name}</h3>
                         <p class="text-gray-400">${event.location}</p>
                     </div>
-                </a>
             `;
+
+            eventItem.appendChild(link);
             return eventItem;
         }
+
 
         window.addEventListener('scroll', lazyLoad);
         window.addEventListener('resize', lazyLoad);
