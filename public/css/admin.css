@@ -36,12 +36,12 @@ body::-webkit-scrollbar-track {
 
 /* Handle */
 body::-webkit-scrollbar-thumb {
-  background: #221e26;
+  background: var(--dark-bg);
 }
 
 /* Handle on hover */
 body::-webkit-scrollbar-thumb:hover {
-  background: rgb(85, 84, 84);
+  background: var(--dark-bg);
 }
 
 .has_child .child {
@@ -284,3 +284,34 @@ body::-webkit-scrollbar-thumb:hover {
   transform: translateX(0);
 }
 
+/* CSS cho Skeleton Loading */
+.skeleton {
+  background: #e0e0e0;
+  border-radius: 4px;
+  /* min-height: 100px; */
+  width: 100%;
+  margin-bottom: 16px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+      background-color: #e0e0e0;
+  }
+  50% {
+      background-color: #f0f0f0;
+  }
+  100% {
+      background-color: #e0e0e0;
+  }
+}
+
+/* CSS cho Lazy Loading */
+.lazy {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.lazy-loaded {
+  opacity: 1;
+}
