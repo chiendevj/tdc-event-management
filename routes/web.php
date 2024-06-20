@@ -2,6 +2,7 @@
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\UploadController;
 use App\Http\Controllers\StatisticalController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +54,7 @@ Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function ()
     Route::get('admin/dashboard/events/create', [EventController::class, 'create'])->name("events.create");
     Route::post('admin/dashboard/events/store', [EventController::class, 'store'])->name("events.store");
     Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
+    Route::get('admin/dashboard/events/{id}/edit', [EventController::class, 'edit'])->name("events.edit");
     Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
     Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");
 });
@@ -71,3 +73,5 @@ Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("event
 Route::get('/auth/login', [AuthController::class, "showLogin"])->name("login");
 Route::post('/auth/login', [AuthController::class, "login"])->name("handle_login");
 Route::post('/auth/logout', [AuthController::class, "logout"])->name("handle_logout");
+Route::post('/upload', [UploadController::class, 'upload'])->name('upload');
+

@@ -16,7 +16,9 @@ class Event extends Model
         'location',
         'point',
         'registration_start',
-        'registration_end', 
+        'registration_end',
+        'content',
+        'status',
     ];
 
     public function students()
