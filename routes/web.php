@@ -2,6 +2,7 @@
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,8 @@ Route::get('/', function () {
 Route::get('/tracuu', function () {
     return view('search');
 })->name('tra-cuu');
+
+Route::get('/search', [StudentController::class, 'searchEventsByStudent'])->name('search_events_by_student');
 
 Route::get('/event/{id}', function () {
     return view('detail');
