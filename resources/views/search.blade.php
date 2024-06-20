@@ -31,8 +31,7 @@
                     <button class="text-gray-600 hover:text-gray-200 focus:outline-none p-5 text-2xl" onclick="closeModal()">&times;</button>
                 </div>
                 <div class="p-6" id="modalBody">
-                    <p class="text-gray-700" id="modalMessage">Vui lòng nhập mã số sinh viên để tra cứu.</p>
-                    <div id="modalContent"></div>
+
                 </div>
             </div>
         </div>
@@ -54,8 +53,10 @@
         }
     }
 
-    // Biểu thức chính quy để kiểm tra mã số sinh viên
     let studentIdRegex = /^\d{5}[a-zA-Z]{2}\d{4}$/;
+
+    let modalBody = document.getElementById("modalBody");
+    let modalTitle = document.getElementById("modalTitle");
 
     // Xử lý sự kiện submit form bằng Ajax
     document.getElementById("searchForm").addEventListener("submit", function(event) {
@@ -64,70 +65,65 @@
         var studentId = document.getElementById("studentId").value.trim();
 
         if (studentId === '') {
-            document.getElementById("modalMessage").innerHTML = 'Vui lòng nhập mã số sinh viên.';
+            modalBody.innerHTML = '<p class="text-gray-700" id="modalMessage">Vui lòng nhập mã số sinh viên để tra cứu.</p>';
             modal.style.display = "flex";
             return; // Dừng hàm nếu không nhập mã số sinh viên
         }
 
         // Kiểm tra mã số sinh viên với biểu thức chính quy
         if (!studentIdRegex.test(studentId)) {
-            document.getElementById("modalMessage").innerHTML = 'Mã số sinh viên không hợp lệ.';
+            modalTitle.innerHTML = 'Kết quả tra cứu';
+            modalBody.innerHTML = 'Mã số sinh viên không hợp lệ.';
             modal.style.display = "flex";
             return; // Dừng hàm nếu mã số sinh viên không hợp lệ
         }
 
-        // Lấy URL endpoint từ data-url của form
         var apiUrl = this.getAttribute('data-url');
 
-        // Gửi request Ajax
         fetch(apiUrl + '?student_id=' + studentId)
             .then(function(response) {
                 return response.json();
             })
             .then(function(data) {
-                console.log(data.error);
                 if (data.error) {
-                    document.getElementById("modalMessage").innerHTML = '<h3 class="text-red-300">' + data.error + '</h3>';
-                } else {
-                    var modalTitle = document.getElementById("modalTitle");
-                    var modalBody = document.getElementById("modalBody");
+                modalTitle.innerHTML = 'Kết quả tra cứu';
+                modalBody.innerHTML = '<p>' + data.error + '</p>';
+            } else {
+                modalTitle.innerHTML = 'Kết quả tra cứu cho sinh viên ' + data.student.fullname + ' (MSSV: ' + data.student.email.split('@')[0] + ')';
 
-                    modalTitle.innerHTML = 'Kết quả tra cứu cho sinh viên ' + data.student.fullname + ' (MSSV: ' + data.student.email.split('@')[0] + ')';
+                if (data.events.length > 0) {
+                    var html = '<h3 class="text-lg font-semibold mb-2">Các sự kiện sinh viên đã tham gia:</h3>';
+                    html += '<div class="overflow-x-auto">';
+                    html += '<table class="min-w-full divide-y divide-gray-200">';
+                    html += '<thead class="bg-gray-50">';
+                    html += '<tr>';
+                    html += '<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 bg-gray-200 uppercase tracking-wider">Tên sự kiện</th>';
+                    html += '</tr>';
+                    html += '</thead>';
+                    html += '<tbody class="bg-white divide-y divide-gray-200">';
 
-                    if (data.events.length > 0) {
-                        var html = '<h3 class="text-lg font-semibold mb-2">Các sự kiện sinh viên đã tham gia:</h3>';
-                        html += '<div class="overflow-x-auto">';
-                        html += '<table class="min-w-full divide-y divide-gray-200">';
-                        html += '<thead class="bg-gray-50">';
+                    data.events.forEach(function(event) {
                         html += '<tr>';
-                        html += '<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 bg-gray-200 uppercase tracking-wider">Tên sự kiện</th>';
+                        html += '<td class="px-6 py-4 whitespace-nowrap"> <span>' + event.id + '. </span> ' + event.name + '</td>';
                         html += '</tr>';
-                        html += '</thead>';
-                        html += '<tbody class="bg-white divide-y divide-gray-200">';
+                    });
 
-                        data.events.forEach(function(event) {
-                            html += '<tr>';
-                            html += '<td class="px-6 py-4 whitespace-nowrap"> <span>' + event.id +'. </span> ' + event.name + '</td>';
-                            html += '</tr>';
-                        });
+                    html += '</tbody>';
+                    html += '</table>';
+                    html += '</div>';
 
-                        html += '</tbody>';
-                        html += '</table>';
-                        html += '</div>';
-
-                        modalBody.innerHTML = html;
-                    } else {
-                        modalBody.innerHTML = '<p>Sinh viên chưa tham gia sự kiện nào.</p>';
-                    }
-
-
-                    modal.style.display = "flex";
+                    modalBody.innerHTML = html;
+                } else {
+                    modalBody.innerHTML = '<p>Sinh viên chưa tham gia sự kiện nào.</p>';
                 }
+            }
+
+
+                modal.style.display = "flex";
+
             })
             .catch(function(error) {
                 console.error('Đã xảy ra lỗi:', error);
-                document.getElementById("modalMessage").innerHTML = 'Đã xảy ra lỗi. Vui lòng thử lại sau.';
-                modal.style.display = "flex";
             });
     });
 </script>
