@@ -19,7 +19,7 @@ class StudentSeeder extends Seeder
                 'id' => "22211TT3000",
                 'email' => '22211TT3000@mail.tdc.edu.vn',
                 'fullname' => 'Trần Trung Chiến',
-                'classname' => 'CD22TT11',
+                'classname' => 'CD22TT12',
             ],
         );
 
@@ -46,7 +46,7 @@ class StudentSeeder extends Seeder
                 'id' => '22211TT2661',
                 'email' => '22211TT2661@mail.tdc.edu.vn',
                 'fullname' => 'Nguyễn Tiến Đạt',
-                'classname' => 'CD22TT11',
+                'classname' => 'CD22TT09',
             ],
         );
 
@@ -73,7 +73,7 @@ class StudentSeeder extends Seeder
                 'id' => '22211TT1357',
                 'email' => '22211TT1357@mail.tdc.edu.vn',
                 'fullname' => 'Nguyễn Văn Dư',
-                'classname' => 'CD22TT11',
+                'classname' => 'CD22TT10',
             ],
         );
 

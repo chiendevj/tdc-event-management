@@ -250,5 +250,13 @@ class EventStudentSeeder extends Seeder
                 'event_id' => '4', 
             ],
         );
+
+        DB::table('event_student')->insert(
+            [
+                'student_id' => '22211TT0744',
+                'event_id' => '1', 
+            ],
+        );
+
     }
 }
