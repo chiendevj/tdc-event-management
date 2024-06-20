@@ -62,6 +62,19 @@ class EventsTableSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
+            [
+                'name' => 'Cuộc thi Lập trình Web',
+                'event_photo' => '/storage/uploads/events/banner4.jpg',
+                'location' => 'Hội trường B, 53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh, Trường Cao Đẳng Công Nghệ Thủ Đức',
+                'event_start' => Carbon::create('2024', '06', '21', '14', '00', '00'),
+                'event_end' => Carbon::create('2024', '06', '21', '16', '00', '00'),
+                'point' => 5,
+                'registration_start' => Carbon::create('2024', '06', '01', '00', '00', '00'),
+                'registration_end' => Carbon::create('2024', '06', '20', '23', '59', '59'),
+                'registration_count' => 50,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
         ];
 
         DB::table('events')->insert($events);

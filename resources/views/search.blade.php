@@ -97,16 +97,18 @@
                     html += '<table class="min-w-full divide-y divide-gray-200">';
                     html += '<thead class="bg-gray-50">';
                     html += '<tr>';
-                    html += '<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 bg-gray-200 uppercase tracking-wider">Tên sự kiện</th>';
+                    html += '<th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-200 bg-blue-800 uppercase tracking-wider">Tên sự kiện</th>';
                     html += '</tr>';
                     html += '</thead>';
                     html += '<tbody class="bg-white divide-y divide-gray-200">';
 
-                    data.events.forEach(function(event) {
-                        html += '<tr>';
-                        html += '<td class="px-6 py-4 whitespace-nowrap"> <span>' + event.id + '. </span> ' + event.name + '</td>';
-                        html += '</tr>';
-                    });
+                    data.events.forEach(function(event, index) {
+                            var bgColorClass = index % 2 === 0 ? 'bg-gray-100' : 'bg-blue-400 text-white'; 
+
+                            html += '<tr class="' + bgColorClass + '">';
+                            html += '<td class="px-6 py-4 whitespace-nowrap"> <span class="font-medium">' + event.id + '. </span> ' + event.name + '</td>';
+                            html += '</tr>';
+                        });
 
                     html += '</tbody>';
                     html += '</table>';

@@ -31,7 +31,7 @@
             <i class="fa-regular fa-times text-white text-2xl hover:text-red-500"></i>
         </button>
     </div>
-    <div class="container mx-auto w-full px-8 py-4 flex items-center justify-between">
+    <div class="container mx-auto z-50 w-full px-8 py-4 flex items-center justify-between">
         <h1 class="text-lg text-white font-semibold">
             <a href="{{ route('dashboard') }}">
                 <img src="{{ asset('assets/logo/fit_circle.png') }}" alt="FIT TDC" class="w-[50px] h-[50px] rounded-full">
@@ -56,13 +56,17 @@
                     <a href="{{ route('events.index') }}">Sự kiện</a>
                 </li>
                 <li
+                    class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
+                    <a href="{{ route('statisticals.index') }}">Thống kê</a>
+                </li>
+                <li
                     class="border-b-2 has_child border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in cursor-pointer relative">
                     Xem thêm <i class="fa-regular fa-chevron-down text-sm "></i>
                     <ul
                         class="absolute child bg-white text-black top-[40px] shadow-lg rounded-sm p-4 min-w-[300px] flex flex-col gap-2">
                         <li
                             class="border-b-2 border-b-white w-fit hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
-                            <a href="">Thống kê</a>
+                            <a href="{{ route('statisticals.index') }}">Something</a>
                         </li>
                         <li
                             class="border-b-2 border-b-white w-fit hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">

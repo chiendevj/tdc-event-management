@@ -2,6 +2,7 @@
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\StatisticalController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,7 +39,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('dashboards.admin.index');
     })->name("dashboard");
+
     Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
+
+    Route::get('admin/dashboard/statisticals', [StatisticalController::class, 'index'])->name("statisticals.index");
+    Route::get('admin/dashboard/statisticals/{id}', [StatisticalController::class, 'eventDetails'])->name('events.details');
+
 
 });
 
