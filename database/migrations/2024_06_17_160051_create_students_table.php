@@ -12,7 +12,7 @@
         public function up(): void
         {
             Schema::create('students', function (Blueprint $table) {
-                $table->string('student_id')->primary();
+                $table->string('id')->primary();
                 $table->string('email')->nullable();
                 $table->string('fullname')->nullable();
                 $table->string('classname');
