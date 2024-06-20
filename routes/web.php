@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 Route::get('/tracuu', function () {
     return view('search');
-});
+})->name('tra-cuu');
 
 Route::get('/event/{id}', function () {
     return view('detail');
