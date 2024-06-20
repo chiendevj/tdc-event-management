@@ -105,7 +105,8 @@ class EventController extends Controller
         return view('dashboards.admin.events.index', ['events' => $events]);
     }
 
-    public function loadmore(Request $request) {
+    public function loadmore(Request $request)
+    {
         $limit = 8;
         $events = Event::paginate($limit, ['*'], 'page', $request->page);
         return response()->json([
@@ -124,7 +125,39 @@ class EventController extends Controller
     public function search(Request $request)
     {
         $search = $request->search;
-        $events = Event::where('name', 'like', '%' . $search . '%')->paginate(8);
+        $filterDateStart = $request->filter_date_start;
+        $filterDateEnd = $request->filter_date_end;
+        $status = $request->status;
+
+        $query = Event::query();
+
+        if (!empty($search)) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        if (!empty($filterDateStart)) {
+            $query->where('event_start', '>=', $filterDateStart);
+        }
+
+        if (!empty($filterDateEnd)) {
+            $query->where('event_start', '<=', $filterDateEnd);
+        }
+
+        if (!empty($status)) {
+            if ($status == 'all') {
+                // Get all events
+                $query->where('status', "<>", $status);
+            } else if ($status == "newest") {
+                $query->orderBy('created_at', 'desc');
+            } else if ($status == "oldest") {
+                $query->orderBy('created_at', 'asc');
+            } else {
+                $query->where('status', $status);
+            }
+        }
+
+        $events = $query->paginate(8);
+
         return response()->json([
             'data' => $events,
             'success' => true,
