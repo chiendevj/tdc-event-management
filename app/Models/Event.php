@@ -20,4 +20,9 @@ class Event extends Model
         'content',
         'status',
     ];
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'event_student', 'event_id', 'student_id');
+    }
 }
