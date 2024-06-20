@@ -32,6 +32,7 @@ class EventController extends Controller
             'point' => 'required|integer',
             'registration_start' => 'required|date',
             'registration_end' => 'required|date',
+            'content' => 'required',
         ];
 
         // Define custom error messages
@@ -50,6 +51,7 @@ class EventController extends Controller
             'registration_start.date' => 'Định dạng thời gian của thời gian mở đăng ký tham gia sự kiện không hợp lệ.',
             'registration_end.required' => 'Vui lòng chọn thời gian đóng đăng ký tham gia sự kiện.',
             'registration_end.date' => 'Định dạng thời gian của thời gian đóng đăng ký tham gia sự kiện không hợp lệ.',
+            'content.required' => 'Hãy thêm một số nội dung cho sự kiện này.',
         ];
 
         // Validate the request with custom messages
@@ -163,5 +165,13 @@ class EventController extends Controller
             'success' => true,
             'message' => 'Events retrieved successfully.'
         ]);
+    }
+
+    public function edit($id) {
+        return view('dashboards.admin.events.edit');
+    }
+
+    public function update(Request $request, $id) {
+        // Handle update events
     }
 }
