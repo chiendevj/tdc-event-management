@@ -13,7 +13,10 @@
                 <a class="hover:text-gray-500 font-semibold" href="#">Lịch sự kiện</a>
               </li>
               <li>
-                <a class="hover:text-gray-500 font-semibold" href="#">Tra cứu</a>
+                <a class="hover:text-gray-500 font-semibold" href="{{ route('tra-cuu') }}">Tra cứu</a>
+              </li>
+              <li>
+                <a class="hover:text-gray-500 font-semibold" href="{{ route('login') }}">Đăng nhập</a>
               </li>
               
           </ul>
