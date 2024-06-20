@@ -16,7 +16,7 @@ class StudentSeeder extends Seeder
         //
         DB::table('students')->insert(
             [
-                'id' => '22211TT3000',
+                'id' => "22211TT3000",
                 'email' => '22211TT3000@mail.tdc.edu.vn',
                 'fullname' => 'Trần Trung Chiến',
                 'classname' => 'CD22TT11',
@@ -79,7 +79,7 @@ class StudentSeeder extends Seeder
 
         DB::table('students')->insert(
             [
-                'id' => '22211TT4044',
+                'id' => "22211TT4044",
                 'email' => '22211TT4044@mail.tdc.edu.vn',
                 'fullname' => 'Nguyễn Trọng Hiền',
                 'classname' => 'CD22TT11',
