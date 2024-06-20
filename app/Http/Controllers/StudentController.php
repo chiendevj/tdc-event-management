@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -27,10 +28,19 @@ class StudentController extends Controller
         }
 
         // Lấy danh sách các sự kiện mà sinh viên đã tham gia
-        $events = $student->events()->toSql();
-        
+         // Lấy danh sách các sự kiện mà sinh viên đã tham gia bằng truy vấn SQL
+         $events = DB::table('events')
+         ->join('event_student', 'events.id', '=', 'event_student.event_id')
+         ->where('event_student.student_id', $studentId)
+         ->select('events.*')
+         ->get();
         // dd($events, $student);
-        return response()->json(['events' => $events]);
+
+        if ($events->isEmpty()) {
+        return response()->json(['student' => $student, 'events' => []]);
+            
+        }
+        return response()->json(['student' => $student, 'events' => $events]);
     }
     
     /**
