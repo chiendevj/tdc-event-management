@@ -1,6 +1,6 @@
 import "./bootstrap";
 
-// Ckeditor 5
+// CKEditor 5
 import { ClassicEditor as ClassicEditorBase } from "@ckeditor/ckeditor5-editor-classic";
 import { Essentials } from "@ckeditor/ckeditor5-essentials";
 import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
@@ -13,19 +13,9 @@ import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
 import { SimpleUploadAdapter } from "@ckeditor/ckeditor5-upload";
 import { Font, FontSize } from "@ckeditor/ckeditor5-font";
 import { Alignment } from "@ckeditor/ckeditor5-alignment";
-import {
-    Table,
-    TableToolbar,
-    TableCellProperties,
-    TableProperties,
-} from "@ckeditor/ckeditor5-table";
-import {
-    Image,
-    ImageUpload,
-    ImageToolbar,
-    ImageCaption,
-    ImageStyle,
-} from "@ckeditor/ckeditor5-image";
+import { Table, TableToolbar, TableCellProperties, TableProperties } from "@ckeditor/ckeditor5-table";
+import { Image, ImageUpload, ImageToolbar, ImageCaption, ImageStyle, ImageResizeEditing, ImageResizeHandles } from "@ckeditor/ckeditor5-image";
+
 export default class ClassicEditor extends ClassicEditorBase {}
 
 ClassicEditor.builtinPlugins = [
@@ -52,6 +42,8 @@ ClassicEditor.builtinPlugins = [
     ImageToolbar,
     ImageCaption,
     ImageStyle,
+    ImageResizeEditing,
+    ImageResizeHandles,
 ];
 
 ClassicEditor.defaultConfig = {
@@ -86,23 +78,15 @@ ClassicEditor.defaultConfig = {
     language: "vn",
 };
 
-const editor = document.querySelector("#editor");
-if (editor) {
+const editorElement = document.querySelector("#editor");
+if (editorElement) {
     ClassicEditor
-        // Note that you do not have to specify the plugin and toolbar configuration — using defaults from the build.
-        .create(document.querySelector("#editor"), {
+        .create(editorElement, {
             simpleUpload: {
-                // The URL that the images are uploaded to.
                 uploadUrl: "/upload",
-
-                // Enable the XMLHttpRequest.withCredentials property.
                 withCredentials: true,
-
-                // Headers sent along with the XMLHttpRequest to the upload server.
                 headers: {
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
                 },
             },
             image: {
@@ -112,6 +96,12 @@ if (editor) {
                     "imageStyle:side",
                     "|",
                     "imageTextAlternative",
+                ],
+                resizeOptions: [
+                    { name: 'resizeImage:original', value: null, label: 'Original' },
+                    { name: 'resizeImage:custom', label: 'Custom', value: 'custom' },
+                    { name: 'resizeImage:40', value: '40', label: '40%' },
+                    { name: 'resizeImage:60', value: '60', label: '60%' },
                 ],
             },
         })
