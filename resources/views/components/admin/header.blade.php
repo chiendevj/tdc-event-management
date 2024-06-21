@@ -20,6 +20,9 @@
                     <a href="{{ route('events.index') }}">Sự kiện</a>
                 </li>
                 <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
+                    <a href="{{ route('statisticals.index') }}">Thống kê</a>
+                </li>
+                <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
                     <form action="{{ route('handle_logout') }}" method="POST">
                         @csrf
                         <button>

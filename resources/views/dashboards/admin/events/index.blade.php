@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="w-full flex items-center justify-between flex-col gap-3 lg:flex-row">
-            <div class="flex items-center w-full lg:w-fit justify-start gap-3 flex-col lg:flex-row">
+            <div class="flex items-center w-full lg:w-fit justify-start gap-3 flex-col lg:flex-col xl:flex-row">
                 <div class="relative border lg:w-fit flex items-center h-full justify-start p-2 text-gray-400 w-full">
                     <label for="filter_date_start" class="">Ngày bắt đầu:</label>
                     <input type="date" name="filter_date_start" id="filter_date_start"
@@ -29,7 +29,7 @@
                     <input type="date" name="filter_date_end" id="filter_date_end"
                         class="border-none p-0 flex-1 outline-none lg:w-fit">
                 </div>
-                <div class="relative border flex items-center h-full justify-start p-2 text-gray-400 w-full lg:w-fit">
+                <div class="relative border flex items-center h-full justify-start p-2 text-gray-400 w-full xl:w-fit">
                     <select name="status" id="status" class="border-none outline-none min-h-[24px] w-full p-0">
                         <option value="all">Tất cả</option>
                         <option value="Sắp diễn ra">Sắp diễn ra</option>
@@ -40,22 +40,27 @@
                     </select>
                 </div>
                 <button
-                    class="h-full p-2 bg-[var(--dark-bg)] w-full lg:w-fit text-white border-[var(--dark-bg)] rounded-sm btn_filter">
+                    class="h-full p-2 bg-[var(--dark-bg)] w-full xl:w-fit text-white border-[var(--dark-bg)] rounded-sm btn_filter">
                     Lọc sự kiện
                 </button>
             </div>
-            @can('create event')
-                <div class="flex items-center justify-center gap-3 w-full lg:w-fit flex-col lg:flex-row">
+            <div class="flex items-center justify-center gap-3 w-full lg:w-fit flex-col xl:flex-row">
+                @can('create event')
                     <a href="{{ route('events.create') }}"
-                        class="block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto lg:w-fit w-full text-center">
+                        class="block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
                         Tạo sự kiện mới
                     </a>
-                    <button
-                        class="btn_export_excel block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto lg:w-fit w-full text-center">
-                        Xuất danh sách ra file Excel
-                    </button>
-                </div>
-            @endcan
+                @endcan
+                <button
+                    class="btn_export_list block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
+                    Xuất danh sách hiện tại
+                </button>
+
+                <button
+                    class="btn_export_all block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
+                    Xuất tất cả sự kiện
+                </button>
+            </div>
         </div>
         <div class="loadmore_animate hidden items-center justify-center relative">
             <div class="dot-spinner">
@@ -69,7 +74,7 @@
                 <div class="dot-spinner__dot"></div>
             </div>
         </div>
-        <div class="grid lg:grid-cols-4 sm:grid-cols-2 gap-4 mt-[20px] list_events relative">
+        <div class="grid lg:grid-cols-3 xl:grid-cols-4 sm:grid-cols-2 gap-4 mt-[20px] list_events relative">
             {{-- @foreach ($events as $event)
                 <x-admin.event :event="$event" />
             @endforeach --}}
@@ -91,7 +96,8 @@
         const filterStartDate = document.querySelector('#filter_date_start');
         const filterEndDate = document.querySelector('#filter_date_end');
         const filterStatus = document.querySelector('#status');
-        const btnExportExcel = document.querySelector('.btn_export_excel');
+        const btnExportExcel = document.querySelector('.btn_export_list');
+        const btnExportExcelAll = document.querySelector('.btn_export_all');
 
         function showSkeletons() {
             for (let i = 0; i < 8; i++) {
@@ -159,7 +165,6 @@
                         listEvents.appendChild(eventItem);
                     });
 
-                    console.log(exportEvents);
                     lazyLoad();
 
                     if (isSearching && data.data.data.length < 8) {
@@ -212,6 +217,7 @@
                                         <div class="tooltip-arrow absolute bottom-0"></div>
                                     </div>
                                 </a>
+                                @can('create event')
                                 <a href="${routeDelete}" class="btn_delete btn_action relative flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]" onclick="return confirmDelete(event)">
                                     <i class="fa-light fa-trash"></i>
                                     <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
@@ -219,6 +225,7 @@
                                         <div class="tooltip-arrow absolute bottom-0"></div>
                                     </div>
                                 </a>
+                                @endcan
                                 <a href="${routeQR}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
                                     <i class="fa-light fa-qrcode"></i>
                                     <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
@@ -237,6 +244,79 @@
 
             eventItem.appendChild(link);
             return eventItem;
+        }
+
+        // Export events
+        function exportEvent(type) {
+            const url = "{{ route('events.export.excel.list') }}";
+            if (type === "list") {
+                if (exportEvents.length > 0) {
+                    fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                    'content')
+                            },
+                            body: JSON.stringify({
+                                type: type,
+                                events: exportEvents
+                            })
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                return response.blob();
+                            } else {
+                                throw new Error('Failed to download file');
+                            }
+                        })
+                        .then(blob => {
+                            const link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = 'events.xlsx';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Có lỗi xảy ra khi xuất file Excel');
+                        });
+                } else {
+                    alert('Không có sự kiện nào để xuất file Excel');
+                }
+            } else if (type === "all") {
+                fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content')
+                        },
+                        body: JSON.stringify({
+                            type: type,
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.blob();
+                        } else {
+                            throw new Error('Failed to download file');
+                        }
+                    })
+                    .then(blob => {
+                        const link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'events.xlsx';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Có lỗi xảy ra khi xuất file Excel');
+                    });
+            }
         }
 
         window.addEventListener('scroll', lazyLoad);
@@ -294,44 +374,17 @@
         });
 
         // Export Excel
-        btnExportExcel.addEventListener('click', () => {
-            const url = "{{ route('events.export.excel.list') }}";
-            if (exportEvents.length > 0) {
-                fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                'content')
-                        },
-                        body: JSON.stringify({
-                            events: exportEvents
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.blob();
-                        } else {
-                            throw new Error('Failed to download file');
-                        }
-                    })
-                    .then(blob => {
-                        const link = document.createElement('a');
-                        link.href = window.URL.createObjectURL(blob);
-                        link.download = 'events.xlsx';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Có lỗi xảy ra khi xuất file Excel');
-                    });
-            } else {
-                alert('Không có sự kiện nào để xuất file Excel');
-            }
-        });
+        if (btnExportExcel) {
+            btnExportExcel.addEventListener('click', () => {
+                exportEvent('list');
+            });
+        }
 
+        if (btnExportExcelAll) {
+            btnExportExcelAll.addEventListener('click', () => {
+                exportEvent('all');
+            });
+        }
 
         // First load
         loadMoreEvents();

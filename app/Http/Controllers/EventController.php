@@ -269,7 +269,16 @@ class EventController extends Controller
 
     public function exportEvents(Request $request)
     {
-        $eventIds = $request->events;
-        return Excel::download(new EventExport($eventIds), 'events.xlsx');
+        $type = $request->type;
+
+        if ($type == 'list') {
+            $eventIds = $request->events;
+            return Excel::download(new EventExport($eventIds), 'events.xlsx');
+        }else if ($type == 'all') {
+            // Export all events
+            return Excel::download(new EventExport(Event::all()->pluck('id')->toArray()), 'events.xlsx');
+        } else {
+            return redirect()->back()->with('error', 'Loại xuất file không hợp lệ.');
+        }
     }
 }
