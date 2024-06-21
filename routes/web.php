@@ -63,6 +63,8 @@ Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function ()
 // Routes chỉ cho admin có quyền edit
 Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () {
     Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
+    Route::get('admin/dashboard/events/{id}/edit', [EventController::class, 'edit'])->name("events.edit");
+    Route::post('admin/dashboard/events/{id}/edit', [EventController::class, 'update'])->name("events.update");
     Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
 });
 

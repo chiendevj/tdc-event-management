@@ -7,14 +7,12 @@
     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
         <div class="col-span-8 p-4">
             <h2 class="md:text-3xl text-base  font-semibold md:pb-6 pb-4">{{$event->name}}</h2>
-            <p class="md:text-base text-xs italic text-gray-500 md:pb-6 pb-3">
-                {!! $event->content !!}
-            </p>
+            
             <div class="banner">
                 <img src="{{ asset('assets/images/workshop2.jpg') }}" alt="" srcset="">
             </div>
-            <div>
-                Thời gian: 14h30
+            <div class="content">
+            {!! $event->content !!}
             </div>
         </div>
         <div class="col-span-4  p-4">
