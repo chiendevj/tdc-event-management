@@ -67,6 +67,7 @@ Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () 
     Route::get('admin/dashboard/events/{id}/edit', [EventController::class, 'edit'])->name("events.edit");
     Route::post('admin/dashboard/events/{id}/edit', [EventController::class, 'update'])->name("events.update");
     Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
+    Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");
 });
 
 // Public routes

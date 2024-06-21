@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
         $editPermission = Permission::create(['name' => 'edit event']);
         $viewPermission = Permission::create(['name' => 'view event']);
         $createPermission = Permission::create(['name' => 'create event']);
+        $deletePermission = Permission::create(['name' => 'delete event']);
 
         // Create Super Admin user
         $superAdmin = User::factory()->create([
