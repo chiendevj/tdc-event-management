@@ -227,10 +227,6 @@
             return eventItem;
         }
 
-
-
-
-
         window.addEventListener('scroll', lazyLoad);
         window.addEventListener('resize', lazyLoad);
 
