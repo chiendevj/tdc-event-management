@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="p-4">
-    <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+    <div class="p-4 border-2 border-gray-200 border-dashed dark:border-gray-700 mt-14">
         <h1 class="text-2xl font-semibold mb-4">Thống kê sự kiện</h1>
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -16,7 +16,7 @@
                             Tên sự kiện
                         </th>
                         <th scope="col" class="px-6 py-3 text-center">
-                            Số lượng sinh viên
+                            Số lượng sinh viên tham gia
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Chi tiết
@@ -33,7 +33,7 @@
                             {{ $event->students_count }}
                         </td>
                         <td class="px-6 py-4">
-                            <button class="text-blue-600 hover:underline dark:text-blue-500" onclick="showEventDetails('{{ $event->id }}')">Chi tiết</button>
+                            <button class="text-blue-600 hover:underline" onclick="showEventDetails('{{ $event->id }}')">Chi tiết</button>
                         </td>
                     </tr>
                     @endforeach
@@ -55,7 +55,7 @@
                 <!-- Nội dung chi tiết sự kiện sẽ được tải vào đây -->
             </div>
             <div class="mt-4">
-                <button id="exportExcelBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Xuất Excel</button>
+                <button id="exportExcelBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded ease-in transition-all">Xuất Excel</button>
             </div>
             <canvas id="eventChart" width="400" height="200"></canvas>
         </div>
@@ -65,7 +65,7 @@
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    let eventChart = null; // Variable to store the chart instance
+    let eventChart = null;
 
     function showEventDetails(eventId) {
         fetch(`{{ route('events.details', ['id' => ':id']) }}`.replace(':id', eventId))
@@ -84,7 +84,7 @@
 
                 eventDetailsContent.innerHTML = `
                     <p><strong>Tên sự kiện:</strong> ${data.event.name}</p>
-                    <p><strong>Tổng sinh viên:</strong> ${data.event.students.length}</p>
+                    <p><strong>Tổng sinh viên tham gia:</strong> ${data.event.students.length}</p>
                     <p><strong>Ngày bắt đầu:</strong> ${formatDate(data.event.event_start)}</p>
                     <p><strong>Ngày kết thúc:</strong> ${formatDate(data.event.event_end)}</p>
                 `;
@@ -97,7 +97,7 @@
                     data: {
                         labels: classLabels,
                         datasets: [{
-                            label: 'Số lượng sinh viên',
+                            label: 'Số lượng sinh viên tham gia',
                             data: classCounts,
                             backgroundColor: 'rgba(54, 162, 235, 0.2)',
                             borderColor: 'rgba(54, 162, 235, 1)',
@@ -137,12 +137,12 @@
         const date = new Date(dateString);
         const hours = date.getHours();
         const ampm = hours >= 12 ? 'PM' : 'AM';
-        const formattedHours = hours % 12 || 12; // Convert hours to 12-hour format
+        const formattedHours = hours % 12 || 12;  
         const minutes = date.getMinutes().toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const year = date.getFullYear();
-        return `${formattedHours}:${minutes} ${ampm} ${day}/${month}/${year}`;
+        return `${formattedHours}:${minutes} ${ampm} ${day}-${month}-${year}`;
     }
 </script>
 

@@ -4,17 +4,6 @@
 
 @section('content')
 <div class="background-tdc">
-    {{-- Error notify --}}
-    @if ($errors->any())
-    <div class="mb-2 form_error_notify bg-white rounded-lg overflow-hidden">
-        <span class="block w-full p-4 bg-red-500 text-white">Thất bại</span>
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li class="text-red-500 p-2">{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
     <div class="search-box">
         <h1 class="title"><span>Tra cứu</span><br> tham gia sự kiện</h1>
         <form id="searchForm" method="get" data-url="{{ route('search_events_by_student') }}">
@@ -26,9 +15,9 @@
         <!-- Modal -->
         <div id="eventsModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
             <div class="bg-white rounded-lg w-full max-w-lg overflow-hidden">
-                <div class="flex justify-between items-center px-6 py-4 bg-blue-950">
+                <div class="flex justify-between items-center px-6 py-4">
                     <h2 class="text-lg font-semibold text-gray-200" id="modalTitle">Kết quả tra cứu</h2>
-                    <button class="text-gray-600 hover:text-gray-200 focus:outline-none p-5 text-2xl" onclick="closeModal()">&times;</button>
+                    <button class="text-gray-200 hover:text-yellow-400 focus:outline-none p-5 text-2xl" onclick="closeModal()">&times;</button>
                 </div>
                 <div class="p-6" id="modalBody">
 
@@ -65,17 +54,22 @@
         var studentId = document.getElementById("studentId").value.trim();
 
         if (studentId === '') {
+            modalTitle.parentElement.classList.remove('bg-red-600', 'bg-blue-950')
+            modalTitle.parentElement.classList.add('bg-red-600')
+            modalTitle.innerHTML = 'Kết quả tra cứu';
             modalBody.innerHTML = '<p class="text-gray-700" id="modalMessage">Vui lòng nhập mã số sinh viên để tra cứu.</p>';
             modal.style.display = "flex";
-            return; // Dừng hàm nếu không nhập mã số sinh viên
+            return;  
         }
 
         // Kiểm tra mã số sinh viên với biểu thức chính quy
         if (!studentIdRegex.test(studentId)) {
+            modalTitle.parentElement.classList.remove('bg-red-600', 'bg-blue-950')
+            modalTitle.parentElement.classList.add('bg-red-600')
             modalTitle.innerHTML = 'Kết quả tra cứu';
             modalBody.innerHTML = 'Mã số sinh viên không hợp lệ.';
             modal.style.display = "flex";
-            return; // Dừng hàm nếu mã số sinh viên không hợp lệ
+            return;  
         }
 
         var apiUrl = this.getAttribute('data-url');
@@ -86,9 +80,13 @@
             })
             .then(function(data) {
                 if (data.error) {
-                modalTitle.innerHTML = 'Kết quả tra cứu';
-                modalBody.innerHTML = '<p>' + data.error + '</p>';
+                    modalTitle.parentElement.classList.remove('bg-red-600', 'bg-blue-950')
+                    modalTitle.parentElement.classList.add('bg-red-600')
+                    modalTitle.innerHTML = 'Kết quả tra cứu';
+                    modalBody.innerHTML = '<p>' + data.error + '</p>';
             } else {
+                modalTitle.parentElement.classList.remove('bg-red-600', 'bg-blue-950')
+                modalTitle.parentElement.classList.add('bg-blue-950')
                 modalTitle.innerHTML = 'Kết quả tra cứu cho sinh viên ' + data.student.fullname + ' (MSSV: ' + data.student.email.split('@')[0] + ')';
 
                 if (data.events.length > 0) {
