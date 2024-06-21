@@ -144,11 +144,9 @@
                 });
 
                 const data = await response.json();
-
                 if (data.data.data.length > 0) {
                     data.data.data.forEach(event => {
                         const eventItem = createEventItem(event);
-                        console.log(eventItem.innerHTML);
                         listEvents.appendChild(eventItem);
                     });
                     lazyLoad();
@@ -170,27 +168,42 @@
             }
         }
 
+        function confirmDelete(event) {
+            event.preventDefault();
+            const userConfirmed = confirm("Bạn có chắc chắn muốn xóa sự kiện này?");
+            if (userConfirmed) {
+                window.location.href = event.currentTarget.href;
+            }
+        }
+
         function createEventItem(event) {
             const route = "{{ route('events.show', ':id') }}".replace(':id', event.id);
             const routeEdit = "{{ route('events.edit', ':id') }}".replace(':id', event.id);
+            const routeDelete = "{{ route('events.delete', ':id') }}".replace(':id', event.id);
             const routeQR = "#"; // Chưa có route
             const eventItem = document.createElement('div');
             const link = document.createElement('a');
 
             link.href = route;
 
-
             eventItem.classList.add('event_item', 'border', 'rounded-sm', 'overflow-hidden');
 
             link.innerHTML = `
                     <div class="overflow-hidden relative">
-                        <img src="${event.event_photo}" alt="" class="w-full overflow-hidden hover:scale-105 transition-all event_img duration-100 ease-in" >
+                        <img src="${event.event_photo}" alt="" class="w-full overflow-hidden hover:scale-105 transition-all event_img duration-100 ease-in">
                         <div class="action_hover absolute top-0 left-0 bottom-0 flex items-center justify-center right-0 bg-[rgba(0,0,0,0.2)]" style="backdrop-filter: blur(5px)">
                             <div class="flex items-center justify-center gap-2">
                                 <a href="${routeEdit}" class="btn_edit btn_action relative flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
                                     <i class="fa-light fa-pen-to-square"></i>
                                     <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
                                         Chỉnh sửa sự kiện
+                                        <div class="tooltip-arrow absolute bottom-0"></div>
+                                    </div>
+                                </a>
+                                <a href="${routeDelete}" class="btn_delete btn_action relative flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]" onclick="return confirmDelete(event)">
+                                    <i class="fa-light fa-trash"></i>
+                                    <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
+                                        Xóa sự kiện
                                         <div class="tooltip-arrow absolute bottom-0"></div>
                                     </div>
                                 </a>
@@ -208,11 +221,14 @@
                         <h3 class="text-lg font-semibold uppercase">${event.name}</h3>
                         <p class="text-gray-400">${event.location}</p>
                     </div>
-            `;
+                `;
 
             eventItem.appendChild(link);
             return eventItem;
         }
+
+
+
 
 
         window.addEventListener('scroll', lazyLoad);

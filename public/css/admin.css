@@ -332,24 +332,24 @@ body::-webkit-scrollbar-thumb:hover {
     transform: scale(1.1);
 }
 
-.action_hover .btn_edit {
+.action_hover .btn_action:nth-child(odd) {
     transform: translateY(-20px);
     opacity: 0;
     transition: all 0.3s ease;
 }
 
-.action_hover .btn_qr {
+.action_hover .btn_action:nth-child(even) {
     transform: translateY(20px);
     opacity: 0;
     transition: all 0.3s ease;
 }
 
-.event_item:hover .action_hover .btn_edit {
+.event_item:hover .btn_action:nth-child(odd) {
     transform: translateY(0);
     opacity: 1;
 }
 
-.event_item:hover .action_hover .btn_qr {
+.event_item:hover .btn_action:nth-child(even) {
     transform: translateY(0);
     opacity: 1;
 }
