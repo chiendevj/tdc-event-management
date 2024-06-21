@@ -42,12 +42,9 @@ Route::middleware(['auth'])->group(function () {
     })->name("dashboard");
 
     Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
-
     Route::get('admin/dashboard/statisticals', [StatisticalController::class, 'index'])->name("statisticals.index");
     Route::get('admin/dashboard/statisticals/{id}', [StatisticalController::class, 'eventDetails'])->name('events.details');
     Route::get('admin/dashboard/statisticals/export/{eventId}', [EventController::class, 'exportEventToExcel'])->name('events.export.excel');
-
-
 });
 
 Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function () {
@@ -56,6 +53,8 @@ Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function ()
     Route::post('admin/dashboard/events/store', [EventController::class, 'store'])->name("events.store");
     Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
     Route::get('admin/dashboard/events/{id}/edit', [EventController::class, 'edit'])->name("events.edit");
+    Route::post('admin/dashboard/events/{id}/edit', [EventController::class, 'update'])->name("events.update");
+    Route::get('admin/dashboard/events/{id}/delete', [EventController::class, 'delete'])->name("events.delete");
     Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
     Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");
 });
