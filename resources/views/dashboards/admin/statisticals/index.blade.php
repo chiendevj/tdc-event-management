@@ -26,7 +26,7 @@
                 <tbody>
                     @foreach($events as $event)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
                             {{ $event->name }}
                         </th>
                         <td class="px-6 py-4 text-center">
@@ -45,19 +45,25 @@
 
 <!-- Modal -->
 <div id="eventDetailsModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
-    <div class="flex items-center justify-center min-h-screen">
-        <div class="bg-gray-100 rounded-lg shadow-lg p-6 w-full max-w-2xl">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold">Chi tiết sự kiện</h2>
-                <button class="text-gray-600 hover:text-gray-900 text-3xl" onclick="closeModal()">&times;</button>
+    <div class="flex items-center justify-center min-h-screen px-4 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+        <div class="inline-block align-bottom bg-gray-100 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+            <div class="bg-gray-100 p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold">Chi tiết sự kiện</h2>
+                    <button class="text-gray-600 hover:text-gray-900 text-3xl" onclick="closeModal()">&times;</button>
+                </div>
+                <div id="eventDetailsContent">
+                    <!-- Nội dung chi tiết sự kiện sẽ được tải vào đây -->
+                </div>
+                <div class="mt-4">
+                    <button id="exportExcelBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded ease-in transition-all">Xuất Excel</button>
+                </div>
+                <canvas id="eventChart" width="400" height="200"></canvas>
             </div>
-            <div id="eventDetailsContent">
-                <!-- Nội dung chi tiết sự kiện sẽ được tải vào đây -->
-            </div>
-            <div class="mt-4">
-                <button id="exportExcelBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded ease-in transition-all">Xuất Excel</button>
-            </div>
-            <canvas id="eventChart" width="400" height="200"></canvas>
         </div>
     </div>
 </div>
