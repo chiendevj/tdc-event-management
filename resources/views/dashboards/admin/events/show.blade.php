@@ -17,24 +17,7 @@
             </div>
         </div>
         <div class="col-span-4  p-4">
-            <!-- Nội dung của cột 20% -->
-            <h1 class="title font-bold capitalize">Sự kiện <span>nổi bật</span></h1>
-            <div class="p-4 event-card">
-                <div class="background">
-                    <img src="{{ asset('assets/images/workshop.jpg') }}" alt="">
-                </div>
-                <div class="content">
-                    <div class="event-title">
-                        <a>
-                            Workshop tìm hiểu về giấy
-                        </a>
-                    </div>
-                    <div class="event-desc">
-                        <div class="event-time"><span>7:00 18/6/2024</span></div>
-                        <div class="event-location"><span>Hội trường D</span></div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>

@@ -10,7 +10,7 @@ class StatisticalController extends Controller
 
     public function index()
     {
-        $events = Event::withCount('students')->paginate(8);
+        $events = Event::withCount('students')->get();
         return view('dashboards.admin.statisticals.index', ['events' => $events]);
     }
 
