@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/dashboard/statisticals', [StatisticalController::class, 'index'])->name("statisticals.index");
     Route::get('admin/dashboard/statisticals/{id}', [StatisticalController::class, 'eventDetails'])->name('events.details');
     Route::get('admin/dashboard/statisticals/export/{eventId}', [EventController::class, 'exportEventToExcel'])->name('events.export.excel');
+    Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
 });
 
 Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function () {

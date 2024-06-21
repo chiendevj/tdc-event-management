@@ -40,15 +40,21 @@
                     </select>
                 </div>
                 <button
-                    class="h-full p-2 bg-[var(--dark-bg)] w-full lg:w-fit text-white border-[var(--dark-bg)] rounded-sm btn_filter">Lọc
-                    sự
-                    kiện</button>
+                    class="h-full p-2 bg-[var(--dark-bg)] w-full lg:w-fit text-white border-[var(--dark-bg)] rounded-sm btn_filter">
+                    Lọc sự kiện
+                </button>
             </div>
             @can('create event')
-                <a href="{{ route('events.create') }}"
-                    class="block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto lg:w-fit w-full text-center">
-                    Tạo sự kiện mới
-                </a>
+                <div class="flex items-center justify-center gap-3 w-full lg:w-fit flex-col lg:flex-row">
+                    <a href="{{ route('events.create') }}"
+                        class="block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto lg:w-fit w-full text-center">
+                        Tạo sự kiện mới
+                    </a>
+                    <button
+                        class="btn_export_excel block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto lg:w-fit w-full text-center">
+                        Xuất danh sách ra file Excel
+                    </button>
+                </div>
             @endcan
         </div>
         <div class="loadmore_animate hidden items-center justify-center relative">
@@ -77,6 +83,7 @@
         let isSearching = false;
         let isLoading = false;
         let preventLoad = false;
+        let exportEvents = [];
         const loadingAnimation = document.querySelector('.loadmore_animate');
         const listEvents = document.querySelector('.list_events');
         const searchInput = document.querySelector('input[name="search"]');
@@ -84,6 +91,7 @@
         const filterStartDate = document.querySelector('#filter_date_start');
         const filterEndDate = document.querySelector('#filter_date_end');
         const filterStatus = document.querySelector('#status');
+        const btnExportExcel = document.querySelector('.btn_export_excel');
 
         function showSkeletons() {
             for (let i = 0; i < 8; i++) {
@@ -146,9 +154,12 @@
                 const data = await response.json();
                 if (data.data.data.length > 0) {
                     data.data.data.forEach(event => {
+                        exportEvents.push(event.id);
                         const eventItem = createEventItem(event);
                         listEvents.appendChild(eventItem);
                     });
+
+                    console.log(exportEvents);
                     lazyLoad();
 
                     if (isSearching && data.data.data.length < 8) {
@@ -158,6 +169,7 @@
                     if (isSearching && searchPage === 1) {
                         listEvents.innerHTML = '<p class="text-center absolute w-full">Không có sự kiện nào</p>';
                         preventLoad = true;
+                        exportEvents = [];
                     }
                 }
             } catch (error) {
@@ -249,6 +261,7 @@
             searchPage = 1;
             preventLoad = false;
             listEvents.innerHTML = '';
+            exportEvents = [];
             loadMoreEvents();
         }
 
@@ -279,6 +292,46 @@
             isSearching = true;
             loadMoreEvents();
         });
+
+        // Export Excel
+        btnExportExcel.addEventListener('click', () => {
+            const url = "{{ route('events.export.excel.list') }}";
+            if (exportEvents.length > 0) {
+                fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content')
+                        },
+                        body: JSON.stringify({
+                            events: exportEvents
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.blob();
+                        } else {
+                            throw new Error('Failed to download file');
+                        }
+                    })
+                    .then(blob => {
+                        const link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = 'events.xlsx';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Có lỗi xảy ra khi xuất file Excel');
+                    });
+            } else {
+                alert('Không có sự kiện nào để xuất file Excel');
+            }
+        });
+
 
         // First load
         loadMoreEvents();

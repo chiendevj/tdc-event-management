@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EventExport;
 use App\Exports\EventWithStudentsExport;
 use App\Models\Event;
 use Illuminate\Http\Request;
@@ -9,7 +10,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class EventController extends Controller
 {
-
     public function create()
     {
         return view('dashboards.admin.events.create');
@@ -265,5 +265,11 @@ class EventController extends Controller
         } else {
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa sự kiện.');
         }
+    }
+
+    public function exportEvents(Request $request)
+    {
+        $eventIds = $request->events;
+        return Excel::download(new EventExport($eventIds), 'events.xlsx');
     }
 }
