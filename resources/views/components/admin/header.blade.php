@@ -14,7 +14,7 @@
                     <a href="">Tài khoản quản lý</a>
                 </li>
                 <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
-                    <a href="">Sinh viên</a>
+                  `  <a href="">Sinh viên</a>
                 </li>
                 <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
                     <a href="{{ route('events.index') }}">Sự kiện</a>
@@ -26,7 +26,7 @@
                     <form action="{{ route('handle_logout') }}" method="POST">
                         @csrf
                         <button>
-                            Logout out
+                            Đăng xuất
                             <i class="fa-light fa-right-from-bracket"></i>
                         </button>
                     </form>
@@ -80,7 +80,7 @@
     <div class="admin flex items-center justify-start gap-2 relative">
         @if (!Auth::check())
         <a href="{{ route('login') }}">
-            <h1 class="text-lg font-bold text-white">Login</h1>
+            <h1 class="text-lg font-bold text-white">Đăng nhập</h1>
         </a>
         @else
         <div tabindex="0" class="profile flex justify-center items-center cursor-pointer">
@@ -99,7 +99,7 @@
                     <form action="{{ route('handle_logout') }}" method="POST">
                         @csrf
                         <button class="flex gap-2 justify-center items-center text-black">
-                            Logout out
+                            Đăng xuất
                             <i class="fa-light fa-right-from-bracket"></i>
                         </button>
                     </form>
