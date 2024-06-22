@@ -17,27 +17,18 @@ class EventWithStudentsExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        // Fetch students of the event and select relevant columns
-        $event = Event::with('students')->findOrFail($this->eventId);
-        return $event->students->map(function($student) {
-            return [
-                'id' => $student->id,
-                'name' => $student->fullname,
-                'email' => $student->email,
-                'classname' => $student->classname,
-
-            ];
-        });
+        // Fetch data for export (example: students of the event)
+        $event = Event::findOrFail($this->eventId);
+        return $event->students; // Adjust this to your actual relationship or data structure
     }
 
     public function headings(): array
     {
         // Define the headings for the exported file
         return [
-            'Mã Số Sinh Viên',
-            'Họ và Tên',
-            'Địa chỉ Email',
-            'Lớp',
+            'Student Name',
+            'Student Email',
+            // Add more headings as needed
         ];
     }
 }

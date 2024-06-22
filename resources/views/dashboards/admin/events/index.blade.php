@@ -358,7 +358,6 @@
         // Scroll event
         window.addEventListener('scroll', () => {
             if (!preventLoad) {
-                console.log(window.scrollY + innerHeight, container.offsetHeight + 200);
                 if (window.scrollY + window.innerHeight >= container.offsetHeight + 300 && !isLoading) {
                     if (isSearching && searchPage < lastPage) {
                         searchPage++;
