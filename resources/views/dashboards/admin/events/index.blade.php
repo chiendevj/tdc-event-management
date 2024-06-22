@@ -3,7 +3,7 @@
 @section('title', 'Sự kiện')
 
 @section('content')
-    <div class="container mx-auto mt-[40px] px-8 py-4">
+    <div class="container mx-auto mt-[40px] px-8 py-4 div_wrapper">
         <div class="flex items-center lg:flex-row justify-between gap-4 flex-col sm:gap-4 mb-[20px]">
             <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
                 Danh sách các sự kiện</h3>
@@ -60,7 +60,7 @@
                     Xuất tất cả sự kiện
                 </button>
                 @endcan
-               
+
             </div>
         </div>
         <div class="loadmore_animate hidden items-center justify-center relative">
@@ -75,7 +75,7 @@
                 <div class="dot-spinner__dot"></div>
             </div>
         </div>
-        <div class="grid lg:grid-cols-3 xl:grid-cols-4 sm:grid-cols-2 gap-4 mt-[20px] list_events relative">
+        <div class="grid lg:grid-cols-3 xl:grid-cols-4 sm:grid-cols-2 gap-4 mt-[20px] list_events relative py-4">
             {{-- @foreach ($events as $event)
                 <x-admin.event :event="$event" />
             @endforeach --}}
@@ -99,6 +99,7 @@
         const filterStatus = document.querySelector('#status');
         const btnExportExcel = document.querySelector('.btn_export_list');
         const btnExportExcelAll = document.querySelector('.btn_export_all');
+        const container = document.querySelector('.div_wrapper');
 
         function showSkeletons() {
             for (let i = 0; i < 8; i++) {
@@ -357,7 +358,8 @@
         // Scroll event
         window.addEventListener('scroll', () => {
             if (!preventLoad) {
-                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 && !isLoading) {
+                console.log(window.scrollY + innerHeight, container.offsetHeight + 200);
+                if (window.scrollY + window.innerHeight >= container.offsetHeight + 300 && !isLoading) {
                     if (isSearching && searchPage < lastPage) {
                         searchPage++;
                         loadMoreEvents();
@@ -369,7 +371,7 @@
             }
         });
 
-        // Search event với debounce
+        // Search event vs debounce
         searchInput.addEventListener('input', debounce(handleSearch, 300));
 
         // Filter event
