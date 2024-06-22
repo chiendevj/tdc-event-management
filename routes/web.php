@@ -2,6 +2,7 @@
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\FacebookController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\StatisticalController;
 use App\Http\Controllers\StudentController;
@@ -46,6 +47,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/dashboard/statisticals/{id}', [StatisticalController::class, 'eventDetails'])->name('events.details');
     Route::get('admin/dashboard/statisticals/export/{eventId}', [EventController::class, 'exportEventToExcel'])->name('events.export.excel');
     Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
+
+    Route::get('/events/{id}/share', [FacebookController::class, 'share'])->name('events.share');
 });
 
 Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function () {

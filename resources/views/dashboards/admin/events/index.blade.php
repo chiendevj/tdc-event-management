@@ -200,7 +200,7 @@
             const routeEdit = "{{ route('events.edit', ':id') }}".replace(':id', event.id);
             const routeDelete = "{{ route('events.delete', ':id') }}".replace(':id', event.id);
             const routeQR = "#"; // Chưa có route
-            const routeShareFacebook = "#"; // Chưa có route
+            const routeShareFacebook = "{{ route('events.share', ':id') }}".replace(':id', event.id);
             const eventItem = document.createElement('div');
             const link = document.createElement('a');
 
