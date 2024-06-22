@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="col-span-2  p-4">
-            
+
         </div>
     </div>
 </div>

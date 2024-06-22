@@ -58,6 +58,7 @@ Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function ()
     Route::get('admin/dashboard/events/{id}/delete', [EventController::class, 'delete'])->name("events.delete");
     Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
     Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");
+    Route::get('/api/events/{id}/participants', [EventController::class, 'getParticipants'])->name("events.participants");
 });
 
 

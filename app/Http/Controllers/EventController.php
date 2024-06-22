@@ -252,7 +252,8 @@ class EventController extends Controller
         return Excel::download(new EventWithStudentsExport($event->id), 'event_' . $event->id . '.xlsx');
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $event = Event::find($id);
         if (!$event) {
             return redirect()->back()->with('error', 'Không tìm thấy sự kiện.');
@@ -274,11 +275,18 @@ class EventController extends Controller
         if ($type == 'list') {
             $eventIds = $request->events;
             return Excel::download(new EventExport($eventIds), 'events.xlsx');
-        }else if ($type == 'all') {
+        } else if ($type == 'all') {
             // Export all events
             return Excel::download(new EventExport(Event::all()->pluck('id')->toArray()), 'events.xlsx');
         } else {
             return redirect()->back()->with('error', 'Loại xuất file không hợp lệ.');
         }
+    }
+
+    public function getParticipants($eventId)
+    {
+        $event = Event::findOrFail($eventId);
+        $students = $event->students;
+        return response()->json(["data" => $students, "success" => true, "message" => "Participants retrieved successfully."]);
     }
 }
