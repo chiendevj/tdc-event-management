@@ -17,5 +17,12 @@ class Event extends Model
         'point',
         'registration_start',
         'registration_end',
+        'content',
+        'status',
     ];
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'event_student', 'event_id', 'student_id');
+    }
 }

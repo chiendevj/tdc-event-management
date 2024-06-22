@@ -1,10 +1,7 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Support\Facades\DB;
-
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -18,9 +15,13 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['name' => 'view data']);
+        // Create permissions
+        $editPermission = Permission::create(['name' => 'edit event']);
+        $viewPermission = Permission::create(['name' => 'view event']);
+        $createPermission = Permission::create(['name' => 'create event']);
+        $deletePermission = Permission::create(['name' => 'delete event']);
 
-        // Tạo người dùng Super Admin
+        // Create Super Admin user
         $superAdmin = User::factory()->create([
             'name' => 'Super Admin',
             'email' => 'spadmin@gmail.com',
@@ -31,16 +32,16 @@ class UserSeeder extends Seeder
         $superAdminRole->givePermissionTo(Permission::all());
         $superAdmin->assignRole($superAdminRole);
 
-        // Tạo người dùng Students
-        $student = User::factory()->create([
-            'name' => 'Nguyễn Văn A',
-            'email' => 'vana.student@gmail.com',
-            'password' => Hash::make('12345'),
+        // Create Admin user
+        $admin = User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('1234567'),
             'created_at' => now()
         ]);
 
-        $studentRole = Role::create(['name' => 'student']);
-        $studentRole->givePermissionTo('view data');
-        $student->assignRole($studentRole);
+        $adminRole = Role::create(['name' => 'admin']);
+        $adminRole->givePermissionTo([$viewPermission, $editPermission]);
+        $admin->assignRole($adminRole);
     }
 }

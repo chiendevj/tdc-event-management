@@ -1,6 +1,10 @@
 <?php
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\StatisticalController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,35 +19,64 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
-// Group routes that require authentication
+Route::get('/tracuu', function () {
+    return view('search');
+})->name('tra-cuu');
+
+Route::get('/search', [StudentController::class, 'searchEventsByStudent'])->name('search_events_by_student');
+
+Route::get('/event/{id}', function () {
+    return view('detail');
+});
+
+Route::get('/calendar-event', [ScheduleController::class, 'index']);
+
+// Routes chỉ cho super-admin
 Route::middleware(['auth'])->group(function () {
+    // Dashboard
     Route::get('/admin/dashboard', function () {
         return view('dashboards.admin.index');
     })->name("dashboard");
 
-    // Event routes
     Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
-    Route::get('admin/dashboard/events/create', [EventController::class, 'create'])->name("events.create");
-    Route::post('admin/dashboard/events/store', [EventController::class, 'store'])->name("events.store");
+    Route::get('admin/dashboard/statisticals', [StatisticalController::class, 'index'])->name("statisticals.index");
+    Route::get('admin/dashboard/statisticals/{id}', [StatisticalController::class, 'eventDetails'])->name('events.details');
+    Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
+    Route::get('admin/dashboard/statisticals/export/{eventId}', [EventController::class, 'exportEventToExcel'])->name('events.export.excel');
+
+    Route::get('/api/events/{id}/participants', [EventController::class, 'getParticipants'])->name("events.participants");
+    Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
+    Route::get('admin/dashboard/statisticals/export/{eventId}', [EventController::class, 'exportEventToExcel'])->name('events.export.excel');
+    Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");
+    Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
+    Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");
 });
 
-// Public routes
-Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");
+Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function () {
+    // Event routes
+    Route::get('admin/dashboard/events/create', [EventController::class, 'create'])->name("events.create");
+    Route::post('admin/dashboard/events/store', [EventController::class, 'store'])->name("events.store");
+    Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
+    Route::get('admin/dashboard/events/{id}/edit', [EventController::class, 'edit'])->name("events.edit");
+    Route::post('admin/dashboard/events/{id}/edit', [EventController::class, 'update'])->name("events.update");
+    Route::get('admin/dashboard/events/{id}/delete', [EventController::class, 'delete'])->name("events.delete");
+});
+
+
+// Routes chỉ cho admin có quyền edit
+Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () {
+    Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
+    Route::get('admin/dashboard/events/{id}/edit', [EventController::class, 'edit'])->name("events.edit");
+    Route::post('admin/dashboard/events/{id}/edit', [EventController::class, 'update'])->name("events.update");
+});
+
 
 // Auth routes
 Route::get('/auth/login', [AuthController::class, "showLogin"])->name("login");
 Route::post('/auth/login', [AuthController::class, "login"])->name("handle_login");
-Route::get('/auth/register', [AuthController::class, "showRegister"])->name("register");
-Route::post('/auth/register', [AuthController::class, "register"])->name("handle_register");
 Route::post('/auth/logout', [AuthController::class, "logout"])->name("handle_logout");
-Route::post('/auth/update', [AuthController::class, "update"])->name("update_profile");
+Route::post('/upload', [UploadController::class, 'upload'])->name('upload');
 
-// Event routes
-Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
-Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
-Route::get('admin/dashboard/events/create', [EventController::class, 'create'])->name("events.create");
-Route::post('admin/dashboard/events/store', [EventController::class, 'store'])->name("events.store");
-Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");

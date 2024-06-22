@@ -1,0 +1,26 @@
+
+.banner img{
+    width: 80%;
+    margin: 0 auto;
+}
+
+.detail .title {
+    font-size: 30px;
+    color: var(--blue);
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.detail .title span {
+    font-size: 32px;
+    font-weight: bold;
+    line-height: 40px;
+    background-image: linear-gradient(to right, #2193b0, #20bdff, #64ffa7);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    transform: translate3d(10px, 0, 50px);
+    backface-visibility: hidden;
+}
