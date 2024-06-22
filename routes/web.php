@@ -55,8 +55,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/dashboard/students', [StudentController::class, "dashboard"])->name("students.index");
     Route::get('/api/students/{id}', [StudentController::class, "getStudentsById"])->name("students.get");
     Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
-
-    Route::get('/events/{id}/share', [FacebookController::class, 'share'])->name('events.share');
 });
 
 // Routes chỉ cho super-admin

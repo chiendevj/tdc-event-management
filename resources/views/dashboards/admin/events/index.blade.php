@@ -200,7 +200,6 @@
             const routeEdit = "{{ route('events.edit', ':id') }}".replace(':id', event.id);
             const routeDelete = "{{ route('events.delete', ':id') }}".replace(':id', event.id);
             const routeQR = "#"; // Chưa có route
-            const routeShareFacebook = "{{ route('events.share', ':id') }}".replace(':id', event.id);
             const eventItem = document.createElement('div');
             const link = document.createElement('a');
 
@@ -233,13 +232,6 @@
                                     <i class="fa-light fa-qrcode"></i>
                                     <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
                                         Mã QR của sự kiện
-                                        <div class="tooltip-arrow absolute bottom-0"></div>
-                                    </div>
-                                </a>
-                                <a href="${routeShareFacebook}" class="btn_share btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
-                                    <i class="fa-light fa-share-from-square"></i>
-                                    <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
-                                        Chia sẻ sự kiện
                                         <div class="tooltip-arrow absolute bottom-0"></div>
                                     </div>
                                 </a>
