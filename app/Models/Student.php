@@ -8,14 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     use HasFactory;
-    
+
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
+        'id',
         'email',
         'fullname',
         'classname',
         'conduct_score',
     ];
- 
+
 
     public function events()
     {

@@ -16,7 +16,7 @@
                 $table->string('email')->nullable();
                 $table->string('fullname')->nullable();
                 $table->string('classname');
-                $table->integer('conduct_sore')->default(0);
+                $table->integer('conduct_score')->default(0);
                 $table->timestamps();
             });
         }

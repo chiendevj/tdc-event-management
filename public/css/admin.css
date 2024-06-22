@@ -21,27 +21,26 @@ body {
     font-weight: 400;
     width: 100%;
 }
-
 /* width */
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
     width: 6px;
     cursor: pointer;
     transition: 0.5s;
 }
 
 /* Track */
-body::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 100px;
 }
 
 /* Handle */
-body::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
     background: var(--dark-bg);
 }
 
 /* Handle on hover */
-body::-webkit-scrollbar-thumb:hover {
+*::-webkit-scrollbar-thumb:hover {
     background: var(--dark-bg);
 }
 
