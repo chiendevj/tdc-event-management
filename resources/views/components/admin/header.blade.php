@@ -11,10 +11,10 @@
         <div class="h-full flex items-start mt-10 justify-center">
             <ul class="rounded-tr-lg rounded-br-lg gap-4 flex flex-col text-center text-white bg-[var(--dark-bg)]">
                 <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
-                    <a href="">Tài khoản quản lý</a>
+                    <a href="">Tài khoản</a>
                 </li>
                 <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
-                  `  <a href="">Sinh viên</a>
+                  <a href="">Sinh viên</a>
                 </li>
                 <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
                     <a href="{{ route('events.index') }}">Sự kiện</a>

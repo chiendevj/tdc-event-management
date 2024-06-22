@@ -44,8 +44,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
     Route::get('admin/dashboard/statisticals', [StatisticalController::class, 'index'])->name("statisticals.index");
     Route::get('admin/dashboard/statisticals/{id}', [StatisticalController::class, 'eventDetails'])->name('events.details');
-    Route::get('admin/dashboard/statisticals/export/{eventId}', [EventController::class, 'exportEventToExcel'])->name('events.export.excel');
     Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
+    Route::get('admin/dashboard/statisticals/export/{eventId}', [EventController::class, 'exportEventToExcel'])->name('events.export.excel');
+
+    Route::get('/api/events/{id}/participants', [EventController::class, 'getParticipants'])->name("events.participants");
+    Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
+    Route::get('admin/dashboard/statisticals/export/{eventId}', [EventController::class, 'exportEventToExcel'])->name('events.export.excel');
+    Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");
+    Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
+    Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");
 });
 
 Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function () {
@@ -56,9 +63,6 @@ Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function ()
     Route::get('admin/dashboard/events/{id}/edit', [EventController::class, 'edit'])->name("events.edit");
     Route::post('admin/dashboard/events/{id}/edit', [EventController::class, 'update'])->name("events.update");
     Route::get('admin/dashboard/events/{id}/delete', [EventController::class, 'delete'])->name("events.delete");
-    Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
-    Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");
-    Route::get('/api/events/{id}/participants', [EventController::class, 'getParticipants'])->name("events.participants");
 });
 
 
@@ -67,12 +71,8 @@ Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () 
     Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
     Route::get('admin/dashboard/events/{id}/edit', [EventController::class, 'edit'])->name("events.edit");
     Route::post('admin/dashboard/events/{id}/edit', [EventController::class, 'update'])->name("events.update");
-    Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
-    Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");
 });
 
-// Public routes
-Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");
 
 // Auth routes
 Route::get('/auth/login', [AuthController::class, "showLogin"])->name("login");
