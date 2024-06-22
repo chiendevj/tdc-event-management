@@ -6,19 +6,19 @@
 
 <div class="p-4">
     <div class="p-4 border-2 border-gray-200 border-dashed dark:border-gray-700 mt-14">
-        <h1 class="text-2xl font-semibold mb-4">Thống kê sự kiện</h1>
+        <h1 class="text-3xl font-semibold mb-4 text-blue-95~0">Thống kê sự kiện</h1>
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 text-sm">
                             Tên sự kiện
                         </th>
-                        <th scope="col" class="px-6 py-3 text-center">
+                        <th scope="col" class="px-6 py-3 text-center text-sm">
                             Số lượng sinh viên tham gia
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 text-center text-sm">
                             Chi tiết
                         </th>
                     </tr>
@@ -32,7 +32,7 @@
                         <td class="px-6 py-4 text-center">
                             {{ $event->students_count }}
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 text-center">
                             <button class="text-blue-600 hover:underline" onclick="showEventDetails('{{ $event->id }}')">Chi tiết</button>
                         </td>
                     </tr>
@@ -135,7 +135,7 @@
         document.getElementById('eventDetailsModal').classList.add('hidden');
         if (eventChart) {
             eventChart.destroy();
-            eventChart = null;
+            eventChart = null;  
         }
     }
 
