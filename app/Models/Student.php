@@ -26,4 +26,9 @@ class Student extends Model
     {
         return $this->belongsToMany(Event::class, 'event_student', 'student_id', 'event_id');
     }
+
+    public function eventCount()
+    {
+        return $this->events()->count();
+    }
 }
