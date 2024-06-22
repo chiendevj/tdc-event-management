@@ -14,6 +14,17 @@ class StatisticalController extends Controller
         return view('dashboards.admin.statisticals.index', ['events' => $events]);
     }
 
+    public function pagination(Request $request)
+    {
+        $events = Event::withCount('students')->paginate(5);
+
+        if ($request->ajax()) {
+            return view('statisticals.events-item', compact('events'))->render();
+        }
+
+        return view('dashboards.admin.statisticals.index', compact('events'));
+    }
+
     public function eventDetails($id)
     {
         $event = Event::with(['students' => function ($query) {

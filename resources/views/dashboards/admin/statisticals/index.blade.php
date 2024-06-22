@@ -4,54 +4,44 @@
 
 @section('content')
 
-    <div class="container mx-auto px-8 py-4 div_wrapper">
-        <div class="p-4">
-            <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
-                Thống kê sự kiện</h3>
-            <div class="flex items-center w-full justify-between gap-3 mt-4">
-                <div class="relative overflow-x-auto shadow-md sm:rounded-sm w-full">
-                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    Tên sự kiện
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    Số lượng sinh viên tham gia
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    Chi tiết
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($events as $event)
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
-                                        {{ $event->name }}
-                                    </th>
-                                    <td class="px-6 py-4 text-center">
-                                        {{ $event->students_count }}
-                                    </td>
-                                    <td class="px-6 py-4 text-center">
-                                        <div class="flex items-center justify-center gap-3">
-                                            <button class="text-blue-600 hover:underline"
-                                                onclick="showEventDetails('{{ $event->id }}')">
-                                                Tổng quan
-                                            </button>
-                                            <button class="text-blue-600 hover:underline"
-                                                onclick="showListParticipants('{{ $event->id }}')">Danh sách tham
-                                                gia</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<div class="p-4">
+    <div class="p-4 border-2 border-gray-200 border-dashed dark:border-gray-700 mt-14">
+        <h1 class="text-3xl font-semibold mb-4 text-blue-95~0">Thống kê sự kiện</h1>
+
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-sm">
+                            Tên sự kiện
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center text-sm">
+                            Số lượng sinh viên tham gia
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center text-sm">
+                            Chi tiết
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($events as $event)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
+                            {{ $event->name }}
+                        </th>
+                        <td class="px-6 py-4 text-center">
+                            {{ $event->students_count }}
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <button class="text-blue-600 hover:underline" onclick="showEventDetails('{{ $event->id }}')">Chi tiết</button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+    </div>
+</div>
 
         <!-- Modal -->
         <div id="eventDetailsModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
@@ -149,14 +139,14 @@
                     });
             }
 
-            function closeModal() {
-                document.getElementById('exportExcelBtn').style.display = 'flex';
-                document.getElementById('eventDetailsModal').classList.add('hidden');
-                if (eventChart) {
-                    eventChart.destroy();
-                    eventChart = null;
-                }
-            }
+    function closeModal() {
+        document.getElementById('exportExcelBtn').style.display = 'flex';
+        document.getElementById('eventDetailsModal').classList.add('hidden');
+        if (eventChart) {
+            eventChart.destroy();
+            eventChart = null;  
+        }
+    }
 
             function formatDate(dateString) {
                 const date = new Date(dateString);

@@ -35,6 +35,8 @@
     </div>
     @include('components.admin.footer')
     <script src="{{ asset('js/app.js') }}"></script>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v20.0&appId=760799009295495" nonce="MNU8X0yA"></script>
 </body>
 
 </html>

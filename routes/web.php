@@ -3,6 +3,7 @@
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\FacebookController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\StatisticalController;
 use App\Http\Controllers\StudentController;
@@ -53,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/events/participants/students', [StudentController::class, 'getStudentsByEventCount'])->name("events.participants.students");
     Route::get('admin/dashboard/students', [StudentController::class, "dashboard"])->name("students.index");
     Route::get('/api/students/{id}', [StudentController::class, "getStudentsById"])->name("students.get");
+    Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
 });
 
 // Routes chỉ cho super-admin
