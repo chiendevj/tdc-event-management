@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c64ed4f38af89436a3e9bfce5462a03",
+    "content-hash": "e288d8b33b281ff3e68164e79ff1c995",
     "packages": [
         {
             "name": "brick/math",
@@ -649,6 +649,66 @@
             "time": "2023-11-17T15:01:25+00:00"
         },
         {
+            "name": "facebook/graph-sdk",
+            "version": "5.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/facebook/php-graph-sdk.git",
+                "reference": "38fd7187a6704d3ab14ded2f3a534ac4ee6f3481"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/38fd7187a6704d3ab14ded2f3a534ac4ee6f3481",
+                "reference": "38fd7187a6704d3ab14ded2f3a534ac4ee6f3481",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "~5.0",
+                "mockery/mockery": "~0.8",
+                "phpunit/phpunit": "~4.0"
+            },
+            "suggest": {
+                "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Facebook\\": "src/Facebook/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Facebook Platform"
+            ],
+            "authors": [
+                {
+                    "name": "Facebook",
+                    "homepage": "https://github.com/facebook/facebook-php-sdk-v4/contributors"
+                }
+            ],
+            "description": "Facebook SDK for PHP",
+            "homepage": "https://github.com/facebook/facebook-php-sdk-v4",
+            "keywords": [
+                "facebook",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/facebook/php-graph-sdk/issues",
+                "source": "https://github.com/facebook/php-graph-sdk/tree/5.1.4"
+            },
+            "abandoned": true,
+            "time": "2016-05-13T17:28:30+00:00"
+        },
+        {
             "name": "fruitcake/php-cors",
             "version": "v1.3.0",
             "source": {
@@ -1193,17 +1253,80 @@
             "time": "2023-12-03T19:50:20+00:00"
         },
         {
-            "name": "laravel/framework",
-            "version": "v10.48.13",
+            "name": "jorenvanhocht/laravel-share",
+            "version": "4.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laravel/framework.git",
-                "reference": "2c6816d697a4362c09c066118addda251b70b98a"
+                "url": "https://github.com/jorenvh/laravel-share.git",
+                "reference": "86af334068038a840567ed62f2082fe3ac981476"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/2c6816d697a4362c09c066118addda251b70b98a",
-                "reference": "2c6816d697a4362c09c066118addda251b70b98a",
+                "url": "https://api.github.com/repos/jorenvh/laravel-share/zipball/86af334068038a840567ed62f2082fe3ac981476",
+                "reference": "86af334068038a840567ed62f2082fe3ac981476",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.13|^7.0",
+                "phpunit/phpunit": "^9.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Jorenvh\\Share\\Providers\\ShareServiceProvider"
+                    ],
+                    "aliases": {
+                        "Share": "Jorenvh\\Share\\ShareFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Jorenvh\\Share\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joren Van Hocht",
+                    "email": "joren@codeswitch.be",
+                    "homepage": "https://codeswitch.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Optional package for Laravel to generate social share links.",
+            "homepage": "https://github.com/jorenvh/laravel-share",
+            "keywords": [
+                "laravel",
+                "share",
+                "social links",
+                "social share links"
+            ],
+            "support": {
+                "issues": "https://github.com/jorenvh/laravel-share/issues",
+                "source": "https://github.com/jorenvh/laravel-share/tree/4.2.0"
+            },
+            "time": "2022-02-11T17:20:09+00:00"
+        },
+        {
+            "name": "laravel/framework",
+            "version": "v10.48.14",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/framework.git",
+                "reference": "27cb4736bb7e60a5311ec73160068dfbcf98336b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/27cb4736bb7e60a5311ec73160068dfbcf98336b",
+                "reference": "27cb4736bb7e60a5311ec73160068dfbcf98336b",
                 "shasum": ""
             },
             "require": {
@@ -1397,7 +1520,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2024-06-18T16:46:35+00:00"
+            "time": "2024-06-21T10:06:42+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -3881,16 +4004,16 @@
         },
         {
             "name": "spatie/laravel-permission",
-            "version": "6.7.0",
+            "version": "6.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-permission.git",
-                "reference": "17607924aa0aa89bc0153c2ce45ed7c55083367b"
+                "reference": "fe973a58b44380d0e8620107259b7bda22f70408"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/17607924aa0aa89bc0153c2ce45ed7c55083367b",
-                "reference": "17607924aa0aa89bc0153c2ce45ed7c55083367b",
+                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/fe973a58b44380d0e8620107259b7bda22f70408",
+                "reference": "fe973a58b44380d0e8620107259b7bda22f70408",
                 "shasum": ""
             },
             "require": {
@@ -3951,7 +4074,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-permission/issues",
-                "source": "https://github.com/spatie/laravel-permission/tree/6.7.0"
+                "source": "https://github.com/spatie/laravel-permission/tree/6.9.0"
             },
             "funding": [
                 {
@@ -3959,7 +4082,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-19T12:35:28+00:00"
+            "time": "2024-06-22T23:04:52+00:00"
         },
         {
             "name": "symfony/console",
@@ -8645,16 +8768,16 @@
         },
         {
             "name": "spatie/error-solutions",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/error-solutions.git",
-                "reference": "202108314a6988ede156fba1b3ea80a784c1734a"
+                "reference": "d60d4d2ef4b7701c86134ded959667cac6215233"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/error-solutions/zipball/202108314a6988ede156fba1b3ea80a784c1734a",
-                "reference": "202108314a6988ede156fba1b3ea80a784c1734a",
+                "url": "https://api.github.com/repos/spatie/error-solutions/zipball/d60d4d2ef4b7701c86134ded959667cac6215233",
+                "reference": "d60d4d2ef4b7701c86134ded959667cac6215233",
                 "shasum": ""
             },
             "require": {
@@ -8707,7 +8830,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/error-solutions/issues",
-                "source": "https://github.com/spatie/error-solutions/tree/1.0.0"
+                "source": "https://github.com/spatie/error-solutions/tree/1.0.1"
             },
             "funding": [
                 {
@@ -8715,7 +8838,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-12T14:49:54+00:00"
+            "time": "2024-06-21T10:09:00+00:00"
         },
         {
             "name": "spatie/flare-client-php",

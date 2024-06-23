@@ -5,20 +5,20 @@
 @section('content')
 
     <div class="p-4">
-        <div class="p-4 border-2 border-gray-200 border-dashed dark:border-gray-700 mt-14">
-            <h1 class="text-2xl font-semibold mb-4">Thống kê sự kiện</h1>
-
+        <div class="container mx-auto px-8 py-4">
+            <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit mb-[20px]">
+                Thống kê sự kiện</h3>
             <div class="relative overflow-x-auto shadow-md sm:rounded-sm">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-6 py-3 text-sm">
                                 Tên sự kiện
                             </th>
-                            <th scope="col" class="px-6 py-3 text-center">
+                            <th scope="col" class="px-6 py-3 text-center text-sm">
                                 Số lượng sinh viên tham gia
                             </th>
-                            <th scope="col" class="px-6 py-3 text-center">
+                            <th scope="col" class="px-6 py-3 text-center text-sm">
                                 Chi tiết
                             </th>
                         </tr>
@@ -36,12 +36,9 @@
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex items-center justify-center gap-3">
                                         <button class="text-blue-600 hover:underline"
-                                            onclick="showEventDetails('{{ $event->id }}')">
-                                            Tổng quan
-                                        </button>
+                                            onclick="showEventDetails('{{ $event->id }}')">Tổng quan</button>
                                         <button class="text-blue-600 hover:underline"
-                                            onclick="showListParticipants('{{ $event->id }}')">Danh sách tham
-                                            gia</button>
+                                            onclick="showListParticipants('{{ $event->id }}')">Danh sách tham gia</button>
                                     </div>
                                 </td>
                             </tr>
@@ -60,7 +57,7 @@
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
             <div
-                class="inline-block align-bottom bg-gray-100 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full lg:max-w-4xl xl:max-w-6xl">
+                class="inline-block align-bottom bg-gray-100 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full lg:max-w-3xl xl:max-w-3xl">
                 <div class="bg-gray-100 p-6">
                     <div class="flex justify-between items-center mb-2">
                         <h2 class="text-xl font-semibold model_title">Chi tiết sự kiện</h2>
@@ -68,7 +65,7 @@
                     </div>
                     <div class="mb-4">
                         <button id="exportExcelBtn"
-                            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-sm ease-in transition-all">Xuất
+                            class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-sm ease-in transition-all">Xuất
                             Excel</button>
                     </div>
                     <div id="eventDetailsContent" class="rounded-sm overflow-hidden">

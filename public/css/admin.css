@@ -8,7 +8,7 @@
     --dark-bg: #04397f;
     --blue: #19a0e4;
     --note-text: #2d3436;
-    --table-border: #fff;
+    --table-border: rgb(55 65 81);
     --nav-hover: #fff;
     --red: #ee5253;
     --event-title: #000;
@@ -78,37 +78,12 @@ body {
     transform: translateY(-50%);
 }
 
-.calender_table table th {
-    padding: 8px;
-    background: var(--dark-bg);
-    color: #fff;
-    border: 2px solid var(--dark-bg);
-}
 
-.calender_table table th:last-child {
-    border-right: 2px solid var(--dark-bg);
-}
 
-.calender_table table {
-    border-collapse: collapse;
-    border: 2px solid var(--dark-bg);
-}
-
-.calender_table table td {
-    padding: 8px;
-    background: #fff;
-    color: #000;
-}
-
-.calender_table table tr td {
-    vertical-align: top;
-    border-right: 2px solid var(--dark-bg);
-    border-bottom: 2px solid var(--dark-bg);
-    /* background-color: var(--dark-bg); */
-}
-
-.calender_table table tr td:last-child {
-    border-right: none;
+.calender_table td {
+    border: 1px solid var(--table-border);
+    padding: 10px;
+    text-align: center;
 }
 
 .day {
@@ -120,7 +95,7 @@ body {
     margin-left: auto;
     padding: 8px;
     border-radius: 4px;
-    color: var(--dark-bg);
+    color: #fff;
 }
 
 .day.active {
@@ -152,12 +127,15 @@ body {
 }
 
 .event {
+    margin-left: auto;
+    max-width: 300px;
     padding: 8px;
     border-radius: 8px;
     margin-top: 6px;
     margin-bottom: 6px;
     color: var(--note-text);
     background-color: var(--note);
+    text-align: left;
 }
 
 .lottie-container {

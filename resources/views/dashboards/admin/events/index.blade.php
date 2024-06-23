@@ -40,23 +40,23 @@
                     </select>
                 </div>
                 <button
-                    class="h-full p-2 bg-[var(--dark-bg)] w-full xl:w-fit text-white border-[var(--dark-bg)] rounded-sm btn_filter">
+                    class="h-full p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear w-full xl:w-fit text-white border-[var(--dark-bg)] rounded-sm btn_filter">
                     Lọc sự kiện
                 </button>
             </div>
             <div class="flex items-center justify-center gap-3 w-full lg:w-fit flex-col xl:flex-row">
                 @can('create event')
                     <a href="{{ route('events.create') }}"
-                        class="block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
+                        class="block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
                         Tạo sự kiện mới
                     </a>
                     <button
-                    class="btn_export_list block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
+                    class="btn_export_list block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
                     Xuất danh sách hiện tại
                 </button>
 
                 <button
-                    class="btn_export_all block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
+                    class="btn_export_all block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
                     Xuất tất cả sự kiện
                 </button>
                 @endcan
@@ -200,7 +200,6 @@
             const routeEdit = "{{ route('events.edit', ':id') }}".replace(':id', event.id);
             const routeDelete = "{{ route('events.delete', ':id') }}".replace(':id', event.id);
             const routeQR = "#"; // Chưa có route
-            const routeShareFacebook = "#"; // Chưa có route
             const eventItem = document.createElement('div');
             const link = document.createElement('a');
 
@@ -233,13 +232,6 @@
                                     <i class="fa-light fa-qrcode"></i>
                                     <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
                                         Mã QR của sự kiện
-                                        <div class="tooltip-arrow absolute bottom-0"></div>
-                                    </div>
-                                </a>
-                                <a href="${routeShareFacebook}" class="btn_share btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
-                                    <i class="fa-light fa-share-from-square"></i>
-                                    <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
-                                        Chia sẻ sự kiện
                                         <div class="tooltip-arrow absolute bottom-0"></div>
                                     </div>
                                 </a>
@@ -358,7 +350,6 @@
         // Scroll event
         window.addEventListener('scroll', () => {
             if (!preventLoad) {
-                console.log(window.scrollY + innerHeight, container.offsetHeight + 200);
                 if (window.scrollY + window.innerHeight >= container.offsetHeight + 300 && !isLoading) {
                     if (isSearching && searchPage < lastPage) {
                         searchPage++;

@@ -15,7 +15,8 @@ return new class extends Migration
             $table->string('student_id');
             $table->integer('event_id');
             $table->primary(['student_id', 'event_id']);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 

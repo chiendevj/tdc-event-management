@@ -8,9 +8,6 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class EventWithStudentsExport implements FromCollection, WithHeadings
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
     protected $eventId;
 
     public function __construct($eventId)
@@ -22,25 +19,18 @@ class EventWithStudentsExport implements FromCollection, WithHeadings
     {
         // Fetch data for export (example: students of the event)
         $event = Event::findOrFail($this->eventId);
-        $students = $event->students;
-        return $students->map(function ($student) {
-            return [
-                'id' => $student->id,
-                'email' => $student->email,
-                'fullname' => $student->fullname,
-                'classname' => $student->classname,
-            ];
-        });
+        return $event->students; // Adjust this to your actual relationship or data structure
     }
 
     public function headings(): array
     {
-        // Define headings for the exported file
+        // Define the headings for the exported file
         return [
-            'Mã sinh viên',
-            'Mail',
+            'Mã số sinh viên',
             'Họ và tên',
+            'Mail',
             'Lớp',
+            // Add more headings as needed
         ];
     }
 }
