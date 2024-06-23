@@ -34,8 +34,12 @@
                                     {{ $event->students_count }}
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <button class="text-blue-600 hover:underline"
-                                        onclick="showEventDetails('{{ $event->id }}')">Chi tiết</button>
+                                    <div class="flex items-center justify-center gap-3">
+                                        <button class="text-blue-600 hover:underline"
+                                            onclick="showEventDetails('{{ $event->id }}')">Tổng quan</button>
+                                        <button class="text-blue-600 hover:underline"
+                                            onclick="showListParticipants('{{ $event->id }}')">Danh sách tham gia</button>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
