@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Exports\EventExport;
 use App\Exports\EventWithStudentsExport;
+use App\Exports\ParticipatedEventsExport;
 use App\Models\Event;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
@@ -283,6 +285,12 @@ class EventController extends Controller
         } else {
             return redirect()->back()->with('error', 'Loại xuất file không hợp lệ.');
         }
+    }
+
+    public function exportParticipantsToExcel($studentId)
+    {
+        $student = Student::find($studentId);
+        return Excel::download(new ParticipatedEventsExport($studentId), "$student->id"."_$student->fullname"."_participated_events.xlsx");
     }
 
     public function getParticipants($eventId)

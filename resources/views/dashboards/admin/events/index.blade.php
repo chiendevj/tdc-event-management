@@ -40,23 +40,23 @@
                     </select>
                 </div>
                 <button
-                    class="h-full p-2 bg-[var(--dark-bg)] w-full xl:w-fit text-white border-[var(--dark-bg)] rounded-sm btn_filter">
+                    class="h-full p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear w-full xl:w-fit text-white border-[var(--dark-bg)] rounded-sm btn_filter">
                     Lọc sự kiện
                 </button>
             </div>
             <div class="flex items-center justify-center gap-3 w-full lg:w-fit flex-col xl:flex-row">
                 @can('create event')
                     <a href="{{ route('events.create') }}"
-                        class="block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
+                        class="block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
                         Tạo sự kiện mới
                     </a>
                     <button
-                    class="btn_export_list block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
+                    class="btn_export_list block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
                     Xuất danh sách hiện tại
                 </button>
 
                 <button
-                    class="btn_export_all block p-2 bg-[var(--dark-bg)] text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
+                    class="btn_export_all block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
                     Xuất tất cả sự kiện
                 </button>
                 @endcan
