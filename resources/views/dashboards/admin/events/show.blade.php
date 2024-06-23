@@ -12,8 +12,8 @@
             </div>
         </div>
         <div class="col-span-2 p-4">
-            <div class="fb-share-button" data-href="{{ $url }}" data-layout="button_count" data-size="large">
-                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ $url }}&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">
+            <div class="fb-share-button" data-href="https://www.facebook.com/tdc.fit" data-layout="button_count" data-size="large">
+                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://www.facebook.com/tdc.fit&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">
                     Chia sẻ
                 </a>
             </div>

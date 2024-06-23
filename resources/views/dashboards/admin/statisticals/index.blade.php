@@ -57,7 +57,7 @@
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
             <div
-                class="inline-block align-bottom bg-gray-100 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full lg:max-w-4xl xl:max-w-6xl">
+                class="inline-block align-bottom bg-gray-100 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full lg:max-w-3xl xl:max-w-3xl">
                 <div class="bg-gray-100 p-6">
                     <div class="flex justify-between items-center mb-2">
                         <h2 class="text-xl font-semibold model_title">Chi tiết sự kiện</h2>

@@ -4,6 +4,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FacebookController;
+use App\Http\Controllers\SocialShareController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\StatisticalController;
 use App\Http\Controllers\StudentController;
@@ -55,6 +56,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/dashboard/students', [StudentController::class, "dashboard"])->name("students.index");
     Route::get('/api/students/{id}', [StudentController::class, "getStudentsById"])->name("students.get");
     Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
+    Route::get('social-share/{id}', [SocialShareController::class, 'index'])->name('social-share');
 });
 
 // Routes chỉ cho super-admin
@@ -81,3 +83,5 @@ Route::get('/auth/login', [AuthController::class, "showLogin"])->name("login");
 Route::post('/auth/login', [AuthController::class, "login"])->name("handle_login");
 Route::post('/auth/logout', [AuthController::class, "logout"])->name("handle_logout");
 Route::post('/upload', [UploadController::class, 'upload'])->name('upload');
+
+
