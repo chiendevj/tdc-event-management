@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div class="relative overflow-x-auto shadow-md sm:rounded-sm">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-sm list_student">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -73,7 +73,7 @@
                 </table>
             </div>
             <!-- Pagination Links -->
-            <div class="mt-4 flex items-center justify-center">
+            <div class="mt-4 flex items-center justify-center pagination_bar">
                 {{ $students->links() }}
             </div>
         </div>
@@ -94,9 +94,10 @@
                         <button class="text-gray-600 hover:text-gray-900 text-3xl" onclick="closeModal()">&times;</button>
                     </div>
                     <div class="mb-4">
-                        <button id="exportExcelBtn"
+                        <button id="exportStudentDetail"
                             class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-sm ease-in transition-all">Xuất
-                            Excel</button>
+                            Excel
+                        </button>
                     </div>
                     <div id="studentDetailContent" class="rounded-sm overflow-hidden">
                         <!-- Nội dung chi tiết sự kiện sẽ được tải vào đây -->
@@ -112,6 +113,7 @@
         const tableBody = document.querySelector('.table_body');
         const studentDetailModal = document.getElementById('studentDetailModal');
         const prevInnerHTML = tableBody.innerHTML;
+        const paginationBar = document.querySelector('.pagination_bar');
 
         function closeModal() {
             document.getElementById('studentDetailModal').classList.add('hidden');
@@ -123,7 +125,6 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === "success") {
-                        console.log(data);
                         const student = data.data;
                         const detail = document.createElement('div');
                         detail.innerHTML = `
@@ -157,23 +158,23 @@
                                     ${student.events.map((event, index) => {
                                       const route = "{{ route('events.show', ':eventId') }}".replace(':eventId', event.id);
                                       return `
-                                              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                  <th scope="row"
-                                                      class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
-                                                      ${event.name}
-                                                  </th>
-                                                  <td class="px-6 py-4 text-center">
-                                                      ${event.participants_count}
-                                                  </td>
-                                                  <td class="px-6 py-4 text-center">
-                                                      <div class="flex items-center justify-center gap-3">
-                                                          <a href="${route}">
-                                                              Chi tiết
-                                                          </a>
-                                                      </div>
-                                                  </td>
-                                              </tr>
-                                          `;
+                                                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                          <th scope="row"
+                                                              class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
+                                                              ${event.name}
+                                                          </th>
+                                                          <td class="px-6 py-4 text-center">
+                                                              ${event.participants_count}
+                                                          </td>
+                                                          <td class="px-6 py-4 text-center">
+                                                              <div class="flex items-center justify-center gap-3">
+                                                                  <a href="${route}">
+                                                                      Chi tiết
+                                                                  </a>
+                                                              </div>
+                                                          </td>
+                                                      </tr>
+                                                  `;
                                     }).join('')}
                                 </tbody>
                             </table>
@@ -181,6 +182,11 @@
                       `;
                         document.getElementById('studentDetailContent').innerHTML = detail.innerHTML + listEvent
                             .innerHTML;
+                        document.getElementById('exportStudentDetail').addEventListener('click', () => {
+                            window.location.href =
+                                "{{ route('events.export.excel.participants', ':studentId') }}".replace(
+                                    ':studentId', studentId);
+                        });
                         studentDetailModal.classList.remove('hidden');
                     }
                 });
@@ -191,8 +197,12 @@
 
             if (value === '') {
                 tableBody.innerHTML = prevInnerHTML;
+                paginationBar.classList.remove('hidden');
                 return;
             }
+
+            paginationBar.classList.add('hidden');
+
 
             const url = "{{ route('students.get', ':studentId') }}".replace(':studentId', value);
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -235,6 +245,9 @@
                                 </td>
                             </tr>
                       `;
+                    } else {
+                        tableBody.innerHTML =
+                            `<tr><td colspan="6" class="text-center p-4 text-red-500">Không tìm thấy sinh viên</td></tr>`;
                     }
                 })
         }

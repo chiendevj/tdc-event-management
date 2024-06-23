@@ -5,10 +5,10 @@
 @section('content')
 
     <div class="p-4">
-        <div class="p-4 border-2 border-gray-200 border-dashed dark:border-gray-700 mt-14">
-            <h1 class="text-3xl font-semibold mb-4 text-blue-95~0">Thống kê sự kiện</h1>
-
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="container mx-auto px-8 py-4">
+            <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit mb-[20px]">
+                Thống kê sự kiện</h3>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-sm">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
