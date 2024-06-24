@@ -23,6 +23,6 @@ class Event extends Model
 
     public function students()
     {
-        return $this->belongsToMany(Student::class, 'event_student', 'event_id', 'student_id');
+        return $this->belongsToMany(Student::class, 'event_student', 'event_id', 'student_id')->withTimestamps();
     }
 }

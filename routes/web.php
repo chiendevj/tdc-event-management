@@ -56,6 +56,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/dashboard/students', [StudentController::class, "dashboard"])->name("students.index");
     Route::get('/api/students/{id}', [StudentController::class, "getStudentsById"])->name("students.get");
     Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
+    Route::get('admin/dashboard/student/{id}/events/participants/export', [EventController::class, 'exportParticipantsToExcel'])->name('events.export.excel.participants');
     Route::get('social-share/{id}', [SocialShareController::class, 'index'])->name('social-share');
 });
 

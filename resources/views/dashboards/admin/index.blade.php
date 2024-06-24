@@ -51,16 +51,16 @@
             </div>
         </div>
 
-        <div class="calender_table mt-[20px] w-full mb-8">
-            <table class="w-full">
-                <thead class="rounded-sm">
-                    <th>Thứ 2</th>
-                    <th>Thứ 3</th>
-                    <th>Thứ 4</th>
-                    <th>Thứ 5</th>
-                    <th>Thứ 6</th>
-                    <th>Thứ 7</th>
-                    <th>Chủ Nhật</th>
+        <div class="calender_table mt-[20px] w-full mb-8 rounded-sm overflow-hidden">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="rounded-sm text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 border border-gray-700 dark:text-gray-400">
+                    <th scope="col" class="px-6 py-3 text-center">Thứ 2</th>
+                    <th scope="col" class="px-6 py-3 text-center">Thứ 3</th>
+                    <th scope="col" class="px-6 py-3 text-center">Thứ 4</th>
+                    <th scope="col" class="px-6 py-3 text-center">Thứ 5</th>
+                    <th scope="col" class="px-6 py-3 text-center">Thứ 6</th>
+                    <th scope="col" class="px-6 py-3 text-center">Thứ 7</th>
+                    <th scope="col" class="px-6 py-3 text-center">Chủ Nhật</th>
                 </thead>
                 <tbody class="calender_body bg-[var(--table-calender-bg)]">
 
@@ -125,9 +125,11 @@
 
             for (let i = 0; i < 6; i++) {
                 let row = document.createElement('tr');
+                row.classList.add("bg-white","border-b","dark:bg-gray-800","dark:border-gray-700")
 
                 for (let j = 1; j <= 7; j++) {
                     let cell = document.createElement('td');
+                    cell.classList.add("px-6","py-4","dark:text-gray-400");
                     let day = document.createElement('span');
                     day.classList.add("day");
 
