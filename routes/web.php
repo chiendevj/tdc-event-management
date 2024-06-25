@@ -2,9 +2,6 @@
 
 
 use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\AttendenceController;
-use App\Http\Controllers\ScheduleController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\QrCodeGeneratorController;
 
