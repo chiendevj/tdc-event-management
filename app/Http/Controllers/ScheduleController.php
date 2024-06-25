@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -11,7 +12,18 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        return view('schedule.index');
+        $events = Event::all();
+        $newEvents = array();
+        foreach ($events as $event) {
+            $newEvents[] = [
+                'title' => $event->name,
+                'start' => $event->event_start,
+                'end' => $event->event_start
+            ];
+        }
+
+        // return  $newEvents;
+        return view('schedule.index', ['events'=> $newEvents]);
     }
 
     /**
