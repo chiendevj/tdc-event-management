@@ -12,8 +12,11 @@
               <li class="{{ Route::is('calendar-event') ? 'active' : '' }}">
                 <a class="hover:text-gray-500 font-semibold" href="{{ route('calendar-event') }}">Lịch sự kiện</a>
               </li>
-              <li class="{{ Route::is('search') ? 'active' : '' }}">
-                <a class="hover:text-gray-500 font-semibold" href="{{ route('search') }}">Tra cứu</a>
+              <li class="{{ Route::is('tra-cuu') ? 'active' : '' }}">
+                <a class="hover:text-gray-500 font-semibold" href="{{ route('tra-cuu') }}">Tra cứu</a>
+              </li>
+              <li>
+                <a class="hover:text-gray-500 font-semibold" href="{{ route('login') }}">Đăng nhập</a>
               </li>
               
           </ul>

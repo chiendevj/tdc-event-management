@@ -18,13 +18,16 @@ class Event extends Model
         'point',
         'registration_start',
         'registration_end',
+        'content',
+        'status',
     ];
-
+  
     public function eventCodes() : HasMany{
         return $this->hasMany(EventCode::class);
     }
 
-    public function students() : HasMany {
-        return $this->hasMany(Student::class);
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'event_student', 'event_id', 'student_id')->withTimestamps();
     }
 }

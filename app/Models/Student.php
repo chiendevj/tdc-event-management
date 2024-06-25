@@ -10,7 +10,25 @@ class Student extends Model
 {
     use HasFactory;
 
-    public function event():BelongsTo {
-        return $this->belongsTo(Event::class);
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $fillable = [
+        'id',
+        'email',
+        'fullname',
+        'classname',
+        'conduct_score',
+    ];
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'event_student', 'student_id', 'event_id')->withTimestamps();
+    }
+
+    public function eventCount()
+    {
+        return $this->events()->count();
     }
 }

@@ -93,6 +93,29 @@
                     @enderror
                 </label>
 
+                <label for="status" class="mt-8 flex flex-col items-start gap-2 w-full">
+                    <span class="text-sm">Trạng thái của sự kiện <span class="text-sm text-red-500">*</span></span>
+                    <select name="status" id="status" class="p-2 border rounded-sm outline-none w-full">
+                        <option value="Sắp diễn ra" {{ old('status') == "Sắp diễn ra" ? 'selected' : '' }}>Sắp diễn ra</option>
+                        <option value="Đang diễn ra" {{ old('status') == "Đang diễn ra" ? 'selected' : '' }}>Đang diễn ra</option>
+                        <option value="Đã diễn ra" {{ old('status') == "Đã diễn ra" ? 'selected' : '' }}>Đã diễn ra</option>
+                    </select>
+                    @error('status')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </label>
+
+
+
+                <div class="mt-8 flex flex-col items-start gap-2 w-full">
+                    <span class="text-sm">Nội dung của sự kiện <span class="text-sm text-red-500">*</span></span>
+                    <textarea name="content" id="editor">{{ old('content') }}</textarea>
+                    @error('content')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
+
                 <button type="submit" class="mt-8 mb-10 py-2 px-4 bg-[var(--dark-bg)] text-white rounded-sm">Tạo</button>
             </div>
         </form>

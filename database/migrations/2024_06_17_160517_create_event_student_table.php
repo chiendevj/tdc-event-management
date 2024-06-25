@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('student_event', function (Blueprint $table) {
-            $table->integer('student_id');
+        Schema::create('event_student', function (Blueprint $table) {
+            $table->string('student_id');
             $table->integer('event_id');
             $table->primary(['student_id', 'event_id']);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('student_event');
+        Schema::dropIfExists('event_student');
     }
 };
