@@ -351,3 +351,8 @@ body {
 .btn_action:hover .tooltip {
     opacity: 1;
 }
+
+.ck.ck-editor {
+    width: 100% !important;
+    position: relative;
+}

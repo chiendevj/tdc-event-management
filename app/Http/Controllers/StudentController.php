@@ -93,9 +93,26 @@ class StudentController extends Controller
 
     public function dashboard()
     {
+        $courseYear = "all";
         $students = Student::withCount('events')->orderByDesc('events_count')->paginate(20);
-        return view('dashboards.admin.students.index', compact('students'));
+        return view('dashboards.admin.students.index', compact('students', 'courseYear'));
     }
+
+    public function filterStudentByCourse($courseYear)
+    {
+        if ($courseYear == 'all') {
+            $students = Student::withCount('events')->orderByDesc('events_count')->paginate(20);
+            return view('dashboards.admin.students.index', compact('students', 'courseYear'));
+        }
+
+        $students = Student::withCount('events')
+            ->whereRaw('LEFT(id, 3) = ?', [$courseYear])
+            ->orderByDesc('events_count')
+            ->paginate(20);
+
+        return view('dashboards.admin.students.index', compact('students', 'courseYear'));
+    }
+
 
     /**
      * Get students by event count

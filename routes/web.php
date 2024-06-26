@@ -66,6 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/events/participants/students', [StudentController::class, 'getStudentsByEventCount'])->name("events.participants.students");
     Route::get('admin/dashboard/students', [StudentController::class, "dashboard"])->name("students.index");
     Route::get('/api/students/{id}', [StudentController::class, "getStudentsById"])->name("students.get");
+    Route::get('admin/dashboard/students/course/{courseYear}', [StudentController::class, "filterStudentByCourse"])->name("students.course.get");
     Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
     Route::get('admin/dashboard/student/{id}/events/participants/export', [EventController::class, 'exportParticipantsToExcel'])->name('events.export.excel.participants');
     Route::get('social-share/{id}', [SocialShareController::class, 'index'])->name('social-share');
@@ -83,7 +84,7 @@ Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function ()
     Route::get('admin/dashboard/events/{id}/qr-codes', [QrCodeGeneratorController::class, 'create'])->name("qr-codes.create");
     Route::get('admin/dashboard/events/{id}/qr-codes/show', [QrCodeGeneratorController::class, 'show'])->name("qr-codes.show");
     Route::post('admin/dashboard/events/{id}/qr-codes', [QrCodeGeneratorController::class, 'store'])->name("qr-codes.store");
-  
+
     Route::get('admin/dashboard/events/{id}/edit', [EventController::class, 'edit'])->name("events.edit");
     Route::post('admin/dashboard/events/{id}/edit', [EventController::class, 'update'])->name("events.update");
     Route::get('admin/dashboard/events/{id}/delete', [EventController::class, 'delete'])->name("events.delete");
