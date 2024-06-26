@@ -10,11 +10,32 @@
                 <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
                     Sinh viên tham gia sự kiện
                 </h3>
-                <div class="relative border h-full flex items-center justify-between p-2 w-fit">
-                    <input type="text" name="search" placeholder="Tìm kiếm sinh viên"
-                        class="outline-none border-none p-0 rounded-sm min-w-[400px] min-h-[24px]">
-                    <div class="text-gray-400">
-                        <i class="fa-light fa-magnifying-glass"></i>
+                <div class="flex items-center justify-center gap-3">
+                    <div class="relative border flex items-center h-full justify-start p-2 text-gray-400 w-full xl:w-fit">
+                        <select name="course" id="course" class="border-none outline-none min-h-[24px] w-full p-0">
+                            <option value="all">Tất cả</option>
+                            @php
+                                $selectedYear = $courseYear;
+
+                                // Get the current year, then get the last two digits of the year
+                                $year = substr(date('Y'), 2);
+                                $startYear = 22;
+                                // Get first number of start year
+                                // 22 => 2
+                                $yearChar = substr($startYear, 0, 1);
+                                for ($i = $year; $i >= $startYear; $i--) {
+                                    $selected = $yearChar . $i == $selectedYear ? 'selected' : '';
+                                    echo "<option value='$yearChar$i'  $selected>Khóa $i</option>";
+                                }
+                            @endphp
+                        </select>
+                    </div>
+                    <div class="relative border h-full flex items-center justify-between p-2 w-fit">
+                        <input type="text" name="search" placeholder="Tìm kiếm sinh viên"
+                            class="outline-none border-none p-0 rounded-sm min-w-[400px] min-h-[24px]">
+                        <div class="text-gray-400">
+                            <i class="fa-light fa-magnifying-glass"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -114,6 +135,14 @@
         const studentDetailModal = document.getElementById('studentDetailModal');
         const prevInnerHTML = tableBody.innerHTML;
         const paginationBar = document.querySelector('.pagination_bar');
+        const filterOption = document.getElementById('course');
+
+        filterOption.addEventListener('change', function() {
+            const value = this.value;
+            const url = "{{ route('students.course.get', ':course') }}".replace(':course', value);
+            window.location.href = url;
+
+        });
 
         function closeModal() {
             document.getElementById('studentDetailModal').classList.add('hidden');
@@ -158,23 +187,23 @@
                                     ${student.events.map((event, index) => {
                                       const route = "{{ route('events.show', ':eventId') }}".replace(':eventId', event.id);
                                       return `
-                                                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                          <th scope="row"
-                                                              class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
-                                                              ${event.name}
-                                                          </th>
-                                                          <td class="px-6 py-4 text-center">
-                                                              ${event.participants_count}
-                                                          </td>
-                                                          <td class="px-6 py-4 text-center">
-                                                              <div class="flex items-center justify-center gap-3">
-                                                                  <a href="${route}">
-                                                                      Chi tiết
-                                                                  </a>
-                                                              </div>
-                                                          </td>
-                                                      </tr>
-                                                  `;
+                                                              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                                  <th scope="row"
+                                                                      class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
+                                                                      ${event.name}
+                                                                  </th>
+                                                                  <td class="px-6 py-4 text-center">
+                                                                      ${event.participants_count}
+                                                                  </td>
+                                                                  <td class="px-6 py-4 text-center">
+                                                                      <div class="flex items-center justify-center gap-3">
+                                                                          <a href="${route}">
+                                                                              Chi tiết
+                                                                          </a>
+                                                                      </div>
+                                                                  </td>
+                                                              </tr>
+                                                          `;
                                     }).join('')}
                                 </tbody>
                             </table>

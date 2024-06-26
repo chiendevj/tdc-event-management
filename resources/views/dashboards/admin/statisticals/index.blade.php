@@ -38,7 +38,8 @@
                                         <button class="text-blue-600 hover:underline"
                                             onclick="showEventDetails('{{ $event->id }}')">Tổng quan</button>
                                         <button class="text-blue-600 hover:underline"
-                                            onclick="showListParticipants('{{ $event->id }}')">Danh sách tham gia</button>
+                                            onclick="showListParticipants('{{ $event->id }}')">Danh sách tham
+                                            gia</button>
                                     </div>
                                 </td>
                             </tr>
@@ -173,6 +174,9 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.data.length === 0) {
+
+                        document.getElementById('exportExcelBtn').style.display =
+                            'none';
                         eventDetailsContent.innerHTML =
                             `<p><em class="text-lg text-red-500">Không có sinh viên nào tham gia sự kiện này.</em></p>`;
                         document.getElementById('eventDetailsModal').classList.remove('hidden');

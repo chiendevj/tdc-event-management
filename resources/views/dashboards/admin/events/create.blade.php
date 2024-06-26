@@ -108,8 +108,8 @@
 
 
                 <div class="mt-8 flex flex-col items-start gap-2 w-full">
-                    <span class="text-sm">Nội dung của sự kiện <span class="text-sm text-red-500">*</span></span>
-                    <textarea name="content" id="editor">{{ old('content') }}</textarea>
+                    <span class="text-sm">Nội dung của sự kiện <span class="text-sm text-red-500 max-w-[400px]">*</span></span>
+                    <textarea name="content" id="editor" class="">{{ old('content') }}</textarea>
                     @error('content')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
