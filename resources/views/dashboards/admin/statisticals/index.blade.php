@@ -3,11 +3,53 @@
 @section('title', 'Thống kê')
 
 @section('content')
-
     <div class="p-4">
         <div class="container mx-auto px-8 py-4">
             <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit mb-[20px]">
                 Thống kê sự kiện</h3>
+            <div class="flex justify-between mb-4">
+                <div>
+                    <form action="{{ route('statisticals.index') }}" method="GET">
+                        <div class="flex items-center space-x-4">
+                            <label for="year">Năm học:</label>
+                            <select name="year" id="year" class="border border-gray-300 rounded px-2 py-1">
+                                <option value="">Chọn năm</option>
+                                @php
+                                    $currentYear = date('Y') - 1;
+                                    $startYear = $currentYear - 2;
+                                    $endYear = $currentYear + 2;
+                                @endphp
+                                @for ($year = $startYear; $year <= $endYear; $year++)
+                                    @php
+                                        $nextYear = $year + 1;
+                                        $academicYear = "$year - $nextYear";
+                                    @endphp
+                                    <option value="{{ $year }}" @if ($year == $selectedYear) selected @endif>{{ $academicYear }}</option>
+                                @endfor
+                            </select>
+
+                            <label for="semester">Học kì:</label>
+                            <select name="semester" id="semester" class="border border-gray-300 rounded px-2 py-1">
+    <option value="">Chọn học kì</option>
+    <option value="1" @if ($selectedSemester == 1) selected @endif>Học kì 1</option>
+    <option value="2" @if ($selectedSemester == 2) selected @endif>Học kì 2</option>
+</select>
+
+
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-sm">Lọc</button>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <form action="{{ route('statisticals.index') }}" method="GET">
+                        <div class="flex items-center space-x-4">
+                            <label for="search">Tìm kiếm:</label>
+                            <input type="text" name="search" id="search" class="border border-gray-300 rounded px-2 py-1" value="{{ $search }}">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-sm">Tìm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <div class="relative overflow-x-auto shadow-md sm:rounded-sm">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -17,6 +59,9 @@
                             </th>
                             <th scope="col" class="px-6 py-3 text-center text-sm">
                                 Số lượng sinh viên tham gia
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-center text-sm">
+                                Học kì
                             </th>
                             <th scope="col" class="px-6 py-3 text-center text-sm">
                                 Chi tiết
@@ -32,6 +77,9 @@
                                 </th>
                                 <td class="px-6 py-4 text-center">
                                     {{ $event->students_count }}
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    {{ $event->semester }}
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex items-center justify-center gap-3">
@@ -77,7 +125,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -235,5 +282,4 @@
                 });
         }
     </script>
-
 @endsection
