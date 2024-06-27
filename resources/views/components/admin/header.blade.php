@@ -10,13 +10,13 @@
         </div>
         <div class="h-full flex items-start mt-10 justify-center">
             <ul class="rounded-tr-lg rounded-br-lg gap-4 flex flex-col text-center text-white bg-[var(--dark-bg)]">
-                <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
+                <li class="border-b-2 border-[var(--dark-bg)] hover:border-[var(--nav-hover)] {{ Route::is('events.index') ? 'border-[var(--nav-hover)]' : '' }} transition-all duration-100 ease-in">
                     <a href="{{ route('events.index') }}">Sự kiện</a>
                 </li>
-                <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
+                <li class="border-b-2 border-[var(--dark-bg)] hover:border-[var(--nav-hover)] {{ Route::is('students.index') ? 'border-[var(--nav-hover)]' : '' }} transition-all duration-100 ease-in">
                     <a href="{{ route('students.index') }}">Sinh viên</a>
                 </li>
-                <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
+                <li class="border-b-2 border-[var(--dark-bg)] hover:border-[var(--nav-hover)] {{ Route::is('statisticals.index') ? 'border-[var(--nav-hover)]' : '' }} transition-all duration-100 ease-in">
                     <a href="{{ route('statisticals.index') }}">Thống kê</a>
                 </li>
                 <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
@@ -50,16 +50,16 @@
     {{-- Navbar start --}}
     <div class="h-full flex items-center justify-center">
         <ul class="rounded-tr-lg rounded-br-lg gap-4 hidden lg:flex sm:hidden text-white bg-[var(--dark-bg)]">
-            <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
+            <li class="border-b-2 border-[var(--dark-bg)] hover:border-[var(--nav-hover)] {{ Route::is('events.index') ? 'border-[var(--nav-hover)]' : '' }} transition-all duration-100 ease-in">
                 <a href="{{ route('events.index') }}">Sự kiện</a>
             </li>
-            <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
+            <li class="border-b-2 border-[var(--dark-bg)] hover:border-[var(--nav-hover)] {{ Route::is('students.index') ? 'border-[var(--nav-hover)]' : '' }} transition-all duration-100 ease-in">
                 <a href="{{ route('students.index') }}">Sinh viên</a>
             </li>
-            <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
+            <li class="border-b-2 border-[var(--dark-bg)] hover:border-[var(--nav-hover)] {{ Route::is('statisticals.index') ? 'border-[var(--nav-hover)]' : '' }} transition-all duration-100 ease-in">
                 <a href="{{ route('statisticals.index') }}">Thống kê</a>
             </li>
-            <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
+            <li class="border-b-2 border-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
                 <a href="">Tài khoản</a>
             </li>
             <li class="border-b-2 has_child border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in cursor-pointer relative">
