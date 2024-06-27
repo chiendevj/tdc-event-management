@@ -54,9 +54,10 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboards.admin.index');
     })->name("dashboard");
 
-    Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
     Route::get('admin/dashboard/statisticals', [StatisticalController::class, 'index'])->name("statisticals.index");
     Route::get('admin/dashboard/statisticals/{id}', [StatisticalController::class, 'eventDetails'])->name('events.details');
+    
+    Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
     Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
     Route::get('admin/dashboard/statisticals/export/{eventId}', [EventController::class, 'exportEventToExcel'])->name('events.export.excel');
     Route::get('/api/events/{id}/participants', [EventController::class, 'getParticipants'])->name("events.participants");
