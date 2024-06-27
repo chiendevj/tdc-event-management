@@ -16,7 +16,6 @@
                             <option value="all">Tất cả</option>
                             @php
                                 $selectedYear = $courseYear;
-
                                 // Get the current year, then get the last two digits of the year
                                 $year = substr(date('Y'), 2);
                                 $startYear = 22;
