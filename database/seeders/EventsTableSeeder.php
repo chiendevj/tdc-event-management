@@ -12,7 +12,7 @@ class EventsTableSeeder extends Seeder
         $events = [
             [
                 'name' => 'Workshop 1',
-                'location' => 'Hội trường D, 53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh, Trường Cao Đẳng Công Nghệ Thủ Đức',
+                'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '07', '10', '08', '00', '00'),
                 'event_end' => Carbon::create('2024', '07', '10', '12', '00', '00'),
@@ -27,7 +27,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Seminar Blockchain',
-                'location' => 'Hội trường H, 123 Lê Văn Việt, Quận 9, TP. Hồ Chí Minh',
+                'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '07', '15', '09', '00', '00'),
                 'event_end' => Carbon::create('2024', '07', '15', '11', '00', '00'),
@@ -42,7 +42,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Hội thảo AI và Machine Learning',
-                'location' => 'Hội trường A, ĐH Bách Khoa, Q10, TP. Hồ Chí Minh',
+                'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '07', '20', '13', '00', '00'),
                 'event_end' => Carbon::create('2024', '07', '20', '16', '00', '00'),
@@ -57,7 +57,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Hackathon 2024',
-                'location' => 'Khu công nghệ cao, Q9, TP. Hồ Chí Minh',
+               'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '07', '25', '08', '00', '00'),
                 'event_end' => Carbon::create('2024', '07', '27', '20', '00', '00'),
@@ -72,7 +72,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Tech Talk về An ninh mạng',
-                'location' => 'Trung tâm Hội nghị, Q1, TP. Hồ Chí Minh',
+               'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '08', '05', '14', '00', '00'),
                 'event_end' => Carbon::create('2024', '08', '05', '17', '00', '00'),
@@ -87,7 +87,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Workshop về lập trình di động',
-                'location' => 'Phòng Lab, ĐH CNTT, TP. Hồ Chí Minh',
+               'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '08', '12', '09', '00', '00'),
                 'event_end' => Carbon::create('2024', '08', '12', '12', '00', '00'),
@@ -102,7 +102,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Hội thảo về Điện toán đám mây',
-                'location' => 'Hội trường B, ĐH FPT, TP. Hồ Chí Minh',
+                'location' => 'Hội trường H',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '08', '18', '10', '00', '00'),
                 'event_end' => Carbon::create('2024', '08', '18', '14', '00', '00'),
@@ -117,7 +117,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Seminar về Dữ liệu lớn',
-                'location' => 'Hội trường C, ĐH Kinh tế, TP. Hồ Chí Minh',
+                'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '08', '25', '13', '00', '00'),
                 'event_end' => Carbon::create('2024', '08', '25', '16', '00', '00'),
@@ -132,7 +132,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Workshop về UX/UI Design',
-                'location' => 'Hội trường D, ĐH Kiến trúc, TP. Hồ Chí Minh',
+                'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '09', '02', '09', '00', '00'),
                 'event_end' => Carbon::create('2024', '09', '02', '12', '00', '00'),
@@ -147,7 +147,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Tech Conference 2024',
-                'location' => 'Trung tâm Hội nghị Quốc gia, Hà Nội',
+                'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '09', '10', '08', '00', '00'),
                 'event_end' => Carbon::create('2024', '09', '11', '17', '00', '00'),
@@ -162,7 +162,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Hội thảo về Công nghệ sinh học',
-                'location' => 'Hội trường B, ĐH Nông Lâm, TP. Hồ Chí Minh',
+                'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '09', '20', '13', '00', '00'),
                 'event_end' => Carbon::create('2024', '09', '20', '16', '00', '00'),
@@ -177,7 +177,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Workshop về IoT nâng cao',
-                'location' => 'Hội trường D, 53 Võ Văn Ngân, Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh, Trường Cao Đẳng Công Nghệ Thủ Đức',
+                'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '09', '25', '08', '00', '00'),
                 'event_end' => Carbon::create('2024', '09', '25', '12', '00', '00'),
@@ -192,7 +192,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Seminar về Trí tuệ nhân tạo',
-                'location' => 'Hội trường H, 123 Lê Văn Việt, Quận 9, TP. Hồ Chí Minh',
+               'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '09', '30', '09', '00', '00'),
                 'event_end' => Carbon::create('2024', '09', '30', '11', '00', '00'),
@@ -207,7 +207,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Tech Expo 2024',
-                'location' => 'Trung tâm Hội chợ và Triển lãm Sài Gòn, Q7, TP. Hồ Chí Minh',
+               'location' => 'Hội trường B',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '10', '05', '09', '00', '00'),
                 'event_end' => Carbon::create('2024', '10', '07', '17', '00', '00'),
@@ -222,7 +222,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Hội thảo về An toàn thông tin',
-                'location' => 'Hội trường B, ĐH CNTT, TP. Hồ Chí Minh',
+                'location' => 'Hội trường B',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '10', '10', '13', '00', '00'),
                 'event_end' => Carbon::create('2024', '10', '10', '16', '00', '00'),
@@ -237,7 +237,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Workshop về phát triển web',
-                'location' => 'Phòng Lab, ĐH CNTT, TP. Hồ Chí Minh',
+                'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '10', '15', '09', '00', '00'),
                 'event_end' => Carbon::create('2024', '10', '15', '12', '00', '00'),
@@ -252,7 +252,7 @@ class EventsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Hội thảo về blockchain',
-                'location' => 'Hội trường D, ĐH Kinh tế, TP. Hồ Chí Minh',
+                'location' => 'Hội trường D',
                 'event_photo' => '/storage/uploads/events/banner.webp',
                 'event_start' => Carbon::create('2024', '10', '20', '09', '00', '00'),
                 'event_end' => Carbon::create('2024', '10', '20', '12', '00', '00'),

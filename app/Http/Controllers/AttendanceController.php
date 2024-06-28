@@ -12,10 +12,10 @@ class AttendanceController extends Controller
     public function attend($code)
     {
         $eventCode = EventCode::where('code', $code)->with('event')->first();
-        if(!$eventCode || $eventCode->status == 1) {
-            return view('form.404');
+        if (!$eventCode || $eventCode->status == 1) {
+            return view('form.404')->with('error', 'Mã sự kiện này không tồn tại!');
         }
-        
+
         $event = [
             'id' => $eventCode->event->id,
             'name' =>  $eventCode->event->name,
@@ -23,10 +23,10 @@ class AttendanceController extends Controller
         ];
 
         return view('form.attendance', ['event' => $event]);
-
     }
 
-    public function submitAttendance(Request $request) {
+    public function submitAttendance(Request $request)
+    {
         $validated = $request->validate([
             'fullname' => 'required|string|max:255',
             'student_id' => 'required|string|max:255',
@@ -39,25 +39,39 @@ class AttendanceController extends Controller
         $class = $validated['class'];
         $code = $request->input('code');
 
-        
+        // Kiểm tra xem sinh viên đã tồn tại hay chưa
+        $student = Student::find($studentId);
 
-        $student = new Student();
-        $student->fullname = $fullname;
-        $student->student_id = $studentId;
-        $student->classname = $class;
-        $student->save();
 
+        if (!$student) {
+            // Nếu sinh viên chưa tồn tại, tạo sinh viên mới
+            $student = new Student();
+            $student->id = $studentId;
+            $student->fullname = $fullname;
+            $student->classname = $class;
+            $student->save();
+        }
+
+        // Kiểm tra xem sinh viên đã điểm danh sự kiện này hay chưa
+        $existingAttendance = StudentEvent::where('student_id', $studentId)
+            ->where('event_id', $event_id)
+            ->first();
+
+        if ($existingAttendance) {
+            return view('form.404')->with('error', 'Bạn đã điểm danh sự kiện này rồi!');
+        }
+
+        // Tạo bản ghi mới trong bảng StudentEvent
         StudentEvent::create([
-            'student_id' => $student->id,
+            'student_id' => $studentId,
             'event_id' => $event_id
         ]);
 
-         // Update the status of the event code
-         $eventCode = EventCode::where('code', $code)->firstOrFail();
-         $eventCode->status = true;
-         $eventCode->save();
+        // Cập nhật trạng thái của mã sự kiện
+        $eventCode = EventCode::where('code', $code)->firstOrFail();
+        $eventCode->status = true;
+        $eventCode->save();
 
-         return view('form.success');
-
+        return view('form.success');
     }
 }

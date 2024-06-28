@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class StudentEvent extends Model
 {
     use HasFactory;
-    protected $table = 'student_event';
+    protected $table = 'event_student';
     protected $fillable = [
         'student_id',
         'event_id',
