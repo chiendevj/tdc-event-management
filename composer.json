@@ -12,8 +12,8 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "simplesoftwareio/simple-qrcode": "^4.2",
         "maatwebsite/excel": "^3.1",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^6.7",
         "yoeunes/toastr": "^2.3"
     },

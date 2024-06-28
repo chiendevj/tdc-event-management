@@ -199,7 +199,7 @@
             const route = "{{ route('events.show', ':id') }}".replace(':id', event.id);
             const routeEdit = "{{ route('events.edit', ':id') }}".replace(':id', event.id);
             const routeDelete = "{{ route('events.delete', ':id') }}".replace(':id', event.id);
-            const routeQR = "#"; // Chưa có route
+            const routeQR ="{{ route('qr-codes.create', ':id') }}".replace(':id', event.id);
             const eventItem = document.createElement('div');
             const link = document.createElement('a');
 

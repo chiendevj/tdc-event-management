@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\EventCode;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
@@ -12,31 +14,38 @@ class QrCodeGeneratorController extends Controller
 {
     public function create($id)
     {
-        return view('dashboards.admin.qr-codes.create', ['eventId' => $id]);
+        $codeCount = EventCode::where('event_id', $id)->count();
+        return view('dashboards.admin.qr-codes.create', [
+            'eventId' => $id,
+            'codeCount' => $codeCount
+        ]);
     }
     public function store(Request $request, $id) {
-        $qrCodes = [];
         $eventId = $id;
         $quantity = $request->input('quantity', 1);
         $batchSize = 10;
+        $generatedCodes = [];
+
+        $existingCodes = EventCode::pluck('code')->toArray();
 
         for ($batch = 0; $batch < ceil($quantity / $batchSize); $batch++) {
             $currentBatchSize = min($batchSize, $quantity - $batch * $batchSize);
 
             for ($i = 1; $i <= $currentBatchSize; $i++) {
-                $maSuKien = 'SK-' . uniqid();
-                Log::info('Mã sự kiện: ' . $maSuKien);
+                $maSuKien = 'msk-' . bin2hex(random_bytes(8));
+                while (in_array($maSuKien, $existingCodes) || in_array($maSuKien, $generatedCodes)) {
+                    $maSuKien = 'msk-' . bin2hex(random_bytes(8));
+                    Log::info('đã có mã trùng');
+                }
 
                 $qrCodeUrl = url('diemdanh/' . $maSuKien);
-                Log::info('Đường dẫn: ' . $qrCodeUrl);
+                
 
                 $eventCode = new EventCode();
                 $eventCode->link = $qrCodeUrl;
                 $eventCode->code = $maSuKien;
                 $eventCode->event_id = $eventId;
                 $eventCode->save();
-
-                // $qrCodes['qrcode_' . ($batch * $batchSize + $i)] = QrCode::size(120)->generate($qrCodeUrl);
             }
 
             // Giải phóng bộ nhớ sau mỗi lô
@@ -46,13 +55,25 @@ class QrCodeGeneratorController extends Controller
         return redirect()->route('qr-codes.show', ['id' => $eventId]);
     }
 
+    public function generateEventCodeRegister() {
+        
+    }
+
     public function show(String $id) {
         $qrCodes = [];
         $eventCodes = EventCode::where('event_id', $id)->get();
+        $event = Event::find($id);
         foreach ($eventCodes as $eventCode) {
             // Tạo QR code từ đường dẫn link của event code
-            $qrCodes[] = QrCode::size(120)->generate($eventCode->link);
+            $qrCodes[] = (object)[
+                'code' => $eventCode->code,
+                'link' => $eventCode->link,
+                'qrImage' => QrCode::generate($eventCode->link)
+            ];
         }
-        return view('dashboards.admin.qr-codes.show', ['qrCodes' => $qrCodes]);
+
+        $eventName =  $event->name;
+
+        return view('dashboards.admin.qr-codes.show', ['qrCodes' => $qrCodes, 'event_name' => $eventName]);
     }
 }

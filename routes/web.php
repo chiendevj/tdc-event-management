@@ -25,9 +25,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [EventController::class, 'getHomeEvents'])->name('home');
+Route::get('/api/upcoming-events', [EventController::class, 'fetchUpcomingEvents']);
+Route::get('/api/featured-events', [EventController::class, 'fetchFeaturedEvents']);
 
 Route::get('/tracuu', function () {
     return view('search');
@@ -35,9 +35,7 @@ Route::get('/tracuu', function () {
 
 Route::get('/search', [StudentController::class, 'searchEventsByStudent'])->name('search_events_by_student');
 
-Route::get('/event/{id}', function () {
-    return view('detail');
-});
+Route::get('/sukien/{id}', [EventController::class, 'detail'])->name('events.detail');
 
 Route::get('/qr-codes', [QrCodeGeneratorController::class, 'generate']);
 

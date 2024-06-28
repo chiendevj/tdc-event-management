@@ -8,6 +8,7 @@ use App\Exports\ParticipatedEventsExport;
 use App\Models\Event;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 
@@ -104,6 +105,38 @@ class EventController extends Controller
         return view('dashboards.admin.events.index', ['events' => $events]);
     }
 
+    public function getHomeEvents(Request $request)
+    {
+        $upcomingEvents  = Event::where('status', 'like', 'Sắp diễn ra')
+            ->paginate(2, ['*'], 'upcoming_page');
+
+        $featuredEvents  = Event::select('events.*', DB::raw('COUNT(event_student.student_id) as student_count'))
+            ->leftJoin('event_student', 'events.id', '=', 'event_student.event_id')
+            ->groupBy('events.id')
+            ->orderByDesc('student_count')
+            ->paginate(2, ['*'], 'featured_page');
+
+        return view('home', compact('upcomingEvents', 'featuredEvents'));
+    }
+
+    public function fetchUpcomingEvents(Request $request)
+    {
+        $page = $request->input('page', 1);
+        $events = Event::where('status', 'like', 'Sắp diễn ra')
+            ->paginate(2, ['*'], 'page', $page);
+
+        return response()->json($events);
+    }
+    public function fetchFeaturedEvents(Request $request)
+    {
+        $events = Event::select('events.*', DB::raw('COUNT(event_student.student_id) as student_count'))
+            ->leftJoin('event_student', 'events.id', '=', 'event_student.event_id')
+            ->groupBy('events.id')
+            ->orderByDesc('student_count')
+            ->paginate(2, ['*'], 'page');
+        return response()->json($events);
+    }
+
     public function loadmore(Request $request)
     {
         $limit = 8;
@@ -122,6 +155,12 @@ class EventController extends Controller
         $event = Event::find($id);
         $nonce = Str::random(8);
         return view('dashboards.admin.events.show', ['event' => $event])->with('title', $event->name)->with('url', $request->url())->with('image', url($event->event_photo))->with('nonce', $nonce);
+    }
+
+    public function detail($id) {
+        $event = Event::find($id);
+        $upcomingEvents = Event::where('status', 'like', 'Sắp diễn ra')->get();
+        return view('detail', ['event' => $event, 'upcomingEvents' => $upcomingEvents]);
     }
 
     public function search(Request $request)
@@ -290,7 +329,7 @@ class EventController extends Controller
     public function exportParticipantsToExcel($studentId)
     {
         $student = Student::find($studentId);
-        return Excel::download(new ParticipatedEventsExport($studentId), "$student->id"."_$student->fullname"."_participated_events.xlsx");
+        return Excel::download(new ParticipatedEventsExport($studentId), "$student->id" . "_$student->fullname" . "_participated_events.xlsx");
     }
 
     public function getParticipants($eventId)
