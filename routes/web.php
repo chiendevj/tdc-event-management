@@ -7,7 +7,6 @@ use App\Http\Controllers\QrCodeGeneratorController;
 
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\FacebookController;
 use App\Http\Controllers\SocialShareController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\StatisticalController;

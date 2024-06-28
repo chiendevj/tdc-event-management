@@ -38,7 +38,8 @@
             </div>
         </div>
         <div class="border-t border-gray-100 mt-6 pt-6 text-center">
-            <p>&copy; 2024 Khoa Công nghệ thông tin | Cao đẳng Công nghệ Thủ Đức | FIT - TDC All Rights Reserved.</p>
+            <p>&copy; <script>document.write(new Date().getFullYear());</script> Khoa Công nghệ thông tin | Cao đẳng Công nghệ Thủ Đức | FIT - TDC All Rights Reserved.</p>
         </div>
+
     </div>
 </footer>
