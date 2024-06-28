@@ -7,52 +7,46 @@
         <div class="container mx-auto px-8 py-4">
             <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit mb-[20px]">
                 Thống kê sự kiện</h3>
-            <div class="flex justify-between mb-4 items-center">
-                <div>
-                    <form action="{{ route('statisticals.index') }}" method="GET">
-                        <div class="flex items-center gap-4">
-                            <label for="year">Năm học:</label>
-                            <select name="year" id="year" class="relative border flex items-center h-full justify-start p-2 text-gray-400 w-full xl:w-fit outline-none">
-                                <option value="">Chọn năm</option>
-                                @php
-                                    $currentYear = date('Y') - 1;
-                                    $startYear = $currentYear - 2;
-                                    $endYear = $currentYear + 2;
-                                @endphp
-                                @for ($year = $startYear; $year <= $endYear; $year++)
-                                    @php
-                                        $nextYear = $year + 1;
-                                        $academicYear = "$year - $nextYear";
-                                    @endphp
-                                    <option value="{{ $year }}" @if ($year == $selectedYear) selected @endif>
-                                        {{ $academicYear }}</option>
-                                @endfor
-                            </select>
-
-                            <label for="semester">Học kì:</label>
-                            <select name="semester" id="semester" class="relative border flex items-center h-full justify-start p-2 text-gray-400 w-full xl:w-fit outline-none">
-                                <option value="">Chọn học kì</option>
-                                <option value="1" @if ($selectedSemester == 1) selected @endif>Học kì 1</option>
-                                <option value="2" @if ($selectedSemester == 2) selected @endif>Học kì 2</option>
-                            </select>
-                            <button type="submit"
-                                class="bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white py-2 px-4 rounded-sm">Lọc</button>
-                        </div>
-                    </form>
-                </div>
-                <div>
-                    <form action="{{ route('statisticals.index') }}" method="GET">
-                        <div class="flex items-center space-x-4">
-                            <label for="search" class="text-nowrap">Tìm kiếm:</label>
-                            <input type="text" name="search" id="search"
-                                class="border h-full w-full flex items-center justify-between p-2 outline-none" value="{{ $search }}">
-                            <button type="submit"
-                                class="bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white py-2 px-4 rounded-sm">Tìm</button>
-                        </div>
-                    </form>
-                </div>
+                <div class="flex flex-col lg:flex-row sm:justify-between mb-4 items-center sm:items-start">
+    <div class="mb-4 lg:mb-0 lg:mr-4">
+        <form action="{{ route('statisticals.index') }}" method="GET">
+            <div class="flex items-center gap-4">
+                <label for="year">Năm học:</label>
+                <select name="year" id="year" class="relative border flex items-center h-full justify-start p-2 text-gray-400 w-full xl:w-fit outline-none">
+                    <option value="">Tất cả</option>
+                    @php
+                        $currentYear = date('Y') - 1;
+                        $startYear = $currentYear - 2;
+                        $endYear = $currentYear + 2;
+                    @endphp
+                    @for ($year = $startYear; $year <= $endYear; $year++)
+                        @php
+                            $nextYear = $year + 1;
+                            $academicYear = "$year - $nextYear";
+                        @endphp
+                        <option value="{{ $year }}" @if ($year == $selectedYear) selected @endif>
+                            {{ $academicYear }}</option>
+                    @endfor
+                </select>
+                <button type="submit" class="bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white py-2 px-4 rounded-sm">Lọc</button>
             </div>
+        </form>
+    </div>
+    <div>
+        <form action="{{ route('statisticals.index') }}" method="GET">
+            <div class="flex items-center space-x-4">
+                <label for="search" class="text-nowrap">Tìm kiếm:</label>
+                <input type="text" name="search" id="search" class="border h-full w-full flex items-center justify-between p-2 outline-none" value="{{ $search }}">
+                <button type="submit" class="bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white py-2 px-4 rounded-sm">Tìm</button>
+            </div>
+        </form>
+    </div>
+</div>
+
             <div class="relative overflow-x-auto shadow-md sm:rounded-sm">
+                @if ($events->isEmpty())
+                <p class="text-center text-red-500 p-20">Không có sự kiện nào để hiển thị.</p>
+                @else
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -96,6 +90,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                @endif
             </div>
         </div>
     </div>
