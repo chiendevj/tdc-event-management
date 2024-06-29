@@ -42,6 +42,8 @@ Route::get('/qr-codes', [QrCodeGeneratorController::class, 'generate']);
 Route::get('/diemdanh/{code}', [AttendanceController::class, 'attend'])->name('attend');
 Route::post('/diemdanh', [AttendanceController::class, 'submitAttendance'])->name('submit.attendance');
 
+Route::get('/sukien/{id}/dangky', [AttendanceController::class, 'register'])->name('regiter');
+Route::post('/sukien/dangky', [AttendanceController::class, 'submitRegister'])->name('submit.register');
 
 Route::get('/calendar-event', [ScheduleController::class, 'index'])->name('calendar-event');
 

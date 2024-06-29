@@ -16,6 +16,7 @@ class ScheduleController extends Controller
         $newEvents = array();
         foreach ($events as $event) {
             $newEvents[] = [
+                'id' => $event->id,
                 'title' => $event->name,
                 'start' => $event->event_start,
                 'end' => $event->event_start

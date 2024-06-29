@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class EventController extends Controller
 {
@@ -161,8 +162,14 @@ class EventController extends Controller
 
     public function detail($id) {
         $event = Event::find($id);
+        $registrationCode = QrCode::generate($event->registration_link);
         $upcomingEvents = Event::where('status', 'like', 'Sắp diễn ra')->get();
-        return view('detail', ['event' => $event, 'upcomingEvents' => $upcomingEvents]);
+        
+        return view('detail', [
+            'event' => $event,
+            'registrationCode' => $registrationCode,
+            'upcomingEvents' => $upcomingEvents
+        ]);
     }
 
     public function search(Request $request)

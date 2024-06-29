@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\EventCode;
+use App\Models\EventRegister;
 use App\Models\Student;
 use App\Models\StudentEvent;
 use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
+    // Điểm danh sinh viên
     public function attend($code)
     {
         $eventCode = EventCode::where('code', $code)->with('event')->first();
@@ -73,5 +76,56 @@ class AttendanceController extends Controller
         $eventCode->save();
 
         return view('form.success');
+    }
+
+    // Sinh viên đăng kí tham gia sự kiện
+    public function register($id) {
+        $event = Event::find($id);
+        return view('form.register', ['event' => $event]);
+    }
+
+    public function submitRegister(Request $request)
+    {
+        $validated = $request->validate([
+            'fullname' => 'required|string|max:255',
+            'student_id' => 'required|string|max:255',
+            'class' => 'required|string|max:255',
+        ]);
+
+        $fullname = $request->input('fullname');
+        $event_id = $request->input('event_id');
+        $studentId = $validated['student_id'];
+        $class = $validated['class'];
+        $code = $request->input('code');
+
+        // Kiểm tra xem sinh viên đã tồn tại hay chưa
+        $student = Student::find($studentId);
+
+
+        if (!$student) {
+            // Nếu sinh viên chưa tồn tại, tạo sinh viên mới
+            $student = new Student();
+            $student->id = $studentId;
+            $student->fullname = $fullname;
+            $student->classname = $class;
+            $student->save();
+        }
+
+        // Kiểm tra xem sinh viên đã điểm danh sự kiện này hay chưa
+        $existingAttendance = EventRegister::where('student_id', $studentId)
+            ->where('event_id', $event_id)
+            ->first();
+
+        if ($existingAttendance) {
+            return view('form.404')->with('error', 'Bạn đã đăng ký sự kiện này rồi!');
+        }
+
+        // Tạo bản ghi mới trong bảng StudentEvent
+        EventRegister::create([
+            'student_id' => $studentId,
+            'event_id' => $event_id
+        ]);
+
+        return view('form.success')->with('success', "Đăng kí thành công");
     }
 }

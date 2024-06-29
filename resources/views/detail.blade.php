@@ -26,7 +26,10 @@
                     <span class="font-bold">Ngày diễn ra:</span>
                     <span>{{ \Carbon\Carbon::parse($event->event_start)->format('H:i d/m/Y') }}</span>
                 </p>
-                <p>Quét mã dưới đây để đăng ký</p>
+                <p class="font-bold mt-3" >Quét mã dưới đây để đăng ký</p>
+                <div id="qrCodeSvg">
+                    {!! $registrationCode !!}
+                </div>
             </div>
             <div class="mt-11 ck-content">
                 {!! $event->content !!}
@@ -59,8 +62,4 @@
         </div>
     </div>
 </div>
-
-<script>
-
-</script>
 @endsection

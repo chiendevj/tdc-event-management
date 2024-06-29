@@ -13,4 +13,7 @@
         background="##FFFFFF" speed="1" style="width: 300px; height: 300px ; margin: 30px auto;" loop autoplay direction="1"
         mode="normal"></lottie-player>
 </div>
+<div class="flex justify-center mt-5">
+    <a href="{{route('home')}}" class="py-3 px-5 rounded-[5px] bg-[#003b7a] hover:opacity-80 text-white"><i class="fa-solid fa-angles-left"></i> Trang Chủ</a>
+</div>
 @endsection
