@@ -123,8 +123,6 @@
         </div>
     </div>
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         let eventChart = null;
 
@@ -245,7 +243,7 @@
                         `;
 
                         data.data.forEach((student, index) => {
-                            console.log(student);
+                            // console.log(student);
                             // Create table body
                             const tr = document.createElement('tr');
 
