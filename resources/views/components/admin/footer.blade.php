@@ -1,4 +1,4 @@
-<footer class="bg-[var(--dark-bg)] text-white rounded-tl-3xl rounded-tr-3xl footer">
+<footer class="bg-[var(--dark-bg)] text-white rounded-tl-2xl rounded-tr-2xl footer">
     <div class="container mx-auto py-8 px-4">
         <div class="flex flex-wrap">
             <!-- Logo và Mô tả -->
