@@ -26,7 +26,12 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
-                events: schedules
+                events: schedules,
+                eventClick: function(info) {
+                    let eventId = info.event.id;
+                    let eventDetailUrl = "{{ route('events.detail', ':id') }}".replace(':id', eventId);
+                    window.location.href = eventDetailUrl;
+                }
             });
             calendar.render();
         });

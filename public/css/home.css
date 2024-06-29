@@ -30,10 +30,16 @@ body {
     backface-visibility: hidden;
 }
 
+
 .event-card {
     box-shadow: 0 0 5px #ccc;
     border-radius: 10px;
     background-color: #fff;
+}
+
+.event-card .background {
+    display: flex;
+    justify-content: center;
 }
 
 .event-card:hover .background {
