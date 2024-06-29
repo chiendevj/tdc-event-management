@@ -8,8 +8,8 @@
         <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Tra cứu tham gia sự kiện</h1>
         <form id="searchForm" method="get" data-url="{{ route('search_events_by_student') }}">
             <div class="flex items-center mb-4 flex-col gap-5">
-                <input id="studentId" class="input-search flex-1 p-3 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" name="student_id" placeholder="Nhập mã số sinh viên" type="text">
-                <button type="submit" class="btn-search p-3 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
+                <input id="studentId" class="input-search flex-1 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" name="student_id" placeholder="Nhập mã số sinh viên" type="text">
+                <button type="submit" class="btn-search p-3 bg-blue-800 text-white rounded-lg hover:bg-blue-900"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
             </div>
         </form>
         <!-- Modal -->
@@ -128,5 +128,22 @@
             modal.style.display = "flex";
         }
     });
+
+    function createBubble() {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        const size = Math.random() * 50 + 20;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = `${Math.random() * 70 + 10}%`;
+        bubble.style.animationDuration = `${Math.random() * 5 + 5}s`;
+        document.body.appendChild(bubble);
+
+        setTimeout(() => {
+            bubble.remove();
+        }, 10000);
+    }
+
+    setInterval(createBubble, 500);
 </script>
 @endsection
