@@ -22,7 +22,7 @@ class Event extends Model
         'content',
         'status',
     ];
-  
+
     public function eventCodes() : HasMany{
         return $this->hasMany(EventCode::class);
     }
