@@ -3,6 +3,7 @@
 @section('title', 'Chi tiết')
 
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/ckeditor.css') }}">
 <div class="w-[92%] container mx-auto detail">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
         <div class="col-span-8 p-4">
@@ -27,7 +28,7 @@
                 </p>
                 <p>Quét mã dưới đây để đăng ký</p>
             </div>
-            <div class="mt-11">
+            <div class="mt-11 ck-content">
                 {!! $event->content !!}
             </div>
         </div>
@@ -51,10 +52,10 @@
                             <div class="event-location"><span>{{$event->location}}</span></div>
                         </div>
                     </div>
-                </div>   
+                </div>
                 @endforeach
             </div>
-           
+
         </div>
     </div>
 </div>

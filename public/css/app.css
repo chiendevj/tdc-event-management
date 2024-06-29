@@ -5,3 +5,7 @@
     --white: #fff;
     --text-gray: #333;
 }
+
+body {
+    font-family: "Inter", sans-serif;
+}

@@ -92,6 +92,8 @@ class EventController extends Controller
 
 
         if ($event) {
+            $event->registration_link = url('/sukien/' . $event->id . '/dangky');
+            $event->save();
             return redirect()->back()->with('success', 'Sự kiện đã được tạo thành công.');
         } else {
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi tạo sự kiện.');
