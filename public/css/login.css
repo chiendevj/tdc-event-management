@@ -1,0 +1,20 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --dark-bg: #04397f;
+    --blue: #19a0e4;
+    --note-text: #2d3436;
+    --table-border: rgb(156 163 175);
+    --nav-hover: #fff;
+    --red: #ee5253;
+    --event-title: #000;
+    --note: #eccc68;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+}

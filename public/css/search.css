@@ -1,105 +1,21 @@
-.background-tdc {
-    width: 100%;
-    height: 100vh;
-    background: url('../assets/images/tdc_bg.jpg') no-repeat center center;
-    background-size: cover;
-    background-attachment: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-.background-tdc::after {
-    content: "";
+.bubble {
     position: absolute;
-    inset: 0;
-    background: rgba(24, 45, 73, 0.436);
+    bottom: -200px;
+    background-color: var(--red);
+    border-radius: 50%;
+    animation: rise 10s infinite;
 }
 
-.background-tdc .title {
-    font-size: 32px;
-    color: var(--blue);
-    text-align: center;
-    margin-top: 40px;
-    margin-bottom: 50px;
-    font-weight: bold;
-    text-transform: capitalize;
-}
-
-.background-tdc .title span {
-    font-size: 35px;
-    font-weight: bold;
-    line-height: 40px;
-    background-image: linear-gradient(to right, #2193b0, #20bdff, #64ffa7);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-    transform: translate3d(10px, 0, 50px);
-    backface-visibility: hidden;
-}
-
-.search-box {
-    width: 80%;
-    height: 80%;
-    background-color: #fff;
-    border-radius: 10px;
-    z-index: 99;
-}
-
-.search-box form div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    box-shadow: 0 0 5px #ccc;
-    margin: 5px;
-    padding: 10px 0;
-    border-radius: 10px;
-}
-
-.input-search {
-    padding: 10px;
-    outline: none;
-    margin: 0 10px;
-    border-radius: 10px;
-    margin-right: 15px;
-    outline: 2px solid var(--blue);
-}
-
-.btn-search {
-    padding: 10px 20px;
-    background: var(--blue);
-    color: var(--white);
-    border-radius: 10px;
-    margin: 20px 10px 0 10px;
-}
-
-@media (min-width: 768px) {
-    .background-tdc .title {
-        font-size: 40px;
+@keyframes rise {
+    0% {
+        bottom: -200px;
+        opacity: 0;
     }
-    .background-tdc .title span {
-        font-size: 45px;
+    50% {
+        opacity: 1;
     }
-
-    .input-search { 
-        width: 300px;
-    }
-
-    .btn-search {
-        margin: 0;
-    }
-
-    .search-box form {
-        display: flex;
-        justify-content: center;
-    }
-    
-    .search-box form div {
-        display: inline-block;
-        padding: 10px 20px;
-        box-shadow: 0 0 5px #ccc;
+    100% {
+        bottom: 100%;
+        opacity: 0;
     }
 }
