@@ -5,13 +5,14 @@
 @section('content')
     <div class="container mx-auto mt-[40px] px-8 py-4 div_wrapper">
         <div class="flex items-center lg:flex-row justify-between gap-4 flex-col sm:gap-4 mb-[20px]">
-           <div class="flex items-center justify-center gap-3">
-            <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
-                Danh sách các sự kiện</h3>
-                <a href="{{ route('events.trash') }}" class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
+            <div class="flex items-center justify-center gap-3">
+                <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
+                    Danh sách các sự kiện</h3>
+                <a href="{{ route('events.trash') }}"
+                    class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
                     Thùng rác
                 </a>
-           </div>
+            </div>
             <div class="flex items-center w-full lg:w-fit justify-between gap-3">
                 <div class="relative border h-full w-full flex items-center justify-between p-2">
                     <input type="text" name="search" placeholder="Tìm kiếm sự kiện"
@@ -57,14 +58,14 @@
                         Tạo sự kiện mới
                     </a>
                     <button
-                    class="btn_export_list block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
-                    Xuất danh sách hiện tại
-                </button>
+                        class="btn_export_list block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
+                        Xuất danh sách hiện tại
+                    </button>
 
-                <button
-                    class="btn_export_all block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
-                    Xuất tất cả sự kiện
-                </button>
+                    <button
+                        class="btn_export_all block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
+                        Xuất tất cả sự kiện
+                    </button>
                 @endcan
 
             </div>
@@ -201,11 +202,25 @@
             }
         }
 
+        function confirmCancel(event) {
+            event.preventDefault();
+            const userConfirmed = confirm("Bạn có chắc chắn muốn hủy sự kiện này?");
+            if (userConfirmed) {
+                window.location.href = event.currentTarget.href;
+            }
+        }
+
         function createEventItem(event) {
+            // Event route
             const route = "{{ route('events.show', ':id') }}".replace(':id', event.id);
             const routeEdit = "{{ route('events.edit', ':id') }}".replace(':id', event.id);
             const routeDelete = "{{ route('events.move.trash', ':id') }}".replace(':id', event.id);
-            const routeQR ="{{ route('qr-codes.create', ':id') }}".replace(':id', event.id);
+            const routeQR = "{{ route('qr-codes.create', ':id') }}".replace(':id', event.id);
+            const routeCancel = "{{ route('events.cancel', ':id') }}".replace(':id', event.id);
+
+            // Check if event not canceled
+            const isCanceled = event.status === 'Đã hủy';
+
             const eventItem = document.createElement('div');
             const link = document.createElement('a');
 
@@ -215,7 +230,7 @@
 
             link.innerHTML = `
                     <div class="overflow-hidden relative">
-                        <img src="${event.event_photo}" alt="" class="w-full overflow-hidden hover:scale-105 transition-all event_img duration-100 ease-in">
+                        <img src="${event.event_photo}" alt="" class="overflow-hidden hover:scale-105 transition-all event_img duration-100 ease-in h-[175px] w-full">
                         <div class="action_hover absolute top-0 left-0 bottom-0 flex items-center justify-center right-0 bg-[rgba(0,0,0,0.2)]" style="backdrop-filter: blur(5px)">
                             <div class="flex items-center justify-center gap-2">
                                 <a href="${routeEdit}" class="btn_edit btn_action relative flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
@@ -241,12 +256,20 @@
                                         <div class="tooltip-arrow absolute bottom-0"></div>
                                     </div>
                                 </a>
+                                ${!isCanceled ? `<a href="${routeCancel}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]" onclick="return confirmCancel(event)">
+                                        <i class="fa-light fa-ban"></i>
+                                        <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
+                                            Hủy sự kiện
+                                            <div class="tooltip-arrow absolute bottom-0"></div>
+                                        </div>
+                                    </a>` : ''}
                             </div>
                         </div>
                     </div>
                     <div class="p-2">
-                        <h3 class="text-lg font-semibold uppercase">${event.name}</h3>
+                        <h3 class="text-lg font-semibold uppercase whitespace-nowrap overflow-hidden text-ellipsis">${event.name}</h3>
                         <p class="text-gray-400">${event.location}</p>
+                        <p class="text-gray-400 px-2 ml-auto rounded-full text-white w-fit  ${event.status !== "Đã hủy" ? 'bg-yellow-400' : 'bg-red-400'}">${event.status}</p>
                     </div>
                 `;
 
