@@ -61,7 +61,10 @@
             </li>
             <li class="border-b-2 border-[var(--dark-bg)] hover:border-[var(--nav-hover)] {{ Route::is('statisticals.index') ? 'border-[var(--nav-hover)]' : '' }} transition-all duration-100 ease-in">
                 <a href="{{ route('statisticals.index') }}">Thống kê</a>
-            </li> 
+            </li>
+            <li class="border-b-2 border-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
+                <a href="">Tài khoản</a>
+            </li>
             <li class="border-b-2 has_child border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in cursor-pointer relative">
                 Xem thêm <i class="fa-regular fa-chevron-down text-sm "></i>
                 <ul class="absolute child bg-white text-black top-[40px] shadow-lg rounded-sm p-4 min-w-[300px] flex flex-col gap-2">
