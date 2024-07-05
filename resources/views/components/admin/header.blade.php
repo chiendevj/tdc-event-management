@@ -22,6 +22,9 @@
                 <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
                     <a href="">Tài khoản</a>
                 </li>
+                <li class="border-b-2 border-b-transparent w-fit hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
+                    <a href="/">Trở về trang người dùng</a>
+                </li>
                 <li class="border-b-2 border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
                     <form action="{{ route('handle_logout') }}" method="POST">
                         @csrf
@@ -66,10 +69,7 @@
                 Xem thêm <i class="fa-regular fa-chevron-down text-sm "></i>
                 <ul class="absolute child bg-white text-black top-[40px] shadow-lg rounded-sm p-4 min-w-[300px] flex flex-col gap-2">
                     <li class="border-b-2 border-b-white w-fit hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
-                        <a href="{{ route('statisticals.index') }}">Something</a>
-                    </li>
-                    <li class="border-b-2 border-b-white w-fit hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
-                        <a href="">Other</a>
+                        <a href="/">Trở về trang người dùng</a>
                     </li>
                 </ul>
             </li>

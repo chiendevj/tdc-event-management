@@ -6,11 +6,11 @@
     <div class="container mx-auto mt-[40px] px-8 py-4 div_wrapper">
         <div class="flex items-center lg:flex-row justify-between gap-4 flex-col sm:gap-4 mb-[20px]">
            <div class="flex items-center justify-center gap-3">
-            <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
-                Danh sách các sự kiện</h3>
-                <a href="{{ route('events.trash') }}" class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
+            <a href="{{ route('events.index') }}" class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
+                Danh sách các sự kiện</a>
+                <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
                     Thùng rác
-                </a>
+                </h3>
            </div>
             <div class="flex items-center w-full lg:w-fit justify-between gap-3">
                 <div class="relative border h-full w-full flex items-center justify-between p-2">
@@ -155,7 +155,7 @@
 
             const url = isSearching ?
                 `/api/events/search?search=${searchInput.value}&filter_date_start=${startDate}&filter_date_end=${endDate}&status=${status}&page=${searchPage}` :
-                `/api/events/more?page=${page}`;
+                `/api/events/trash?page=${page}`;
             try {
                 const response = await fetch(url, {
                     method: 'GET',
@@ -203,9 +203,8 @@
 
         function createEventItem(event) {
             const route = "{{ route('events.show', ':id') }}".replace(':id', event.id);
-            const routeEdit = "{{ route('events.edit', ':id') }}".replace(':id', event.id);
             const routeDelete = "{{ route('events.move.trash', ':id') }}".replace(':id', event.id);
-            const routeQR ="{{ route('qr-codes.create', ':id') }}".replace(':id', event.id);
+            const routeRestore ="{{ route('events.move.restore', ':id') }}".replace(':id', event.id);
             const eventItem = document.createElement('div');
             const link = document.createElement('a');
 
@@ -218,13 +217,6 @@
                         <img src="${event.event_photo}" alt="" class="w-full overflow-hidden hover:scale-105 transition-all event_img duration-100 ease-in">
                         <div class="action_hover absolute top-0 left-0 bottom-0 flex items-center justify-center right-0 bg-[rgba(0,0,0,0.2)]" style="backdrop-filter: blur(5px)">
                             <div class="flex items-center justify-center gap-2">
-                                <a href="${routeEdit}" class="btn_edit btn_action relative flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
-                                    <i class="fa-light fa-pen-to-square"></i>
-                                    <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
-                                        Chỉnh sửa sự kiện
-                                        <div class="tooltip-arrow absolute bottom-0"></div>
-                                    </div>
-                                </a>
                                 @can('create event')
                                 <a href="${routeDelete}" class="btn_delete btn_action relative flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]" onclick="return confirmDelete(event)">
                                     <i class="fa-light fa-trash"></i>
@@ -234,10 +226,10 @@
                                     </div>
                                 </a>
                                 @endcan
-                                <a href="${routeQR}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
-                                    <i class="fa-light fa-qrcode"></i>
+                                <a href="${routeRestore}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
+                                    <i class="fa-sharp fa-light fa-trash-undo"></i>
                                     <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
-                                        Mã QR của sự kiện
+                                        Khôi phục sự kiện
                                         <div class="tooltip-arrow absolute bottom-0"></div>
                                     </div>
                                 </a>

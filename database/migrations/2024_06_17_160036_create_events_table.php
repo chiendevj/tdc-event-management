@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('content')->nullable();
             $table->text('registration_link')->nullable();
             $table->string('status')->default("Sắp diễn ra");
+            $table->integer('is_trash')->default(0);// 0: not trash, 1: trash
             $table->timestamps();
         });
     }

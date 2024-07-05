@@ -21,6 +21,7 @@ class Event extends Model
         'registration_link',
         'content',
         'status',
+        'is_trash',
     ];
 
     public function eventCodes() : HasMany{
