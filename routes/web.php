@@ -69,6 +69,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
     Route::get('admin/dashboard/student/{id}/events/participants/export', [EventController::class, 'exportParticipantsToExcel'])->name('events.export.excel.participants');
     Route::get('social-share/{id}', [SocialShareController::class, 'index'])->name('social-share');
+    Route::get('admin/dashboard/events/trash/{id}', [EventController::class, 'moveEventToTrash'])->name('events.move.trash');
+    Route::get('admin/dashboard/events/trash', [EventController::class, 'showTrash'])->name('events.trash');
+    Route::get('api/events/trash', [EventController::class, 'trash'])->name('events.trash.more');
+    Route::get('admin/dashboard/events/cancel/{id}', [EventController::class, 'moveEventToTrash'])->name('events.move.cancel');
+    Route::get('admin/dashboard/events/restore/{id}', [EventController::class, 'restoreEventFromTrash'])->name('events.move.restore');
 });
 
 // Routes chỉ cho super-admin
@@ -100,11 +105,8 @@ Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () 
 
 });
 
-
 // Auth routes
 Route::get('/auth/login', [AuthController::class, "showLogin"])->name("login");
 Route::post('/auth/login', [AuthController::class, "login"])->name("handle_login");
 Route::post('/auth/logout', [AuthController::class, "logout"])->name("handle_logout");
 Route::post('/upload', [UploadController::class, 'upload'])->name('upload');
-
-

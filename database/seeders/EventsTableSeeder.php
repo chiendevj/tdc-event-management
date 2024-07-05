@@ -10,8 +10,6 @@ class EventsTableSeeder extends Seeder
     public function run()
     {
 
-
-
         $events = [
             [
                 'id' => 1,

@@ -143,7 +143,9 @@ class EventController extends Controller
     public function loadmore(Request $request)
     {
         $limit = 8;
+
         $events = Event::orderBy('created_at', 'desc')
+            ->where('is_trash', '<>',  1)
             ->paginate($limit, ['*'], 'page', $request->page);
 
         return response()->json([
@@ -153,31 +155,33 @@ class EventController extends Controller
         ]);
     }
 
+
     public function show($id, Request $request)
     {
         $event = Event::find($id);
         $students = Student::where('event_id', $id)
-        ->join('event_registers', 'event_registers.student_id', '=', 'students.id')
-        ->select('students.*')
-        ->get();
+            ->join('event_registers', 'event_registers.student_id', '=', 'students.id')
+            ->select('students.*')
+            ->get();
 
         $classCounts = Student::where('event_id', $id)
-        ->join('event_registers', 'event_registers.student_id', '=', 'students.id')
-        ->select('students.classname', DB::raw('count(*) as count'))
-        ->groupBy('students.classname')
-        ->pluck('count', 'students.classname')
-        ->toArray();
+            ->join('event_registers', 'event_registers.student_id', '=', 'students.id')
+            ->select('students.classname', DB::raw('count(*) as count'))
+            ->groupBy('students.classname')
+            ->pluck('count', 'students.classname')
+            ->toArray();
 
         $nonce = Str::random(8);
         // dd($classCounts);
         return view('dashboards.admin.events.show', ['event' => $event, 'students' => $students, 'classCounts' => $classCounts])->with('title', $event->name)->with('url', $request->url())->with('image', url($event->event_photo))->with('nonce', $nonce);
     }
 
-    public function detail($id) {
+    public function detail($id)
+    {
         $event = Event::find($id);
         $registrationCode = QrCode::generate($event->registration_link);
         $upcomingEvents = Event::where('status', 'like', 'Sắp diễn ra')->get();
-        
+
         return view('detail', [
             'event' => $event,
             'registrationCode' => $registrationCode,
@@ -208,7 +212,8 @@ class EventController extends Controller
 
         if (!empty($status)) {
             if ($status == 'all') {
-                $query->where('status', "<>", $status);
+                // get all events except the ones in the trash
+                $query->where('status', 'not like', 'Đã xóa');
             } else if ($status == "newest") {
                 $query->orderBy('created_at', 'desc');
             } else if ($status == "oldest") {
@@ -359,5 +364,65 @@ class EventController extends Controller
         $event = Event::findOrFail($eventId);
         $students = $event->students;
         return response()->json(["data" => $students, "success" => true, "message" => "Participants retrieved successfully."]);
+    }
+
+    public function moveEventToTrash($id)
+    {
+        $event = Event::find($id);
+        if (!$event) {
+            return redirect()->back()->with('error', 'Không tìm thấy sự kiện.');
+        }
+
+        $event->is_trash = 1;
+        $event->save();
+
+        return redirect()->back()->with('success', 'Sự kiện đã được chuyển vào thùng rác.');
+    }
+
+    public function cancelEvent($id)
+    {
+        $event = Event::find($id);
+        if (!$event) {
+            return redirect()->back()->with('error', 'Không tìm thấy sự kiện.');
+        }
+
+        $event->status = 'Đã hủy';
+        $event->save();
+
+        return redirect()->back()->with('success', 'Sự kiện đã được hủy.');
+    }
+
+    public function showTrash()
+    {
+        $events = Event::where('is_trash', 1)->paginate(8);
+        return view('dashboards.admin.events.trash', ['events' => $events]);
+    }
+
+    public function trash(Request $request)
+    {
+        $limit = 8;
+
+        $events = Event::orderBy('created_at', 'desc')
+            ->where('is_trash', 1)
+            ->paginate($limit, ['*'], 'page', $request->page);
+
+        return response()->json([
+            'data' => $events,
+            'success' => true,
+            'message' => 'Events retrieved successfully.'
+        ]);
+    }
+
+    public function restoreEventFromTrash($id)
+    {
+        $event = Event::find($id);
+        if (!$event) {
+            return redirect()->back()->with('error', 'Không tìm thấy sự kiện.');
+        }
+
+        $event->is_trash = 0;
+        $event->save();
+
+        return redirect()->back()->with('success', 'Sự kiện đã được khôi phục.');
     }
 }
