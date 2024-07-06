@@ -148,17 +148,26 @@ class StudentController extends Controller
         $student->events_count = $student->events->count();
 
         $eventsByAcademicPeriods = $student->events->groupBy(function ($event) {
-            if ($event->academicPeriod->semester == "summer") {
-                return 'Năm học ' . $event->academicPeriod->year . ' - ' . ($event->academicPeriod->year + 1) . ' , Học kỳ hè';
+            $month = \Carbon\Carbon::parse($event->event_start)->month;
+
+            if ($month >= 9 && $month <= 12) {
+                return 'Năm học ' . $event->academicPeriod->year . ' - ' . ($event->academicPeriod->year + 1) . ' , Học kỳ 1';
+            } elseif ($month >= 3 && $month <= 6) {
+                return 'Năm học ' . ($event->academicPeriod->year - 1) . ' - ' . $event->academicPeriod->year . ' , Học kỳ 2';
+            } elseif ($month >= 7 && $month <= 8) {
+                return 'Năm học ' . ($event->academicPeriod->year - 1) . ' - ' . $event->academicPeriod->year . ' , Học kỳ hè';
+            } else {
+                return 'Năm học ' . ($event->academicPeriod->year - 1) . ' - ' . $event->academicPeriod->year . ' , Khoảng thời gian nghỉ';
             }
-            return 'Năm học ' . $event->academicPeriod->year . ' - ' . ($event->academicPeriod->year + 1) . ' , Học kỳ ' . $event->academicPeriod->semester;
         });
+
 
         $result = [];
         foreach ($eventsByAcademicPeriods as $period => $events) {
             $eventList = [];
             foreach ($events as $event) {
                 $eventList[] = [
+                    'id' => $event->id,
                     'name' => $event->name,
                     'event_start' => $event->event_start,
                     'event_end' => $event->event_end,
@@ -173,7 +182,7 @@ class StudentController extends Controller
             ];
         }
 
-        $result = collect($result)->sortBy('academic_period_id')->values()->all();
+        // $result = collect($result)->sortBy('academic_period_id')->values()->all();
 
         $student->events_by_academic_period = $result;
 
@@ -183,9 +192,6 @@ class StudentController extends Controller
             "message" => "Get student by id successfully!"
         ]);
     }
-
-
-
 
     public function exportStudentEvents($studentId, $academicPeriodId)
     {

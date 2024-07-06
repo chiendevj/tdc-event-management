@@ -109,7 +109,7 @@ class EventController extends Controller
 
             // Check exists
             $academicPeriod = AcademicPeriod::where('semester', $semester)
-                ->whereYear('year', $eventStartDate->year)
+                ->where('year', $eventStartDate->year)
                 ->first();
 
             if ($academicPeriod) {
