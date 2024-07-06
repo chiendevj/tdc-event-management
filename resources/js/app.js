@@ -1,6 +1,6 @@
-import "./bootstrap";
-import moment from 'moment';
-window.moment = moment;
+// import "./bootstrap";
+// import moment from 'moment';
+// window.moment = moment;
 
 
 // CKEditor 5

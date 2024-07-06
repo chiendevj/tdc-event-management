@@ -5,7 +5,7 @@
 @section('content')
 <div class="px-40 py-20">
     <div class="flex justify-between mb-10">
-        <h4 class="font-bold mb-4 p-2 bg-blue-900 inline-block text-white">Danh sách tài khoản</h4>
+        <h4 class="font-semibold mb-4 p-2 bg-blue-900 inline-block text-white">Danh sách tài khoản</h4>
         <a href="{{ route('accounts.create') }}" class="font-bold p-2 mb-4 bg-blue-900 text-white hover:bg-green-600">Tạo tài khoản mới</a>
     </div>
 
@@ -54,7 +54,7 @@
     </table>
 
     <div class="flex justify-between mb-10">
-        <h4 class="font-bold mb-4 p-2 bg-blue-900 inline-block text-white">Danh sách Quyền</h4>
+        <h4 class="font-semibold mb-4 p-2 bg-blue-900 inline-block text-white">Danh sách Quyền</h4>
         <a href="{{ route('roles.create') }}" class="font-bold p-2 mb-4 bg-blue-900 text-white hover:bg-green-600">Tạo quyền mới</a>
     </div>
 
