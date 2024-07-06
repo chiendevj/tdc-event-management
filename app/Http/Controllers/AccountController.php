@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -18,7 +19,8 @@ class AccountController extends Controller
 
     public function create()
     {
-        return view('dashboards.admin.accounts.create');
+        $roles = Role::all();
+        return view('dashboards.admin.accounts.create', compact('roles'));
     }
 
     public function store(Request $request)
@@ -51,35 +53,49 @@ class AccountController extends Controller
 
     public function edit(User $account)
     {
-        return view('dashboards.admin.accounts.edit', compact('account'));
+        $roles = Role::all();
+        return view('dashboards.admin.accounts.edit', compact('account', 'roles'));
     }
 
     public function update(Request $request, User $account)
     {
+        // Validate the request
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $account->id,
-            // Add other validation rules as necessary
+            'password' => 'nullable|min:8|confirmed',
+            'role' => 'required_if:role_select,true|exists:roles,name'
         ]);
 
+        // Update account details
         $account->update([
             'name' => $request->name,
             'email' => $request->email,
-            // Add other fields as necessary
         ]);
+
+        // If password is provided, update it
+        if ($request->filled('password')) {
+            $account->update([
+                'password' => bcrypt($request->password),
+            ]);
+        }
+
+        // Update role if the user is not a super-admin
+        if (!$account->hasRole('super-admin')) {
+            $account->syncRoles([$request->role]);
+        }
 
         return redirect()->route('accounts.index')->with('success', 'Cập nhật tài khoản thành công.');
     }
 
     public function destroy(User $account)
-{
-    if ($account->hasRole('super-admin')) {
-        return redirect()->route('accounts.index')->with('error', 'Bạn không thể xóa tài khoản superadmin.');
+    {
+        if ($account->hasRole('super-admin')) {
+            return redirect()->route('accounts.index')->with('error', 'Bạn không thể xóa tài khoản superadmin.');
+        }
+
+        $account->delete();
+
+        return redirect()->route('accounts.index')->with('success', 'Tài khoản đã được xóa thành công.');
     }
-
-    $account->delete();
-
-    return redirect()->route('accounts.index')->with('success', 'Tài khoản đã được xóa thành công.');
-}
-
 }

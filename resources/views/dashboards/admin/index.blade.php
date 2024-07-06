@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Trang chủ')
 
 @section('content')
     <div class="w-full bg-[var(--dark-bg)] mx-auto">

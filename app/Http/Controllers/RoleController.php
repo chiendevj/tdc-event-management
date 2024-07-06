@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -16,30 +17,62 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        $role = Role::create(['name' => $request->name]);
-        $role->syncPermissions($request->permissions);
+        $request->validate([
+            'name' => 'required|unique:roles,name',
+            'permissions' => 'nullable|string'
+        ]);
 
-        return redirect()->route('roles.index')->with('success', 'Role created successfully');
+        // Create the new role
+        $role = Role::create(['name' => $request->name]);
+
+        // Create and assign permissions to the role
+        if ($request->filled('permissions')) {
+            $permissions = explode(',', $request->permissions);
+            foreach ($permissions as $permissionName) {
+                $permission = Permission::firstOrCreate(['name' => $permissionName]);
+                $role->givePermissionTo($permission);
+            }
+        }
+
+        return redirect()->route('accounts.index')->with('success', 'Tạo quyền mới thành công.');
     }
 
     public function edit(Role $role)
     {
-        $permissions = Permission::all();
-        return view('roles.edit', compact('role', 'permissions'));
+        $permissions = Permission::all();  
+        return view('dashboards.admin.roles.edit', compact('role', 'permissions'));
     }
 
     public function update(Request $request, Role $role)
     {
-        $role->update(['name' => $request->name]);
-        $role->syncPermissions($request->permissions);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'permissions' => 'nullable|array',
+        ]);
 
-        return redirect()->route('roles.index')->with('success', 'Role updated successfully');
+        $role->update([
+            'name' => $request->name,
+        ]); 
+        if ($request->has('permissions')) {
+            $permissions = Permission::whereIn('id', $request->permissions)->get();
+            $role->syncPermissions($permissions);
+        } else {
+            $role->syncPermissions([]);
+        }
+
+        return redirect()->route('accounts.edit')->with('success', 'Cập nhật quyền thành công.');
     }
+
 
     public function destroy(Role $role)
     {
-        $role->delete();
-        return redirect()->route('roles.index')->with('success', 'Role deleted successfully');
-    }
+        if ($role->name == 'super-admin') {
+            return redirect()->route('accounts.index')->with('error', 'Không thể xóa quyền Super Admin!');
+        }
 
+        $role->permissions()->detach();
+        // Xóa quyền
+        $role->delete();
+        return redirect()->route('accounts.index')->with('success', 'Xóa quyền thành công.');
+    }
 }
