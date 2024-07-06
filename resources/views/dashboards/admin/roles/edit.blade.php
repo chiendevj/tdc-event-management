@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Tạo quyền mới')
+@section('title', 'Chỉnh sửa quyền')
 
 @section('content')
 <div class="px-20 py-10">
     <div class="flex justify-center">
-        <h1 class="p-2 bg-blue-800 mb-4 text-white font-semibold">Tạo quyền mới</h1>
+        <h1 class="p-2 bg-blue-800 mb-4 text-white font-semibold">Chỉnh sửa quyền</h1>
     </div>
 
     <form action="{{ route('roles.update', $role) }}" method="POST" class="px-40 py-10 border-blue-900 border-dashed border-2">
@@ -13,11 +13,11 @@
         @method('PUT')
         <div class="mb-4">
             <label for="name" class="block text-[14px] font-medium text-blue-900">Tên quyền <span class="text-red-500">*</span></label>
-            <input type="text" name="name" id="name" class="mt-1 p-2 outline outline-gray-300 outline-2 rounded-sm block w-full text-blue-900 placeholder:text-sm" placeholder="Nhập tên quyền mới" required value="{{ $role->name }}">
+            <input type="text" name="name" id="name" class="mt-1 p-2 outline outline-gray-300 outline-2 rounded-sm block w-full text-blue-900 placeholder:text-sm" placeholder="Nhập tên quyền mới" required value="{{ old('name', $role->name) }}">
         </div>
 
         <div class="mb-4">
-            <label for="permission" class="block text-[14px] font-medium text-blue-900">Danh sách Permissions</label>
+            <label for="permission-select" class="block text-[14px] font-medium text-blue-900">Danh sách Permissions</label>
             <select id="permission-select" class="mt-1 p-2 outline outline-gray-300 outline-2 rounded-sm block w-full text-blue-900">
                 @foreach($permissions as $permission)
                     <option value="{{ $permission->name }}">{{ $permission->name }}</option>
@@ -27,7 +27,7 @@
         </div>
 
         <div class="mb-4">
-            <label for="permission" class="block text-[14px] font-medium text-blue-900">Permissions khác (nếu có)</label>
+            <label for="permission-input" class="block text-[14px] font-medium text-blue-900">Permissions khác (nếu có)</label>
             <input type="text" id="permission-input" class="mt-1 p-2 outline outline-gray-300 outline-2 rounded-sm block w-full text-blue-900 placeholder:text-sm" placeholder="Nhập tên permission mới và nhấn thêm">
             <button type="button" id="add-other-permission" class="mt-2 p-2 bg-blue-800 text-white font-semibold">Thêm</button>
         </div>
@@ -60,8 +60,7 @@
         const permissionInput = document.getElementById('permission-input');
         const permissionsHiddenInput = document.getElementById('permissions-hidden-input');
 
-        addOtherPermissionButton.addEventListener('click', function() {
-            const permission = permissionInput.value.trim();
+        function addPermission(permission) {
             if (permission && !permissionsHiddenInput.value.includes(permission)) {
                 const li = document.createElement('li');
                 li.textContent = permission;
@@ -73,24 +72,22 @@
 
                 permissionsHiddenInput.value += (permissionsHiddenInput.value ? ',' : '') + permission;
 
-                permissionInput.value = '';
+                return true;
             }
-        });
+            return false;
+        }
 
         addPermissionButton.addEventListener('click', function () {
             const permission = permissionSelect.value.trim();
-            if (permission && !permissionsHiddenInput.value.includes(permission)) {
-                const li = document.createElement('li');
-                li.textContent = permission;
-                const removeButton = document.createElement('button');
-                removeButton.textContent = 'Xóa';
-                removeButton.className = 'ml-2 text-red-500 hover:text-red-700 font-medium remove-permission';
-                li.appendChild(removeButton);
-                permissionsList.appendChild(li);
-
-                permissionsHiddenInput.value += (permissionsHiddenInput.value ? ',' : '') + permission;
-
+            if (addPermission(permission)) {
                 permissionSelect.value = '';
+            }
+        });
+
+        addOtherPermissionButton.addEventListener('click', function () {
+            const permission = permissionInput.value.trim();
+            if (addPermission(permission)) {
+                permissionInput.value = '';
             }
         });
 

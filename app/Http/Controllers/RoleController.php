@@ -44,24 +44,28 @@ class RoleController extends Controller
     }
 
     public function update(Request $request, Role $role)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'permissions' => 'nullable|array',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'permissions' => 'nullable|string',
+    ]);
 
-        $role->update([
-            'name' => $request->name,
-        ]); 
-        if ($request->has('permissions')) {
-            $permissions = Permission::whereIn('id', $request->permissions)->get();
-            $role->syncPermissions($permissions);
-        } else {
-            $role->syncPermissions([]);
-        }
+    // Update the role name
+    $role->update([
+        'name' => $request->name,
+    ]);
 
-        return redirect()->route('accounts.edit')->with('success', 'Cập nhật quyền thành công.');
+    // Update permissions
+    if ($request->filled('permissions')) {
+        $permissions = explode(',', $request->permissions);
+        $role->syncPermissions($permissions);
+    } else {
+        $role->syncPermissions([]);
     }
+
+    return redirect()->route('accounts.index')->with('success', 'Cập nhật quyền thành công.');
+}
+
 
 
     public function destroy(Role $role)
