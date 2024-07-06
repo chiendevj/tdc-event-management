@@ -22,6 +22,7 @@ class Event extends Model
         'content',
         'status',
         'is_trash',
+        'academic_period_id',
     ];
 
     public function eventCodes() : HasMany{
@@ -31,5 +32,10 @@ class Event extends Model
     public function students()
     {
         return $this->belongsToMany(Student::class, 'event_student', 'event_id', 'student_id')->withTimestamps();
+    }
+
+    public function academicPeriod()
+    {
+        return $this->belongsTo(AcademicPeriod::class);
     }
 }

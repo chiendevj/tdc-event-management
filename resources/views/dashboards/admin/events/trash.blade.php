@@ -203,7 +203,7 @@
 
         function createEventItem(event) {
             const route = "{{ route('events.show', ':id') }}".replace(':id', event.id);
-            const routeDelete = "{{ route('events.move.trash', ':id') }}".replace(':id', event.id);
+            const routeDelete = "{{ route('events.delete', ':id') }}".replace(':id', event.id);
             const routeRestore ="{{ route('events.move.restore', ':id') }}".replace(':id', event.id);
             const eventItem = document.createElement('div');
             const link = document.createElement('a');
