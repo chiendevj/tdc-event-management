@@ -12,7 +12,7 @@
     --nav-hover: #fff;
     --red: #ee5253;
     --event-title: #fff;
-    --note: #eccc68;
+    --note: #fff;
     --gray: #b2bec3;
 }
 
@@ -79,8 +79,6 @@ body {
     transform: translateY(-50%);
 }
 
-
-
 .calender_table td {
     border: 1px solid var(--table-border);
     padding: 10px;
@@ -100,7 +98,7 @@ body {
 
 .day.active {
     color: #fff;
-    background: var(--red);
+    background: var(--dark-bg);
 }
 
 .event_calender {
@@ -296,7 +294,6 @@ body {
 
 .event_item {
     user-select: none;
-
 }
 
 .action_hover {
@@ -361,21 +358,27 @@ body {
 }
 
 .event-past {
-    background-color: #8395a7 !important;
+    background-color: #4b4b4b !important;
     color: white !important;
-  }
+}
 
-  .event-ongoing {
-    background-color:#00b894 !important;
+.event-ongoing {
+    background-color: #1dd1a1 !important;
     color: white !important;
-  }
+}
 
-  .event-upcoming {
-    background-color:#0984e3 !important;
+.event-upcoming {
+    background-color: #0abde3 !important;
     color: white !important;
-  }
+}
 
-  .event-cancelled {
-    background-color: #eb4d4b !important;
+.event-cancelled {
+    background-color: #ff6b6b !important;
     color: white !important;
-  }
+}
+
+.explain-color {
+    width: 22px;
+    height: 22px;
+    border-radius: 8px;
+}

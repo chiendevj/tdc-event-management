@@ -35,7 +35,27 @@
         <h3
             class="text-lg text-center uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit mx-auto">
             Lịch biểu sự kiện</h3>
+        <div class="explain flex items-center justify-center gap-3 mb-4 mt-8">
+            <div class="explain-item flex items-center justify-center gap-2">
+                <div class="explain-color event-upcoming"></div>
+                <p class="explain-text">Sắp diễn ra</p>
+            </div>
+            <div class="explain-item items-center justify-center gap-2 flex">
+                <div class="explain-color event-ongoing"></div>
+                <p class="explain-text">Đang diễn ra</p>
+            </div>
+            <div class="explain-item items-center justify-center gap-2 flex">
+                <div class="explain-color event-past"></div>
+                <p class="explain-text">Đã diễn ra</p>
+            </div>
+            <div class="explain-item items-center justify-center gap-2 flex">
+                <div class="explain-color event-cancelled"></div>
+                <p class="explain-text">Đã hủy</p>
+            </div>
+        </div>
+
         <div class="change_date flex items-center justify-between mt-[20px]">
+
             <div
                 class="icon_prev_date text-[var(--dark-bg)] font-semibold transition-all duration-100 ease-in p-2 flex items-center justify-center w-[32px] h-[32px] hover:text-white hover:bg-[var(--dark-bg)] rounded-full cursor-pointer">
                 <i class="fa-light fa-chevron-left"></i>
@@ -69,7 +89,7 @@
             </table>
         </div>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
         const displayDate = document.querySelector('.display_current_date');
         const btnChangeNextDate = document.querySelector('.icon_next_date');
@@ -77,7 +97,6 @@
         const totalParticipant = document.querySelector('.total_paticipant');
         const totalEvent = document.querySelector('.total_event');
         let events = [];
-        // const colors = ["#eb4d4b", "#6ab04c", "#f0932b", "#0abde3", "#6c5ce7", "#38ada9"];
 
         // Get current date and display
         const currentDate = new Date();
@@ -146,8 +165,6 @@
                         date++;
                     }
 
-
-
                     row.appendChild(cell);
                 }
 
@@ -195,6 +212,7 @@
             const eventEle = document.createElement('div');
             const eventTitle = document.createElement('h4');
             const eventDescription = document.createElement('p');
+            const eventTime = document.createElement('p');
             const detailEventRoute = "{{ route('events.show', ':eventId') }}".replace(':eventId', event.id);
             link.href = detailEventRoute;
 
@@ -220,10 +238,15 @@
             eventEle.classList.add('event');
             eventTitle.classList.add('event_title');
             eventDescription.classList.add('event_desc');
+            eventTime.classList.add('event_desc');
+
+            eventTime.textContent = moment(event.event_start).format('HH:mm DD/MM/YYYY');
+
             eventTitle.textContent = event.name;
             eventDescription.textContent = event.location;
             eventEle.appendChild(eventTitle);
             eventEle.appendChild(eventDescription);
+            eventEle.appendChild(eventTime);
             link.appendChild(eventEle);
             cell.appendChild(link);
         }
