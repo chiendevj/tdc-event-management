@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\AcademicPeriodController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\QrCodeGeneratorController;
@@ -11,7 +11,6 @@ use App\Http\Controllers\SocialShareController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\StatisticalController;
 use App\Http\Controllers\StudentController;
-
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,7 +64,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/events/participants/students', [StudentController::class, 'getStudentsByEventCount'])->name("events.participants.students");
     Route::get('admin/dashboard/students', [StudentController::class, "dashboard"])->name("students.index");
     Route::get('/api/students/{id}', [StudentController::class, "getStudentsById"])->name("students.get");
+    Route::get('/api/academic-periods', [AcademicPeriodController::class, "getAcademicPeriods"])->name("academic_period.get");
     Route::get('admin/dashboard/students/course/{courseYear}', [StudentController::class, "filterStudentByCourse"])->name("students.course.get");
+    Route::get('admin/dashboard/students/{studentId}/events/export/{academicPeriodId}', [StudentController::class, 'exportStudentEvents'])->name("students.events.export");
     Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
     Route::get('admin/dashboard/student/{id}/events/participants/export', [EventController::class, 'exportParticipantsToExcel'])->name('events.export.excel.participants');
     Route::get('social-share/{id}', [SocialShareController::class, 'index'])->name('social-share');

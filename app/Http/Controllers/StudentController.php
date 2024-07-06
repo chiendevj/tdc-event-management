@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StudentEventsExport;
+use App\Models\AcademicPeriod;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
@@ -120,20 +123,85 @@ class StudentController extends Controller
 
     public function getStudentsByEventCount()
     {
-        $students = Student::withCount('events')->orderByDesc('events_count')->get();
+        $students = Student::withCount('events')
+            ->with('events')
+            ->orderByDesc('events_count')
+            ->get();
+
         return response()->json(["data" => $students, "status" => "success", "message" => "Get students by event count successfully!"]);
     }
 
     public function getStudentsById($id)
     {
         $student = Student::with(['events' => function ($query) {
-            $query->withCount('students as participants_count');
+            $query->withCount('students as participants_count')->with('academicPeriod');
         }])->find($id);
 
         if (!$student) {
-            return response()->json(["data" => null, "status" => "error", "message" => "Student not found!"]);
+            return response()->json([
+                "data" => null,
+                "status" => "error",
+                "message" => "Student not found!"
+            ]);
         }
+
         $student->events_count = $student->events->count();
-        return response()->json(["data" => $student, "status" => "success", "message" => "Get student by id successfully!"]);
+
+        $eventsByAcademicPeriods = $student->events->groupBy(function ($event) {
+            if ($event->academicPeriod->semester == "summer") {
+                return 'Năm học ' . $event->academicPeriod->year . ' - ' . ($event->academicPeriod->year + 1) . ' , Học kỳ hè';
+            }
+            return 'Năm học ' . $event->academicPeriod->year . ' - ' . ($event->academicPeriod->year + 1) . ' , Học kỳ ' . $event->academicPeriod->semester;
+        });
+
+        $result = [];
+        foreach ($eventsByAcademicPeriods as $period => $events) {
+            $eventList = [];
+            foreach ($events as $event) {
+                $eventList[] = [
+                    'name' => $event->name,
+                    'event_start' => $event->event_start,
+                    'event_end' => $event->event_end,
+                    'participants_count' => $event->participants_count,
+                ];
+            }
+            $academicPeriodId = $events->first()->academicPeriod->id;
+            $result[] = [
+                'academic_period_id' => $academicPeriodId,
+                'academic_period' => $period,
+                'events' => $eventList,
+            ];
+        }
+
+        $result = collect($result)->sortBy('academic_period_id')->values()->all();
+
+        $student->events_by_academic_period = $result;
+
+        return response()->json([
+            "data" => $student,
+            "status" => "success",
+            "message" => "Get student by id successfully!"
+        ]);
+    }
+
+
+
+
+    public function exportStudentEvents($studentId, $academicPeriodId)
+    {
+        $student = Student::find($studentId);
+        $academicPeriod = AcademicPeriod::find($academicPeriodId);
+
+        $file = $academicPeriod->year . '-' . $academicPeriod->year + 1 . '_semester_' . $academicPeriod->semester . '_student_' . $student->fullname . '_events.xlsx';
+
+        if (!$student || !$academicPeriod) {
+            return response()->json([
+                "data" => null,
+                "status" => "error",
+                "message" => "Student or Academic Period not found!"
+            ]);
+        }
+
+        return Excel::download(new StudentEventsExport($studentId, $academicPeriodId), $file);
     }
 }

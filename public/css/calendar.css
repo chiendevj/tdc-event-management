@@ -35,3 +35,38 @@
         order: 3;
       }
 }
+
+.event-past {
+  background-color: #8395a7 !important;
+  color: white !important;
+}
+
+.event-ongoing {
+  background-color:#00b894 !important;
+  color: white !important;
+}
+
+.event-upcoming {
+  background-color:#0984e3 !important;
+  color: white !important;
+}
+
+.event-cancelled {
+  background-color: #eb4d4b !important;
+  color: white !important;
+}
+
+.fc-daygrid-event-dot {
+  background: #fff !important;
+  border-color: #fff !important;
+}
+
+.fc-toolbar-title{
+  text-transform: capitalize;
+}
+
+.explain-color {
+  width: 22px;
+  height: 22px;
+  border-radius: 8px;
+}
