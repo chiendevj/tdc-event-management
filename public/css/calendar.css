@@ -37,22 +37,22 @@
 }
 
 .event-past {
-  background-color: #8395a7 !important;
+  background-color: #4b4b4b !important;
   color: white !important;
 }
 
 .event-ongoing {
-  background-color:#00b894 !important;
+  background-color: #1dd1a1 !important;
   color: white !important;
 }
 
 .event-upcoming {
-  background-color:#0984e3 !important;
+  background-color: #0abde3 !important;
   color: white !important;
 }
 
 .event-cancelled {
-  background-color: #eb4d4b !important;
+  background-color: #ff6b6b !important;
   color: white !important;
 }
 

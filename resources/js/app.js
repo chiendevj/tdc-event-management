@@ -1,4 +1,7 @@
 import "./bootstrap";
+import moment from 'moment';
+window.moment = moment;
+
 
 // CKEditor 5
 import { ClassicEditor as ClassicEditorBase } from "@ckeditor/ckeditor5-editor-classic";
