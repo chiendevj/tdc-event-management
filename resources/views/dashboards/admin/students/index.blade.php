@@ -115,8 +115,7 @@
                     </div>
                     <div class="mb-4">
                         <button id="exportStudentDetail"
-                            class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-sm ease-in transition-all">Xuất
-                            Excel
+                            class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-sm ease-in transition-all">Xuất toàn bộ thông tin tham gia sự kiện ra Excel
                         </button>
                     </div>
                     <div id="studentDetailContent" class="rounded-sm overflow-hidden">
@@ -135,6 +134,7 @@
         const prevInnerHTML = tableBody.innerHTML;
         const paginationBar = document.querySelector('.pagination_bar');
         const filterOption = document.getElementById('course');
+        const studentContent = document.getElementById('studentDetailContent');
 
         filterOption.addEventListener('change', function() {
             const value = this.value;
@@ -145,6 +145,7 @@
 
         function closeModal() {
             document.getElementById('studentDetailModal').classList.add('hidden');
+            studentContent.innerHTML = '';
         }
 
         const showStudentEventDetail = (studentId) => {
@@ -153,6 +154,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === "success") {
+                        const academics = data.data.events_by_academic_period;
                         const student = data.data;
                         const detail = document.createElement('div');
                         detail.innerHTML = `
@@ -162,59 +164,77 @@
                         <p>Số sự kiện tham gia: ${student.events_count}</p>
                       `;
 
-                        const listEvent = document.createElement('div');
-                        listEvent.classList.add('list_event_participant');
-                        listEvent.innerHTML = `
-                        <h3 class="text-left font-semibold my-4">Danh sách sự kiện đã tham gia</h3>
-                        <div class="rounded-sm overflow-hidden">
-                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                <thead
-                                    class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-                                            Tên sự kiện
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-center">
-                                            Số lượng sinh viên tham gia
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-center">
-                                            Chi tiết
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${student.events.map((event, index) => {
-                                      const route = "{{ route('events.show', ':eventId') }}".replace(':eventId', event.id);
-                                      return `
-                                                              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                                  <th scope="row"
-                                                                      class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
-                                                                      ${event.name}
-                                                                  </th>
-                                                                  <td class="px-6 py-4 text-center">
-                                                                      ${event.participants_count}
-                                                                  </td>
-                                                                  <td class="px-6 py-4 text-center">
-                                                                      <div class="flex items-center justify-center gap-3">
-                                                                          <a href="${route}">
-                                                                              Chi tiết
-                                                                          </a>
-                                                                      </div>
-                                                                  </td>
-                                                              </tr>
-                                                          `;
-                                    }).join('')}
-                                </tbody>
-                            </table>
-                        </div>
-                      `;
-                        document.getElementById('studentDetailContent').innerHTML = detail.innerHTML + listEvent
-                            .innerHTML;
-                        document.getElementById('exportStudentDetail').addEventListener('click', () => {
-                            window.location.href =
-                                "{{ route('events.export.excel.participants', ':studentId') }}".replace(
-                                    ':studentId', studentId);
+                        studentContent.appendChild(detail);
+
+
+                        academics.forEach(academic => {
+                            console.log(academic);
+                            const listEvent = document.createElement('div');
+                            listEvent.classList.add('list_event_participant' , 'mb-4');
+                            listEvent.innerHTML = `
+                               <div class="flex items-center justify-between flex-col sm:flex-row lg:flex-row xl:flex-row">
+                                     <h3 class="text-left font-semibold my-4">Danh sách sự kiện đã tham gia (${academic.academic_period})</h3>
+                                      <button id="exportStudentDetailSemester${academic.academic_period_id}"
+                                        class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-sm ease-in transition-all">Xuất danh sách sự kiện ra Excel
+                                    </button>
+                                </div>
+                                <div class="rounded-sm overflow-hidden">
+                                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                        <thead
+                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3">
+                                                    Tên sự kiện
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-center">
+                                                    Số lượng sinh viên tham gia
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-center">
+                                                    Chi tiết
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${academic.events.map((event, index) => {
+                                            const route = "{{ route('events.show', ':eventId') }}".replace(':eventId', event.id);
+                                            return `
+                                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                            <th scope="row"
+                                                                class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
+                                                                ${event.name}
+                                                            </th>
+                                                            <td class="px-6 py-4 text-center">
+                                                                ${event.participants_count}
+                                                            </td>
+                                                            <td class="px-6 py-4 text-center">
+                                                                <div class="flex items-center justify-center gap-3">
+                                                                    <a href="${route}">
+                                                                        Chi tiết
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    `;
+                                            }).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            `;
+                            studentContent.appendChild(listEvent);
+                            document.getElementById('exportStudentDetail').addEventListener('click', () => {
+                                window.location.href =
+                                    "{{ route('events.export.excel.participants', ':studentId') }}"
+                                    .replace(
+                                        ':studentId', studentId);
+                            });
+
+                            document.getElementById('exportStudentDetailSemester' + academic.academic_period_id).addEventListener('click', () => {
+                                window.location.href = "{{ route('students.events.export', [':studentId', ':academicPeriodId']) }}"
+                                .replace(':studentId', studentId)
+                                .replace(':academicPeriodId', academic.academic_period_id);
+                            });
                         });
+
                         studentDetailModal.classList.remove('hidden');
                     }
                 });

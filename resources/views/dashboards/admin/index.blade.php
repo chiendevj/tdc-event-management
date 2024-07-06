@@ -53,7 +53,8 @@
 
         <div class="calender_table mt-[20px] w-full mb-8 rounded-sm overflow-hidden">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="rounded-sm text-xs border border-[var(--table-border)] text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+                <thead
+                    class="rounded-sm text-xs border border-[var(--table-border)] text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
                     <th scope="col" class="px-6 py-3 text-center">Thứ 2</th>
                     <th scope="col" class="px-6 py-3 text-center">Thứ 3</th>
                     <th scope="col" class="px-6 py-3 text-center">Thứ 4</th>
@@ -125,11 +126,11 @@
 
             for (let i = 0; i < 6; i++) {
                 let row = document.createElement('tr');
-                row.classList.add("bg-white","border-b", "border-[var(--table-border)]")
+                row.classList.add("bg-white", "border-b", "border-[var(--table-border)]")
 
                 for (let j = 1; j <= 7; j++) {
                     let cell = document.createElement('td');
-                    cell.classList.add("px-6","py-4","dark:text-gray-400");
+                    cell.classList.add("px-6", "py-4", "dark:text-gray-400");
                     let day = document.createElement('span');
                     day.classList.add("day");
 
@@ -144,6 +145,8 @@
                         renderEventsForDay(cell, date, month, year, day);
                         date++;
                     }
+
+
 
                     row.appendChild(cell);
                 }
@@ -177,7 +180,7 @@
                             createEventElement(event, cell);
                         }
                     } else if (eventEndMonth !== eventStartMonth && eventEndMonth === month) {
-                         // case event start in previous month and end in current month
+                        // case event start in previous month and end in current month
                         if (eventEnd.getDate() >= date) {
                             day.classList.add('active');
                             createEventElement(event, cell);
@@ -188,12 +191,32 @@
         }
 
         function createEventElement(event, cell) {
+            const link = document.createElement('a');
             const eventEle = document.createElement('div');
             const eventTitle = document.createElement('h4');
             const eventDescription = document.createElement('p');
-            // const color = colors[Math.floor(Math.random() * colors.length)];
+            const detailEventRoute = "{{ route('events.show', ':eventId') }}".replace(':eventId', event.id);
+            link.href = detailEventRoute;
 
-            // eventEle.style.backgroundColor = color;
+            // Check event status and add background color
+            switch (event.status) {
+                case 'Đang diễn ra':
+                    eventEle.classList.add("event-ongoing");
+                    break;
+                case 'Đã diễn ra':
+                    eventEle.classList.add("event-past");
+                    break;
+                case 'Sắp diễn ra':
+                    eventEle.classList.add("event-upcoming");
+                    break;
+                case 'Đã hủy':
+                    eventEle.classList.add("event-cancelled");
+                    break;
+                default:
+                    break;
+            }
+
+
             eventEle.classList.add('event');
             eventTitle.classList.add('event_title');
             eventDescription.classList.add('event_desc');
@@ -201,7 +224,8 @@
             eventDescription.textContent = event.location;
             eventEle.appendChild(eventTitle);
             eventEle.appendChild(eventDescription);
-            cell.appendChild(eventEle);
+            link.appendChild(eventEle);
+            cell.appendChild(link);
         }
 
 

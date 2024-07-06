@@ -9,7 +9,7 @@ class AcademicPeriod extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['semester', 'year'];
+    protected $fillable = ['semester', 'year', 'id'];
 
     public function events()
     {

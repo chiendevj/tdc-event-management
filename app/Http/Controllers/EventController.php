@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\EventExport;
 use App\Exports\EventWithStudentsExport;
 use App\Exports\ParticipatedEventsExport;
+use App\Models\AcademicPeriod;
 use App\Models\Event;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -94,6 +95,34 @@ class EventController extends Controller
 
         if ($event) {
             $event->registration_link = url('/sukien/' . $event->id . '/dangky');
+            // Base on the event start date, create academic year and semester
+            $eventStartDate = \Carbon\Carbon::parse($event->event_start);
+            $eventMonth = $eventStartDate->month;
+
+            if ($eventMonth >= 9 && $eventMonth <= 12) {
+                $semester = 1; // Semester 1
+            } elseif ($eventMonth >= 3 && $eventMonth <= 6) {
+                $semester = 2; // Semester 2
+            } else {
+                $semester = "summer"; // Semester Sumemr
+            }
+
+            // Check exists
+            $academicPeriod = AcademicPeriod::where('semester', $semester)
+                ->whereYear('year', $eventStartDate->year)
+                ->first();
+
+            if ($academicPeriod) {
+                $event->academic_period_id = $academicPeriod->id;
+            } else {
+                $newAcademicPeriod = new AcademicPeriod();
+                $newAcademicPeriod->semester = $semester;
+                $newAcademicPeriod->year = $eventStartDate->year;
+                $newAcademicPeriod->save();
+                $event->academic_period_id = $newAcademicPeriod->id;
+            }
+
+
             $event->save();
             return redirect()->back()->with('success', 'Sự kiện đã được tạo thành công.');
         } else {
@@ -304,6 +333,35 @@ class EventController extends Controller
 
             $validatedData['event_photo'] = '/storage/' . $filePath;
         }
+
+        $eventStartDate = \Carbon\Carbon::parse($request->event_start);
+        $eventMonth = $eventStartDate->month;
+        if ($eventMonth >= 9 && $eventMonth <= 12) {
+            $semester = 1; // Semester 1
+        } elseif ($eventMonth >= 3 && $eventMonth <= 6) {
+            $semester = 2; // Semester 2
+        } else {
+            $semester = "summer"; // Semester Sumemr
+        }
+
+        // Check exists
+        $academicPeriod = AcademicPeriod::where('semester', $semester)
+            ->where('year', $eventStartDate->year)
+            ->first();
+
+
+
+        if ($academicPeriod) {
+            $event->academic_period_id = $academicPeriod->id;
+        } else {
+            $newAcademicPeriod = new AcademicPeriod();
+            $newAcademicPeriod->semester = $semester;
+            $newAcademicPeriod->year = $eventStartDate->year;
+            $newAcademicPeriod->save();
+            $event->academic_period_id = $newAcademicPeriod->id;
+        }
+
+
 
         $updated = $event->update($validatedData);
 
