@@ -39,11 +39,9 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
-        $permissions = Permission::all(); // Lấy danh sách tất cả permissions
-        $rolePermissions = $role->permissions()->pluck('id')->toArray(); // Lấy danh sách permissions của role
-
-        return view('dashboards.admin.roles.edit', compact('role', 'permissions', 'rolePermissions'));
-    } 
+        $permissions = Permission::all();  
+        return view('dashboards.admin.roles.edit', compact('role', 'permissions'));
+    }
 
     public function update(Request $request, Role $role)
     {
@@ -54,21 +52,22 @@ class RoleController extends Controller
 
         $role->update([
             'name' => $request->name,
-        ]);
-
-        if ($request->permissions) {
-            $role->permissions()->sync($request->permissions); // Đồng bộ permissions
+        ]); 
+        if ($request->has('permissions')) {
+            $permissions = Permission::whereIn('id', $request->permissions)->get();
+            $role->syncPermissions($permissions);
         } else {
-            $role->permissions()->detach(); // Xóa tất cả permissions nếu không có permissions nào được chọn
+            $role->syncPermissions([]);
         }
 
-        return redirect()->route('accounts.index')->with('success', 'Cập nhật quyền thành công.');
+        return redirect()->route('accounts.edit')->with('success', 'Cập nhật quyền thành công.');
     }
+
 
     public function destroy(Role $role)
     {
-        if ($role === 'super-admin') {
-            return redirect()->route('accounts.index')->with('success', 'Không thể xóa quyền Super Admin!');
+        if ($role->name == 'super-admin') {
+            return redirect()->route('accounts.index')->with('error', 'Không thể xóa quyền Super Admin!');
         }
 
         $role->permissions()->detach();

@@ -24,7 +24,7 @@
         <div class="mb-4">
             <label for="password" class="block text-[14px] font-medium text-blue-900">Mật khẩu</label>
             <input type="password" name="password" id="password" class="mt-1 p-2 outline outline-gray-300 outline-2 rounded-sm block w-full text-blue-900 placeholder:text-sm" placeholder="Nhập mật khẩu mới (nếu muốn thay đổi)">
-            <small class="text-gray-500">Ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt</small>
+            <small class="text-red-500">Ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt</small>
         </div>
 
         @if(!$account->hasRole('super-admin'))
