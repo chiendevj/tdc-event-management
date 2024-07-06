@@ -1,12 +1,13 @@
 <?php
 
-
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\QrCodeGeneratorController;
 
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SocialShareController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\StatisticalController;
@@ -55,13 +56,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('admin/dashboard/statisticals', [StatisticalController::class, 'index'])->name("statisticals.index");
     Route::get('admin/dashboard/statisticals/{id}', [StatisticalController::class, 'eventDetails'])->name('events.details');
+    Route::get('admin/dashboard/statisticals/export/{eventId}', [EventController::class, 'exportEventToExcel'])->name('events.export.excel');
+
     Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
     Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
-    Route::get('admin/dashboard/statisticals/export/{eventId}', [EventController::class, 'exportEventToExcel'])->name('events.export.excel');
     Route::get('/api/events/{id}/participants', [EventController::class, 'getParticipants'])->name("events.participants");
-    Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");
-    Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
-    Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");
+    Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all"); 
+
     Route::get('/api/events/participants/students', [StudentController::class, 'getStudentsByEventCount'])->name("events.participants.students");
     Route::get('admin/dashboard/students', [StudentController::class, "dashboard"])->name("students.index");
     Route::get('/api/students/{id}', [StudentController::class, "getStudentsById"])->name("students.get");
@@ -92,6 +93,9 @@ Route::middleware(['auth', 'role_or_permission:super-admin'])->group(function ()
     Route::get('admin/dashboard/events/{id}/edit', [EventController::class, 'edit'])->name("events.edit");
     Route::post('admin/dashboard/events/{id}/edit', [EventController::class, 'update'])->name("events.update");
     Route::get('admin/dashboard/events/{id}/delete', [EventController::class, 'delete'])->name("events.delete");
+
+    Route::resource('accounts', AccountController::class);
+    Route::resource('roles', RoleController::class);
 });
 
 
@@ -100,6 +104,9 @@ Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () 
     Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
     Route::get('admin/dashboard/events/{id}/edit', [EventController::class, 'edit'])->name("events.edit");
     Route::post('admin/dashboard/events/{id}/edit', [EventController::class, 'update'])->name("events.update");
+    Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
+    Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");
+
 });
 
 // Auth routes

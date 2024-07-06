@@ -9,6 +9,7 @@
     {{-- Main css --}}
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
     {{-- Fonts --}}
+    <link rel="shortcut icon" href="{{ asset('assets/logo/logo_removebg.png') }}" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
