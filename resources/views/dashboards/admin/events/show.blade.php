@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="col-span-12 md:col-span-4 p-4">
-            <h2 class="text-lg font-bold">Biểu đồ số lượng sinh viên theo từng lớp</h2>
+            <h2 class="text-lg font-bold">Biểu đồ số lượng sinh viên đăng ký tham gia</h2>
             <canvas id="classChart" width="300" height="300"></canvas>
         </div>
         <div class="col-span-12 p-4">

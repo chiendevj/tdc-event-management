@@ -26,9 +26,9 @@ class StudentSeeder extends Seeder
             DB::table('students')->insert(
                 [
                     'id' => $studentId,
-                    'email' => $faker->unique()->userName . '@mail.tdc.edu.vn',
+                    'email' => $studentId . '@mail.tdc.edu.vn',
                     'fullname' => $faker->name,
-                    'classname' => $classYear . 'TT' . $faker->numberBetween(10, 12),
+                    'classname' => $classYear . 'TT' . $faker->numberBetween(01, 12),
                 ]
             );
         }
