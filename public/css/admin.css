@@ -11,8 +11,9 @@
     --table-border: rgb(156 163 175);
     --nav-hover: #fff;
     --red: #ee5253;
-    --event-title: #000;
+    --event-title: #fff;
     --note: #eccc68;
+    --gray: #b2bec3;
 }
 
 body {
@@ -94,7 +95,7 @@ body {
     align-items: center;
     margin-left: auto;
     padding: 8px;
-    border-radius: 4px;
+    border-radius: 50%;
 }
 
 .day.active {
@@ -123,6 +124,8 @@ body {
 .event_desc {
     max-width: 300px;
     font-size: 14px;
+    color: var(--note);
+    font-weight: 500;
 }
 
 .event {
@@ -293,6 +296,7 @@ body {
 
 .event_item {
     user-select: none;
+
 }
 
 .action_hover {
@@ -355,3 +359,23 @@ body {
     width: 100% !important;
     position: relative;
 }
+
+.event-past {
+    background-color: #8395a7 !important;
+    color: white !important;
+  }
+
+  .event-ongoing {
+    background-color:#00b894 !important;
+    color: white !important;
+  }
+
+  .event-upcoming {
+    background-color:#0984e3 !important;
+    color: white !important;
+  }
+
+  .event-cancelled {
+    background-color: #eb4d4b !important;
+    color: white !important;
+  }

@@ -19,6 +19,7 @@ class ScheduleController extends Controller
                 'id' => $event->id,
                 'title' => $event->name,
                 'start' => $event->event_start,
+                'status' => $event->status,
                 'end' => $event->event_start
             ];
         }

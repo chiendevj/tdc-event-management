@@ -26,7 +26,7 @@ return new class extends Migration
             $table->text('registration_link')->nullable();
             $table->string('status')->default("Sắp diễn ra");
             $table->integer('is_trash')->default(0);// 0: not trash, 1: trash
-            $table->integer('academic_period_id');
+            $table->integer('academic_period_id')->default(0);
             $table->timestamps();
         });
     }
