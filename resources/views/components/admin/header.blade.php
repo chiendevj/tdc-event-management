@@ -5,7 +5,13 @@
             <img src="https://quizgecko.com/images/avatars/avatar-{{ auth()->user()->id }}.webp" class="w-[50px] flex items-center justify-center h-[50px] m-[8px] rounded-full border-gray-500 ring-2" />
             <div class="text-center">
                 <h1 class="text-lg font-bold text-white">{{ auth()->user()->name }}</h1>
-                <p class="text-sm text-gray-500">Admin</p>
+                <p class="text-sm text-gray-500">
+                    @role('super-admin')
+                    Super Admin
+                    @else
+                    Admin
+                    @endrole
+                </p>
             </div>
         </div>
         <div class="h-full flex items-start mt-10 justify-center">
@@ -91,7 +97,13 @@
                 <img src="https://quizgecko.com/images/avatars/avatar-{{ auth()->user()->id }}.webp" class="hidden w-[50px] lg:flex items-center justify-center h-[50px] m-[8px] rounded-full border-gray-500 ring-2" />
                 <div class="hidden lg:block">
                     <h1 class="text-lg font-bold text-white">{{ auth()->user()->name }}</h1>
-                    <p class="text-sm text-gray-500">Admin</p>
+                    <p class="text-sm text-gray-500">
+                        @role('super-admin')
+                        Super Admin
+                        @else
+                        Admin
+                        @endrole
+                    </p>
                 </div>
                 <button class="menu-icon lg:ms-4 btn_open_menu_mobile lg:hidden flex items-center justify-center">
                     <i class="fa-regular fa-bars text-white text-2xl"></i>

@@ -25,17 +25,21 @@ class AccountController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|',
-            'password' => 'required|min:6',
-            // Add other validation rules as necessary
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8',
+            'role' => 'required|exists:roles,name', // Ensure the role exists
         ]);
 
-        User::create([
+        // Create the user
+        $user = User::create([
             'name' => $request->name,
             'email' => strtolower($request->email),
             'password' => bcrypt($request->password),
-            // Add other fields as necessary
         ]);
+
+        // Assign role to the user
+        $role = Role::where('name', $request->role)->first();
+        $user->assignRole($role); // Gán vai trò cho người dùng mới tạo
 
         return redirect()->route('accounts.index')->with('success', 'Tạo tài khoản thành công.');
     }
