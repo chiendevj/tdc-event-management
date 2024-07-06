@@ -18,7 +18,8 @@ class AccountController extends Controller
 
     public function create()
     {
-        return view('dashboards.admin.accounts.create');
+        $roles = Role::all();
+        return view('dashboards.admin.accounts.create', compact('roles'));
     }
 
     public function store(Request $request)
@@ -51,25 +52,40 @@ class AccountController extends Controller
 
     public function edit(User $account)
     {
-        return view('dashboards.admin.accounts.edit', compact('account'));
+        $roles = Role::all();
+        return view('dashboards.admin.accounts.edit', compact('account', 'roles'));
     }
 
     public function update(Request $request, User $account)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $account->id,
-            // Add other validation rules as necessary
-        ]);
+{
+    // Validate the request
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email,' . $account->id,
+        'password' => 'nullable|min:8|confirmed',
+        'role' => 'required_if:role_select,true|exists:roles,name'
+    ]);
 
+    // Update account details
+    $account->update([
+        'name' => $request->name,
+        'email' => $request->email,
+    ]);
+
+    // If password is provided, update it
+    if ($request->filled('password')) {
         $account->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            // Add other fields as necessary
+            'password' => bcrypt($request->password),
         ]);
-
-        return redirect()->route('accounts.index')->with('success', 'Cập nhật tài khoản thành công.');
     }
+
+    // Update role if the user is not a super-admin
+    if (!$account->hasRole('super-admin')) {
+        $account->syncRoles([$request->role]);
+    }
+
+    return redirect()->route('accounts.index')->with('success', 'Cập nhật tài khoản thành công.');
+}
 
     public function destroy(User $account)
 {

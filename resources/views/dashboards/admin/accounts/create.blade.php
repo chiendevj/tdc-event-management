@@ -34,13 +34,17 @@
         <div class="mb-4">
             <label for="role" class="block text-[14px] font-medium text-blue-900">Vai trò <span class="text-red-500">*</span></label>
             <select name="role" id="role" class="mt-1 p-2 outline outline-gray-300 outline-2 rounded-sm block w-full text-blue-900">
-                <option value="admin">Admin</option>
-                <!-- Add more options based on your roles -->
+                @foreach($roles as $role)
+                    @if($role->name != 'super-admin')
+                        <option value="{{ $role->name }}">{{ $role->name }}</option>
+                    @endif
+                @endforeach
             </select>
         </div>
 
-        <div class="flex justify-center">
-            <button type="submit" class="p-2 bg-blue-800 text-white font-semibold opacity-90 hover:opacity-100">Tạo tài khoản</button>
+        <div class="flex justify-between">
+            <a class="py-2 px-5 bg-green-600 text-white font-semibold opacity-90 hover:opacity-100" href="{{ route('accounts.index') }}">Trở lại</a>
+            <button type="submit" class="py-2 px-5 bg-blue-800 text-white font-semibold opacity-90 hover:opacity-100">Tạo tài khoản</button>
         </div>
     </form>
 </div>
