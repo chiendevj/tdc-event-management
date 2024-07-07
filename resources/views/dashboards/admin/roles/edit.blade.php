@@ -20,7 +20,7 @@
             <label for="permission-select" class="block text-[14px] font-medium text-blue-900">Danh sách Permissions</label>
             <select id="permission-select" class="mt-1 p-2 outline outline-gray-300 outline-2 rounded-sm block w-full text-blue-900">
                 @foreach($permissions as $permission)
-                    <option value="{{ $permission->name }}">{{ $permission->name }}</option>
+                <option value="{{ $permission->name }}">{{ $permission->name }}</option>
                 @endforeach
             </select>
             <button type="button" id="add-permission" class="mt-2 p-2 bg-blue-800 text-white font-semibold">Thêm</button>
@@ -34,13 +34,13 @@
 
         <ul id="permissions-list" class="mb-4 list-disc pl-5 text-blue-900">
             @foreach($role->permissions as $permission)
-                <li>
-                    {{ $permission->name }}
-                    <button type="button" class="ml-2 text-red-500 hover:text-red-700 font-medium remove-permission">Xóa</button>
-                </li>
+            <li>
+                {{ $permission->name }}
+                <button type="button" class="ml-2 text-red-500 hover:text-red-700 font-medium remove-permission">Xóa</button>
+            </li>
             @endforeach
         </ul>
-        
+
         <input type="hidden" name="permissions" id="permissions-hidden-input" value="{{ implode(',', $role->permissions->pluck('name')->toArray()) }}">
 
         <div class="flex justify-between">
@@ -51,7 +51,7 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const addPermissionButton = document.getElementById('add-permission');
         const addOtherPermissionButton = document.getElementById('add-other-permission');
 
@@ -77,32 +77,39 @@
             return false;
         }
 
-        addPermissionButton.addEventListener('click', function () {
+        addPermissionButton.addEventListener('click', function() {
             const permission = permissionSelect.value.trim();
             if (addPermission(permission)) {
                 permissionSelect.value = '';
             }
         });
 
-        addOtherPermissionButton.addEventListener('click', function () {
+        addOtherPermissionButton.addEventListener('click', function() {
             const permission = permissionInput.value.trim();
             if (addPermission(permission)) {
                 permissionInput.value = '';
             }
         });
 
-        permissionsList.addEventListener('click', function (event) {
+        permissionsList.addEventListener('click', function(event) {
             if (event.target.classList.contains('remove-permission')) {
-                const permissionToRemove = event.target.parentElement.textContent.trim();
+                const listItem = event.target.parentElement;
+                const permissionToRemove = Array.from(listItem.childNodes)
+                    .filter(node => node.nodeType === Node.TEXT_NODE)
+                    .map(node => node.textContent.trim())
+                    .join('');
+
                 const currentPermissions = permissionsHiddenInput.value.split(',').filter(Boolean);
                 const index = currentPermissions.indexOf(permissionToRemove);
+
                 if (index !== -1) {
                     currentPermissions.splice(index, 1);
                     permissionsHiddenInput.value = currentPermissions.join(',');
-                    event.target.parentElement.remove();
+                    listItem.remove();
                 }
             }
         });
+
     });
 </script>
 @endsection
