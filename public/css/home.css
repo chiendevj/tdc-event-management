@@ -69,6 +69,7 @@ body {
     gap: 10px;
     margin-bottom: 15px;
     font-size: 14px;
+    flex-direction: column;
 }
 
 .event-card .event-time span {
@@ -215,5 +216,24 @@ header {
 @media screen and (max-width: 768px) {
     .slider {
         height: 400px;
+    }
+}
+
+.temp_text {
+    background: rgb(0, 0, 0);
+    background: linear-gradient(90deg, rgb(4, 57, 127) 0%, rgba(255,255,255,1) 4%, rgb(4, 57, 127) 8%, rgb(4, 57, 127) 100%, rgb(4, 57, 127) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: textGradient 6s ease infinite alternate;
+}
+
+@keyframes textGradient {
+    0% {
+        background-position: 10% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
     }
 }

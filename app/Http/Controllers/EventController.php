@@ -199,6 +199,7 @@ class EventController extends Controller
     public function getHomeEvents(Request $request)
     {
         $upcomingEvents  = Event::where('status', 'like', 'Sắp diễn ra')
+            ->where('is_trash', '<>', 1)
             ->paginate(2, ['*'], 'upcoming_page');
 
         $featuredEvents  = Event::select('events.*', DB::raw('COUNT(event_student.student_id) as student_count'))
@@ -210,6 +211,14 @@ class EventController extends Controller
         return view('home', compact('upcomingEvents', 'featuredEvents'));
     }
 
+    /**
+     * Fetches upcoming events.
+     *
+     * This method retrieves upcoming events based on the provided request parameters.
+     *
+     * @param \Illuminate\Http\Request $request The HTTP request object.
+     * @return \Illuminate\Http\JsonResponse The JSON response containing the upcoming events.
+     */
     public function fetchUpcomingEvents(Request $request)
     {
         $page = $request->input('page', 1);
@@ -219,6 +228,16 @@ class EventController extends Controller
         return response()->json($events);
     }
 
+    /**
+     * Fetches featured events.
+     *
+     * This method retrieves featured events from the database. It selects the events along with the count of students
+     * registered for each event. The events are sorted in descending order based on the student count. Only events that
+     * are not marked as trash and have a status other than "Đã hủy" are included in the result.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fetchFeaturedEvents(Request $request)
     {
         $events = Event::select('events.*', DB::raw('COUNT(event_student.student_id) as student_count'))
@@ -291,7 +310,7 @@ class EventController extends Controller
     {
         $event = Event::find($id);
         $registrationCode = QrCode::generate($event->registration_link);
-        $upcomingEvents = Event::where('status', 'like', 'Sắp diễn ra')->get();
+        $upcomingEvents = Event::where('status', 'like', 'Sắp diễn ra')->where('is_trash', '<>', 1)->get();
 
         return view('detail', [
             'event' => $event,
@@ -695,7 +714,7 @@ class EventController extends Controller
     public function getFeaturedEvents()
     {
         //  if have many featured events, get random 4 events
-        $events = Event::where('is_featured_event', 1)->inRandomOrder()->limit(4)->get();
+        $events = Event::where('is_featured_event', 1)->where('is_trash', '<>', 1)->where('status', '<>', 'Đã hủy')->inRandomOrder()->limit(4)->get();
         return response()->json(["data" => $events, "staus" => "success", "message" => "Featured events retrieved successfully."]);
     }
 }

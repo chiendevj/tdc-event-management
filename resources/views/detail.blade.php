@@ -5,8 +5,8 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/ckeditor.css') }}">
 <div class="w-[92%] container mx-auto detail mt_container">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-        <div class="col-span-8 p-4">
+    <div class="grid grid-cols-1 xl:grid-cols-12 xl:gap-4 lg:gap-2">
+        <div class="xl:col-span-8 xl:p-4 lg:col-6 lg:gap-2">
             <h2 class="md:text-3xl text-base font-bold md:pb-6 pb-4">{{$event->name}}</h2>
             <p class="md:text-base text-xs italic text-gray-500 md:pb-6 pb-3">
             </p>
