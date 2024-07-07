@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\EventExport;
 use App\Exports\EventWithStudentsExport;
 use App\Exports\ParticipatedEventsExport;
+use App\Exports\StudentRegisterEventExport;
 use App\Models\AcademicPeriod;
 use App\Models\Event;
 use App\Models\Student;
@@ -716,5 +717,43 @@ class EventController extends Controller
         //  if have many featured events, get random 4 events
         $events = Event::where('is_featured_event', 1)->where('is_trash', '<>', 1)->where('status', '<>', 'Đã hủy')->inRandomOrder()->limit(4)->get();
         return response()->json(["data" => $events, "staus" => "success", "message" => "Featured events retrieved successfully."]);
+    }
+
+    /**
+     * Retrieve the question of a specific event.
+     *
+     * @param int $id The ID of the event.
+     * @return \Illuminate\Http\JsonResponse The JSON response containing the event question.
+     */
+    public function getEventQuestion($id)
+    {
+        $event = Event::find($id);
+        $event->eventRegisters()->get();
+        return response()->json(["data" => $event->eventRegisters()->get(), "success" => true, "message" => "Question retrieved successfully."]);
+    }
+
+    /**
+     * Retrieve the registered students for a specific event.
+     *
+     * @param int $id The ID of the event.
+     * @return \Illuminate\Http\JsonResponse The JSON response containing the registered students' data.
+     */
+    public function getRegisteredStudents($id)
+    {
+        $event = Event::find($id);
+        $students = $event->eventRegisters()->with('student')->get();
+        return response()->json(["data" => $students, "success" => true, "message" => "Students retrieved successfully."]);
+    }
+
+    /**
+     * Export the registration data of an event to an Excel file.
+     *
+     * @param int $eventId The ID of the event.
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse The Excel file download response.
+     */
+    public function exportRegisterEventToExcel($eventId)
+    {
+        $event = Event::find($eventId);
+        return Excel::download(new StudentRegisterEventExport($event->id), 'register_event_' . $event->id . '.xlsx');
     }
 }

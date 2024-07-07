@@ -141,6 +141,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
     Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
     Route::get('/api/events', [EventController::class, 'getAllEvents'])->name("events.all");
+    // Route for get question of event
+    Route::get('/api/events/{id}/questions', [EventController::class, 'getEventQuestion'])->name("events.questions");
+    // Route for get students register event
+    Route::get('/api/events/{id}/register/students', [EventController::class, 'getRegisteredStudents'])->name("events.register.students");
+    // Route for export students register event
+    Route::get('/api/events/{id}/register/students/export', [EventController::class, 'exportRegisterEventToExcel'])->name("events.register.students.export");
 
     /**
      *  ============ Students ============

@@ -31,4 +31,9 @@ class Student extends Model
     {
         return $this->events()->count();
     }
+
+    public function eventRegisters()
+    {
+        return $this->hasMany(EventRegister::class);
+    }
 }

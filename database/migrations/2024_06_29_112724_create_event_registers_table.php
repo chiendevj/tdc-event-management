@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('event_registers', function (Blueprint $table) {
             $table->string('student_id');
             $table->integer('event_id');
+            $table->text('question')->nullable();
             $table->primary(['student_id', 'event_id']);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();

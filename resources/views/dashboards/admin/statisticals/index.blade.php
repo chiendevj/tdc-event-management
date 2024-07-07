@@ -87,7 +87,9 @@
                                             <button class="text-blue-600 hover:underline"
                                                 onclick="showEventDetails('{{ $event->id }}')">Tổng quan</button>
                                             <button class="text-blue-600 hover:underline"
-                                                onclick="showListParticipants('{{ $event->id }}')">Danh sách tham
+                                                onclick="showRegisteredList('{{ $event->id }}')">Đăng ký</button>
+                                            <button class="text-blue-600 hover:underline"
+                                                onclick="showParticipantList('{{ $event->id }}')">Tham
                                                 gia</button>
                                         </div>
                                     </td>
@@ -213,7 +215,7 @@
             return `${formattedHours}:${minutes} ${ampm} ${day}-${month}-${year}`;
         }
 
-        function showListParticipants(eventId) {
+        function showParticipantList(eventId) {
             const chartCanvas = document.getElementById('eventChart');
             chartCanvas.classList.add('hidden');
             eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
@@ -272,6 +274,77 @@
                         eventDetailsContent.appendChild(table);
                         document.getElementById('exportExcelBtn').onclick = function() {
                             window.location.href = `{{ route('events.export.excel', ['eventId' => ':eventId']) }}`
+                                .replace(':eventId', eventId);
+                        };
+                        document.getElementById('eventDetailsModal').classList.remove('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching participants:', error);
+                });
+        }
+
+        function showRegisteredList(eventId) {
+            const chartCanvas = document.getElementById('eventChart');
+            chartCanvas.classList.add('hidden');
+            eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
+            fetch(`{{ route('events.register.students', ['id' => ':id']) }}`.replace(':id', eventId))
+                .then(response => response.json())
+                .then(data => {
+                    if (data.data.length === 0) {
+
+                        document.getElementById('exportExcelBtn').style.display =
+                            'none';
+                        eventDetailsContent.innerHTML =
+                            `<p><em class="text-lg text-red-500">Không có sinh viên nào tham gia sự kiện này.</em></p>`;
+                        document.getElementById('eventDetailsModal').classList.remove('hidden');
+                        return;
+                    } else {
+                        // Create table
+                        const table = document.createElement('table');
+                        table.classList.add("w-full", "text-sm", "text-left", "text-gray-500", "dark:text-gray-400");
+                        const tableBody = document.createElement('tbody');
+                        const tableHeader = document.createElement('thead');
+
+                        // Create table header
+                        tableHeader.classList.add("text-xs", "text-gray-700", "uppercase", "bg-gray-50",
+                            "dark:bg-gray-700", "dark:text-gray-400", "text-center");
+                        tableHeader.innerHTML = `
+                            <tr>
+                                <th class="px-6 py-4">STT</th>
+                                <th class="px-6 py-4">Mã sinh viên</th>
+                                <th class="px-6 py-4">Họ và tên</th>
+                                <th class="px-6 py-4">Lớp</th>
+                                <th class="px-6 py-4">Nội dung quan tâm, câu hỏi</th>
+                            </tr>
+                        `;
+
+                        data.data.forEach((student, index) => {
+                            // console.log(student);
+                            // Create table body
+                            const tr = document.createElement('tr');
+
+                            tr.classList.add("bg-white", "border-b", "dark:bg-gray-800",
+                                "dark:border-gray-700");
+                            tr.innerHTML = `
+                                <td class="px-6 py-4 text-center">${index + 1}</td>
+                                <td class="px-6 py-4 text-center">${student.student.id}</td>
+                                <td class="px-6 py-4 text-center">${student.student.fullname}</td>
+                                <td class="px-6 py-4 text-center">${student.student.classname}</td>
+                                <td class="px-6 py-4 text-center">${student.question}</td>
+                            `;
+
+                            tableBody.appendChild(tr);
+                        })
+
+                        table.appendChild(tableHeader);
+                        table.appendChild(tableBody);
+                        eventDetailsContent.innerHTML = '';
+
+                        document.querySelector('.model_title').innerText = `Danh sách sinh viên đăng ký tham gia sự kiện`;
+                        eventDetailsContent.appendChild(table);
+                        document.getElementById('exportExcelBtn').onclick = function() {
+                            window.location.href = `{{ route('events.register.students.export', ':eventId') }}`
                                 .replace(':eventId', eventId);
                         };
                         document.getElementById('eventDetailsModal').classList.remove('hidden');
