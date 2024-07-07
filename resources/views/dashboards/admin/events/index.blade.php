@@ -8,10 +8,12 @@
             <div class="flex items-center justify-center gap-3">
                 <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
                     Danh sách các sự kiện</h3>
-                <a href="{{ route('events.trash') }}"
-                    class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
-                    Thùng rác
-                </a>
+                @can('restore event')
+                    <a href="{{ route('events.trash') }}"
+                        class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
+                        Thùng rác
+                    </a>
+                @endcan
             </div>
             <div class="flex items-center w-full lg:w-fit justify-between gap-3">
                 <div class="relative border h-full w-full flex items-center justify-between p-2">
@@ -44,6 +46,7 @@
                         <option value="newest">Mới nhất</option>
                         <option value="oldest">Cũ nhất</option>
                         <option value="Đã hủy">Đã hủy</option>
+                        <option value="featured">Sự kiện nổi bật</option>
                     </select>
                 </div>
                 <button
@@ -217,6 +220,7 @@
             const routeDelete = "{{ route('events.move.trash', ':id') }}".replace(':id', event.id);
             const routeQR = "{{ route('qr-codes.create', ':id') }}".replace(':id', event.id);
             const routeCancel = "{{ route('events.cancel', ':id') }}".replace(':id', event.id);
+            const routeFeature = "{{ route('events.featured', ':id') }}".replace(':id', event.id);
 
 
             const eventItem = document.createElement('div');
@@ -244,6 +248,9 @@
                     break;
             }
 
+            // Check if event is featured
+            const isFeatured = event.is_featured_event === 1;
+
             link.href = route;
 
             eventItem.classList.add('event_item', 'border', 'rounded-sm', 'overflow-hidden');
@@ -253,14 +260,16 @@
                         <img src="${event.event_photo}" alt="" class="overflow-hidden hover:scale-105 transition-all event_img duration-100 ease-in w-full">
                         <div class="action_hover absolute top-0 left-0 bottom-0 flex items-center justify-center right-0 bg-[rgba(0,0,0,0.2)]" style="backdrop-filter: blur(5px)">
                             <div class="flex items-center justify-center gap-2">
-                                <a href="${routeEdit}" class="btn_edit btn_action relative flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
+                                 @can('edit event')
+                                 <a href="${routeEdit}" class="btn_edit btn_action relative flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
                                     <i class="fa-light fa-pen-to-square"></i>
                                     <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
                                         Chỉnh sửa sự kiện
                                         <div class="tooltip-arrow absolute bottom-0"></div>
-                                    </div>
-                                </a>
-                                @can('create event')
+                                        </div>
+                                    </a>
+                                @endcan
+                                @can('delete event')
                                 <a href="${routeDelete}" class="btn_delete btn_action relative flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]" onclick="return confirmDelete(event)">
                                     <i class="fa-light fa-trash"></i>
                                     <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
@@ -269,20 +278,33 @@
                                     </div>
                                 </a>
                                 @endcan
-                                <a href="${routeQR}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
-                                    <i class="fa-light fa-qrcode"></i>
-                                    <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
-                                        Mã QR của sự kiện
-                                        <div class="tooltip-arrow absolute bottom-0"></div>
-                                    </div>
-                                </a>
+                                 @can('cancel event')
                                 ${!isCanceled ? `<a href="${routeCancel}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]" onclick="return confirmCancel(event)">
                                                 <i class="fa-light fa-ban"></i>
                                                 <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
                                                     Hủy sự kiện
                                                     <div class="tooltip-arrow absolute bottom-0"></div>
-                                                </div>
-                                            </a>` : ''}
+                                                    </div>
+                                                    </a>` : ''}
+                                @endcan
+                                @can('qr event')
+                                        <a href="${routeQR}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
+                                            <i class="fa-light fa-qrcode"></i>
+                                            <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
+                                                Mã QR của sự kiện
+                                                <div class="tooltip-arrow absolute bottom-0"></div>
+                                            </div>
+                                        </a>
+                                @endcan
+                                @can('featured event')
+                                        <a href="${routeFeature}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
+                                            <i class="fa-light fa-star  ${isFeatured ? 'text-yellow-400' : 'text-black'}"></i>
+                                            <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
+                                                Đánh dâu sự kiện nổi bật
+                                                <div class="tooltip-arrow absolute bottom-0"></div>
+                                            </div>
+                                        </a>
+                                @endcan
                             </div>
                         </div>
                     </div>

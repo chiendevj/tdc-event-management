@@ -3,7 +3,7 @@
 @section('title', 'Lịch sự kiện')
 
 @section('content')
-    <div class="w-[92%] container mx-auto mt-12">
+    <div class="w-[92%] container mx-auto mt-[120px]">
         <div class="explain flex items-center justify-center gap-3 mb-4">
             <div class="explain-item flex items-center justify-center gap-2">
                 <div class="explain-color event-upcoming"></div>
