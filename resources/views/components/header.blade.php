@@ -1,4 +1,4 @@
-<header class="bg-white shadow-md" id="navbar">
+<header class="shadow-md fixed top-0 left-0 right-0" id="navbar">
   <nav class="navbar flex justify-between items-center w-[92%] mx-auto">
       <div>
           <img class="md:w-44 w-32 py-3 cursor-pointer" src="{{ asset('assets/logo/logo_fit_tdc.png') }}" alt="Logo FIT">
@@ -18,7 +18,7 @@
               <li>
                 <a class="hover:text-gray-500 font-semibold" href="{{ route('login') }}">Đăng nhập</a>
               </li>
-              
+
           </ul>
       </div>
       <div class="flex items-center gap-6 md:hidden">

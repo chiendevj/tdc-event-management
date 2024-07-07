@@ -7,6 +7,7 @@
 <div class="w-full container mx-auto detail">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-8 p-4">
+            <h2 class="text-lg font-bold mt-4">Nội dung của sự kiện</h2>
             <div class="content ck-content">
                 {!! $event->content !!}
             </div>

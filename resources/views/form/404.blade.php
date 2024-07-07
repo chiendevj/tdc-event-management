@@ -3,7 +3,7 @@
 @section('title', 'Not found')
 
 @section('content')
-<div class="banner_display ">
+<div class="banner_display mt-[100px]">
     @if ($error)
     <h1 class="text-[20px] md:text-[23px] font-bold text-[#003b7a] text-center mt-5 capitalize"> {{ $error }}</h1>
     @endif
