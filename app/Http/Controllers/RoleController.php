@@ -39,34 +39,34 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
-        $permissions = Permission::all();  
+        $permissions = Permission::all();
         return view('dashboards.admin.roles.edit', compact('role', 'permissions'));
     }
 
+
     public function update(Request $request, Role $role)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'permissions' => 'nullable|string',
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'permissions' => 'nullable|string',
+        ]);
 
-    // Update the role name
-    $role->update([
-        'name' => $request->name,
-    ]);
+        // Update the role name
+        $role->update([
+            'name' => $request->name,
+        ]);
 
-    // Update permissions
-    if ($request->filled('permissions')) {
-        $permissions = explode(',', $request->permissions);
-        $role->syncPermissions($permissions);
-    } else {
-        $role->syncPermissions([]);
+        // Update permissions
+        if ($request->filled('permissions')) {
+            $permissions = explode(',', $request->permissions);
+            foreach ($permissions as $permissionName) {
+                $permission = Permission::firstOrCreate(['name' => $permissionName]);
+                $role->givePermissionTo($permission);
+            }
+        }
+
+        return redirect()->route('accounts.index')->with('success', 'Cập nhật quyền thành công.');
     }
-
-    return redirect()->route('accounts.index')->with('success', 'Cập nhật quyền thành công.');
-}
-
-
 
     public function destroy(Role $role)
     {
