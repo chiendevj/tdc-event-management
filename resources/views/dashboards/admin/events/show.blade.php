@@ -50,7 +50,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <tr class="bg-gray-100 border-b dark:bg-gray-800 dark:border-gray-700">
                                 <td colspan="4" class="border px-4 py-2 text-center">Không có sinh viên nào đăng ký</td>
                             </tr>
                         @endforelse
