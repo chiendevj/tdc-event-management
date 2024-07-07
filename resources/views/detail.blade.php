@@ -4,7 +4,7 @@
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/ckeditor.css') }}">
-<div class="w-[92%] container mx-auto detail">
+<div class="w-[92%] container mx-auto detail mt_container">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
         <div class="col-span-8 p-4">
             <h2 class="md:text-3xl text-base font-bold md:pb-6 pb-4">{{$event->name}}</h2>
@@ -37,14 +37,14 @@
         </div>
         <div class="col-span-4  p-4">
             <!-- Nội dung của cột 20% -->
-            <h1 class="title font-bold capitalize">Sự kiện <span>Sắp diễn ra</span></h1>
+            <h1 class="title font-bold uppercase">Sự kiện <span>Sắp diễn ra</span></h1>
             <div class="owl-carousel owl-theme">
                 @foreach ($upcomingEvents as $event)
-                <div class="p-4 m-2 event-card">
+                <div class="m-2 event-card">
                     <div class="background">
                         <img src="{{$event->event_photo}}" alt="">
                     </div>
-                    <div class="content">
+                    <div class="content px-4 py-2">
                         <div class="event-title">
                             <a>
                                 {{$event->name}}

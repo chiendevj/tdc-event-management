@@ -3,82 +3,120 @@
 @section('title', 'Trang chủ')
 
 @section('content')
+    {{-- Banner  --}}
+    <div class="w-full banner_bg mt_container relative overflow-hidden">
+        <div class="slider">
+            <div class="list">
+
+            </div>
+            <div class="buttons">
+                <button id="prev"><i class="fa-regular fa-chevron-left"></i></button>
+                <button id="next"><i class="fa-regular fa-chevron-right"></i></button>
+            </div>
+            <ul class="dots">
+
+            </ul>
+        </div>
+    </div>
     <div class="w-[92%] container mx-auto">
         <div class="big-event">
-            <h1 class="title font-bold capitalize">Sự kiện <span>Sắp diễn ra</span></h1>
+            <h1 class="title font-bold uppercase text_title"><span>Sự kiện</span> <span class="text_title">Sắp diễn ra</span></h1>
             <div id="upcoming-loading" class="hidden">Đang tải...</div>
             <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4" id="upcoming-events">
             </div>
             <div id="upcoming-pagination" class="pagination-bar mt-6"></div>
         </div>
         <div class="big-event">
-            <h1 class="title font-bold capitalize">Sự kiện <span>nổi bật</span></h1>
+            <h1 class="title font-bold uppercase text_title"><span>Sự kiện</span> <span class="text_title">nổi bật</span></h1>
             <div id="featured-loading" class="">
-                
+
             </div>
             <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4" id="featured-events">
             </div>
             <div id="featured-pagination" class="pagination-bar mt-6"></div>
 
         </div>
-
-        {{-- <div class="big-event">
-            <h1 class="title font-bold capitalize">Sự kiện <span>nổi bật</span></h1>
-            <div class="mt-5">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="p-4 event-card">
-                        <div class="background">
-                            <img src="{{ asset('assets/images/workshop.jpg') }}" alt="">
-                        </div>
-                        <div class="content">
-                            <div class="event-title">
-                                <a>
-                                    Workshop tìm hiểu về giấy
-                                </a>
-                            </div>
-                            <div class="event-desc">
-                                <div class="event-time"><span>7:00 18/6/2024</span></div>
-                                <div class="event-location"><span>Hội trường D</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 event-card">
-                        <div class="background">
-                            <img src="{{ asset('assets/images/workshop1.jpg') }}" alt="">
-                        </div>
-                        <div class="content">
-                            <div class="event-title">
-                                <a>
-                                    Xây dựng thương hiệu cá nhân
-                                </a>
-                            </div>
-                            <div class="event-desc">
-                                <div class="event-time"><span>8:00 18/6/2024</span></div>
-                                <div class="event-location"><span>Hội trường D</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 event-card">
-                        <div class="background">
-                            <img src="{{ asset('assets/images/workshop2.jpg') }}" alt="">
-                        </div>
-                        <div class="content">
-                            <div class="event-title">
-                                <a>
-                                    Cuộc thi web dev challanges
-                                </a>
-                            </div>
-                            <div class="event-desc">
-                                <div class="event-time"><span>14:30 18/5/2024</span></div>
-                                <div class="event-location"><span>Tại phòng B002B</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
     </div>
     <script>
+        // Banner
+        let slider = document.querySelector('.slider .list');
+        let items = document.querySelectorAll('.slider .list .item');
+        let next = document.getElementById('next');
+        let prev = document.getElementById('prev');
+        let dots = document.querySelectorAll('.slider .dots li');
+        const SLIDE_TIMER = 5000;
+
+
+
+        async function createSliderItems() {
+            const url = "{{ route('events.get.featured') }}";
+            await fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    data.data.forEach((item, key) => {
+                        let div = document.createElement('div');
+                        div.className = 'item';
+                        div.innerHTML = `<img src="${item.event_photo}" alt="">`;
+                        slider.appendChild(div);
+                        let li = document.createElement('li');
+                        li.className = key === 0 ? 'active' : '';
+                        document.querySelector('.slider .dots').appendChild(li);
+                    })
+                    items = document.querySelectorAll('.slider .list .item');
+                    dots = document.querySelectorAll('.slider .dots li');
+                    lengthItems = items.length - 1;
+                    return true;
+                }).catch(error => {
+                    return false;
+                });
+        }
+
+        createSliderItems();
+
+        let lengthItems = items.length - 1;
+        let active = 0;
+
+        next.onclick = function() {
+            active = active + 1 <= lengthItems ? active + 1 : 0;
+            reloadSlider();
+        }
+
+        prev.onclick = function() {
+            active = active - 1 >= 0 ? active - 1 : lengthItems;
+            reloadSlider();
+        }
+
+        let refreshInterval = setInterval(() => {
+            next.click()
+        }, SLIDE_TIMER);
+
+        function reloadSlider() {
+            slider.style.left = -items[active].offsetLeft + 'px';
+            //
+            let last_active_dot = document.querySelector('.slider .dots li.active');
+            last_active_dot.classList.remove('active');
+            dots[active].classList.add('active');
+
+            clearInterval(refreshInterval);
+            refreshInterval = setInterval(() => {
+                next.click()
+            }, SLIDE_TIMER);
+        }
+
+        dots.forEach((li, key) => {
+            li.addEventListener('click', () => {
+                active = key;
+                reloadSlider();
+            })
+        })
+
+
+        window.onresize = function(event) {
+            reloadSlider();
+        };
+
+        // Events
+
         async function fetchEvents(linkUrl, listType) {
             const eventsContainer = document.getElementById(`${listType}-events`);
             const loadingElement = document.getElementById(`${listType}-loading`);
@@ -123,23 +161,22 @@
 
             try {
                 if (result.data.length === 0) {
-                const noEventsMessage = document.createElement('p');
-                noEventsMessage.textContent = 'Không có sự kiện nào.';
-                noEventsMessage.className = 'text-red-500 text-center';
-                eventsContainer.className = '';
-                eventsContainer.appendChild(noEventsMessage);
-            } else {
-                result.data.forEach(event => {
-                    const eventElement = document.createElement('a');
-                    let route = "{{ route('events.detail', ':id') }}".replace(':id', event.id);
-                    eventElement.classList.add('p-4');
-                    eventElement.classList.add('event-card');
-                    eventElement.href = route;
-                    eventElement.innerHTML = `
+                    const noEventsMessage = document.createElement('p');
+                    noEventsMessage.textContent = 'Không có sự kiện nào.';
+                    noEventsMessage.className = 'text-red-500 text-center';
+                    eventsContainer.className = '';
+                    eventsContainer.appendChild(noEventsMessage);
+                } else {
+                    result.data.forEach(event => {
+                        const eventElement = document.createElement('a');
+                        let route = "{{ route('events.detail', ':id') }}".replace(':id', event.id);
+                        eventElement.classList.add('event-card');
+                        eventElement.href = route;
+                        eventElement.innerHTML = `
                 <div class="background">
                     <img src="${event.event_photo}" alt="">
                 </div>
-                <div class="content">
+                <div class="content p-4">
                     <div class="event-title">
                         <a href="${route}">
                             ${event.name}
@@ -151,15 +188,15 @@
                     </div>
                 </div>
             `;
-                    eventsContainer.appendChild(eventElement);
-                });
-                if(result.last_page > 1){
-                    setupPagination(result, listType);
+                        eventsContainer.appendChild(eventElement);
+                    });
+                    if (result.last_page > 1) {
+                        setupPagination(result, listType);
+                    }
                 }
-            }
             } catch (error) {
                 console.log(error);
-            }finally {
+            } finally {
                 loadingElement.classList.add('hidden');
             }
         }

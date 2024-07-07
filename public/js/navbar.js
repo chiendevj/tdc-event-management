@@ -1,18 +1,21 @@
 //_______________________Navbar___________________________________//
 const navbar = document.getElementById("navbar");
+const banner = document.querySelector(".banner");
 let lastScrollTop = 0;
 
-window.addEventListener("scroll", function () {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    if (scrollTop > lastScrollTop) {
-        // Downscroll
-        navbar.classList.add("show");
-    } else if (scrollTop === 0) {
-        // Reached top of the page
-        navbar.classList.remove("show");
-    }
-    lastScrollTop = scrollTop;
-});
+// window.addEventListener("scroll", function () {
+//     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+//     if (scrollTop > lastScrollTop) {
+//         // Downscroll
+//         navbar.classList.add("show");
+//         banner.classList.add("margin");
+//     } else if (scrollTop === 0) {
+//         // Reached top of the page
+//         navbar.classList.remove("show");
+//         banner.classList.remove("margin");
+//     }
+//     lastScrollTop = scrollTop;
+// });
 
 function onToggleMenu() {
     const sidebar = document.getElementById("sidebar");

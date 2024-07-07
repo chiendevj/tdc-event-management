@@ -3,7 +3,7 @@
 @section('title', 'Đăng ký')
 
 @section('content')
-<div class="banner_display ">
+<div class="banner_display mt-[100px]">
     {{-- @if ($success)
     <h1 class="text-[20px] md:text-[23px] font-bold text-[#003b7a] text-center mt-5 capitalize"> {{ $success }}</h1>
     @endif --}}
