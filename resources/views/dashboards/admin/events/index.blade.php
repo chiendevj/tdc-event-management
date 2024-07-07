@@ -234,7 +234,7 @@
                     style = "event-ongoing"
                     break;
                 case 'Đã diễn ra':
-                    style = "event-piast"
+                    style = "event-past"
                     break;
                 case 'Đã hủy':
                     isCanceled = true;
