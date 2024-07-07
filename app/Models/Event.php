@@ -25,6 +25,10 @@ class Event extends Model
         'academic_period_id',
     ];
 
+    public function eventRegisters() : HasMany{
+        return $this->hasMany(EventRegister::class);
+    }
+
     public function eventCodes() : HasMany{
         return $this->hasMany(EventCode::class);
     }

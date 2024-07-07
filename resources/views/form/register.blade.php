@@ -38,6 +38,10 @@
                         <p id="classError" class="block text-[12px] text-red-500"></p>
                     </div>
                     <div class="mt-4">
+                        <label for="">Hãy đặt câu hỏi hay vấn đề mà bạn quan tâm về sự kiện này</label>
+                        <textarea type="text" name="question" placeholder="" class="border-b border-solid outline-none"></textarea>
+                    </div>
+                    <div class="mt-4">
                         <input type="hidden" name="event_id" value="{{ $event['id'] }}">
                         <button class="btn-attended" type="submit">Gửi</button>
                     </div>

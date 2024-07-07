@@ -94,6 +94,7 @@ class AttendanceController extends Controller
 
         $fullname = $request->input('fullname');
         $event_id = $request->input('event_id');
+        $question = $request->input('question');
         $studentId = $validated['student_id'];
         $class = $validated['class'];
         $code = $request->input('code');
@@ -123,7 +124,8 @@ class AttendanceController extends Controller
         // Tạo bản ghi mới trong bảng StudentEvent
         EventRegister::create([
             'student_id' => $studentId,
-            'event_id' => $event_id
+            'event_id' => $event_id,
+            'question' => $question
         ]);
 
         return view('form.success')->with('success', "Đăng kí thành công");
