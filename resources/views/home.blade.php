@@ -6,8 +6,11 @@
     {{-- Banner  --}}
     <div class="w-full banner_bg mt_container relative overflow-hidden">
         <div class="slider">
+            <h1 class="temp_text hidden text-[42px] font-bold uppercase absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center">
+                <span>Chào mừng bạn đến với</span>
+                <span>Sự kiện FIT - TDC</span>
+            </h1>
             <div class="list">
-
             </div>
             <div class="buttons">
                 <button id="prev"><i class="fa-regular fa-chevron-left"></i></button>
@@ -20,14 +23,16 @@
     </div>
     <div class="w-[92%] container mx-auto">
         <div class="big-event">
-            <h1 class="title font-bold uppercase text_title"><span>Sự kiện</span> <span class="text_title">Sắp diễn ra</span></h1>
+            <h1 class="title font-bold uppercase text_title"><span>Sự kiện</span> <span class="text_title">Sắp diễn
+                    ra</span></h1>
             <div id="upcoming-loading" class="hidden">Đang tải...</div>
             <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4" id="upcoming-events">
             </div>
             <div id="upcoming-pagination" class="pagination-bar mt-6"></div>
         </div>
         <div class="big-event">
-            <h1 class="title font-bold uppercase text_title"><span>Sự kiện</span> <span class="text_title">nổi bật</span></h1>
+            <h1 class="title font-bold uppercase text_title"><span>Sự kiện</span> <span class="text_title">nổi bật</span>
+            </h1>
             <div id="featured-loading" class="">
 
             </div>
@@ -50,9 +55,14 @@
 
         async function createSliderItems() {
             const url = "{{ route('events.get.featured') }}";
-            await fetch(url)
+            return await fetch(url)
                 .then(response => response.json())
                 .then(data => {
+
+                    if (data.data.length === 0) {
+                        return false;
+                    }
+
                     data.data.forEach((item, key) => {
                         let div = document.createElement('div');
                         div.className = 'item';
@@ -71,43 +81,48 @@
                 });
         }
 
-        createSliderItems();
+        createSliderItems().then(result => {
+            if (result) {
+                let lengthItems = items.length - 1;
+                let active = 0;
 
-        let lengthItems = items.length - 1;
-        let active = 0;
+                next.onclick = function() {
+                    active = active + 1 <= lengthItems ? active + 1 : 0;
+                    reloadSlider();
+                }
 
-        next.onclick = function() {
-            active = active + 1 <= lengthItems ? active + 1 : 0;
-            reloadSlider();
-        }
+                prev.onclick = function() {
+                    active = active - 1 >= 0 ? active - 1 : lengthItems;
+                    reloadSlider();
+                }
 
-        prev.onclick = function() {
-            active = active - 1 >= 0 ? active - 1 : lengthItems;
-            reloadSlider();
-        }
+                let refreshInterval = setInterval(() => {
+                    next.click()
+                }, SLIDE_TIMER);
 
-        let refreshInterval = setInterval(() => {
-            next.click()
-        }, SLIDE_TIMER);
+                function reloadSlider() {
+                    slider.style.left = -items[active].offsetLeft + 'px';
+                    //
+                    let last_active_dot = document.querySelector('.slider .dots li.active');
+                    last_active_dot.classList.remove('active');
+                    dots[active].classList.add('active');
 
-        function reloadSlider() {
-            slider.style.left = -items[active].offsetLeft + 'px';
-            //
-            let last_active_dot = document.querySelector('.slider .dots li.active');
-            last_active_dot.classList.remove('active');
-            dots[active].classList.add('active');
+                    clearInterval(refreshInterval);
+                    refreshInterval = setInterval(() => {
+                        next.click()
+                    }, SLIDE_TIMER);
+                }
 
-            clearInterval(refreshInterval);
-            refreshInterval = setInterval(() => {
-                next.click()
-            }, SLIDE_TIMER);
-        }
-
-        dots.forEach((li, key) => {
-            li.addEventListener('click', () => {
-                active = key;
-                reloadSlider();
-            })
+                dots.forEach((li, key) => {
+                    li.addEventListener('click', () => {
+                        active = key;
+                        reloadSlider();
+                    })
+                })
+            } else {
+                document.querySelector('.temp_text').style.display = 'block';
+                document.querySelector('.buttons').style.display = 'none';
+            }
         })
 
 

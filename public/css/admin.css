@@ -5,7 +5,7 @@
 }
 
 :root {
-    --dark-bg: #04397f;
+    --dark-bg: rgb(4, 57, 127);
     --blue: #19a0e4;
     --note-text: #2d3436;
     --table-border: rgb(156 163 175);
