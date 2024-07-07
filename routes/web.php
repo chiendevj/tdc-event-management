@@ -161,11 +161,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/dashboard/students/{studentId}/events/export/{academicPeriodId}', [StudentController::class, 'exportStudentEvents'])->name("students.events.export");
     Route::get('admin/dashboard/student/{id}/events/participants/export', [EventController::class, 'exportParticipantsToExcel'])->name('events.export.excel.participants');
 
-
-    /**
-     *  ============ Social share ============
-     */
-    Route::get('social-share/{id}', [SocialShareController::class, 'index'])->name('social-share');
 });
 
 
