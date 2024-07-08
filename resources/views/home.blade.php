@@ -7,8 +7,8 @@
     <div class="w-full banner_bg mt_container relative overflow-hidden">
         <div class="slider">
             <h1 class="temp_text hidden text-[42px] font-bold uppercase absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center">
-                <span>Chào mừng bạn đến với</span>
-                <span>Sự kiện FIT - TDC</span>
+                <span class="text-[30px] md:text-[42px]">Chào mừng bạn đến với</span>
+                <span class="text-[30px] md:text-[42px]">Sự kiện FIT - TDC</span>
             </h1>
             <div class="list">
             </div>
