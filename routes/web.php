@@ -72,33 +72,33 @@ Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () 
 });
 
 // Routes only use for admin have permission to delete event => move to trash
-Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () {
+Route::middleware(['auth', 'role_or_permission:delete event'])->group(function () {
     // Route for move event to trash
     Route::get('admin/dashboard/events/trash/{id}', [EventController::class, 'moveEventToTrash'])->name('events.move.trash');
 });
 
 // Routes only use for admin have permission to add event
-Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () {
+Route::middleware(['auth', 'role_or_permission:create event'])->group(function () {
     // Route for create event
     Route::get('admin/dashboard/events/create', [EventController::class, 'create'])->name("events.create");
     Route::post('admin/dashboard/events/store', [EventController::class, 'store'])->name("events.store");
 });
 
 // Routes only use for admin have permission to restore event
-Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () {
+Route::middleware(['auth', 'role_or_permission:restore event'])->group(function () {
     // Route for restore event from trash
     Route::get('admin/dashboard/events/restore/{id}', [EventController::class, 'restoreEventFromTrash'])->name('events.move.restore');
 });
 
 // Routes only use for admin have permission to featured event
-Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () {
+Route::middleware(['auth', 'role_or_permission:featured event'])->group(function () {
     // Route for featured event
     Route::get('admin/dashboard/events/featured/{id}', [EventController::class, 'featuredEvent'])->name('events.featured');
     Route::get('api/events/featured', [EventController::class, 'getFeaturedEvents'])->name('events.get.featured');
 });
 
 // Routes only use for admin have permission to cancel event
-Route::middleware(['auth', 'role_or_permission:edit event'])->group(function () {
+Route::middleware(['auth', 'role_or_permission:cancel event'])->group(function () {
     // Route for cancel event
     Route::get('admin/dashboard/events/cancel/{id}', [EventController::class, 'cancelEvent'])->name('events.cancel');
 });
