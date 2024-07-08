@@ -40,7 +40,7 @@ class AuthController extends Controller
                 Session::forget('unlogin');
                 return redirect()->route('dashboard');
             }
-            return redirect()->intended('admin/dashboard')->with('success', 'Đăng nhập thành công!');
+            return redirect()->route("dashboard")->with('success', 'Đăng nhập thành công!');
         }
 
         // Đăng nhập thất bại
