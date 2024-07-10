@@ -12,7 +12,8 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        $events = Event::all();
+        // $events = Event::all();
+        $events = Event::where('is_trash', "not like", '1')->get();
         $newEvents = array();
         foreach ($events as $event) {
             $newEvents[] = [

@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <div class="calender_table mt-[20px] w-full mb-8 rounded-sm overflow-hidden">
+        <div class="calender_table mt-[20px] w-full mb-8 rounded-sm overflow-y-auto">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead
                     class="rounded-sm text-xs border border-[var(--table-border)] text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
@@ -253,20 +253,36 @@
 
 
         async function getEvents(params) {
-            const url = "/api/events";
+            const url = "{{ route('events.all') }}";
             const response = await fetch(url);
             const data = await response.json();
             if (data.success) {
                 events = data.data;
                 return true;
             }
-
             return false;
+        }
+
+        async function getParticipants(params) {
+            const url = "{{ route('students.events.participants.total') }}";
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data.status === 'success') {
+                const formatter = new Intl.NumberFormat('vi-VN');
+                const total = formatter.format(data.data.total_students_participated_in_events);
+                totalParticipant.textContent = total;
+            }
         }
 
         getEvents().then(() => {
             generateCalendar(currentDate.getMonth(), currentDate.getFullYear());
-            totalEvent.textContent = events.length;
+            if (events.length > 0) {
+                const formatter = new Intl.NumberFormat('vi-VN');
+                const total = formatter.format(events.length);
+                totalEvent.textContent = total;
+            }
         });
+
+        getParticipants();
     </script>
 @endsection

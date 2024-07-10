@@ -184,9 +184,11 @@
                     }
                 } else {
                     if (isSearching && searchPage === 1) {
-                        listEvents.innerHTML = '<p class="text-center absolute w-full">Không có sự kiện nào</p>';
+                        listEvents.innerHTML = '<p class="text-center text-red-500 absolute w-full">Không có sự kiện nào</p>';
                         preventLoad = true;
                         exportEvents = [];
+                    }else {
+                        listEvents.innerHTML = '<p class="text-center text-red-500 absolute w-full">Không có sự kiện nào</p>';
                     }
                 }
             } catch (error) {

@@ -210,4 +210,22 @@ class StudentController extends Controller
 
         return Excel::download(new StudentEventsExport($studentId, $academicPeriodId), $file);
     }
+
+    public function getTotalStudentsParticipatedInEvents()
+    {
+        $students = Student::withCount('events')->get();
+        $totalStudents = $students->count();
+        $totalStudentsParticipatedInEvents = $students->filter(function ($student) {
+            return $student->events_count > 0;
+        })->count();
+
+        return response()->json([
+            "data" => [
+                "total_students" => $totalStudents,
+                "total_students_participated_in_events" => $totalStudentsParticipatedInEvents
+            ],
+            "status" => "success",
+            "message" => "Get total students participated in events successfully!"
+        ]);
+    }
 }
