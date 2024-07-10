@@ -36,7 +36,7 @@ class EventController extends Controller
      */
     public function getAllEvents()
     {
-        $events = Event::all();
+        $events = Event::where('is_trash', "not like", '1')->get();
         return response()->json(["data" => $events, "success" => true, "message" => "Events retrieved successfully."]);
     }
 
