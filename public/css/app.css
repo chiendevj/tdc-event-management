@@ -1,7 +1,47 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 :root {
-    --blue: #003b7a;
-    --blue-text: #428bca;
-    --yellow: #f5ce31;
-    --white: #fff;
-    --text-gray: #333;
+    --dark-bg: #1e3a8a;
+    --blue: #19a0e4;
+    --note-text: #2d3436;
+    --table-border: rgb(156 163 175);
+    --nav-hover: #fff;
+    --red: #ee5253;
+    --event-title: #000;
+    --note: #eccc68;
+    --yellow: #f7b731;
+}
+
+body {
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+/* width */
+*::-webkit-scrollbar {
+    width: 6px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 100px;
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+    background: var(--dark-bg);
+}
+
+/* Handle on hover */
+*::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-bg);
 }

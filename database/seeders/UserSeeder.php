@@ -20,6 +20,10 @@ class UserSeeder extends Seeder
         $viewPermission = Permission::create(['name' => 'view event']);
         $createPermission = Permission::create(['name' => 'create event']);
         $deletePermission = Permission::create(['name' => 'delete event']);
+        $restorePermisstion = Permission::create(['name' => 'restore event']);
+        $cancelPermission = Permission::create(['name' => 'cancel event']);
+        $qrPermission = Permission::create(['name' => 'qr event']);
+        $featuredPermission = Permission::create(['name' => 'featured event']);
 
         // Create Super Admin user
         $superAdmin = User::factory()->create([
@@ -37,11 +41,10 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('1234567'),
-            'created_at' => now()
         ]);
 
         $adminRole = Role::create(['name' => 'admin']);
-        $adminRole->givePermissionTo([$viewPermission, $editPermission]);
+        $adminRole->givePermissionTo([$viewPermission, $editPermission, $createPermission, $deletePermission, $cancelPermission, $qrPermission, $featuredPermission]);
         $admin->assignRole($adminRole);
     }
 }

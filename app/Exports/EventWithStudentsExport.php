@@ -27,8 +27,8 @@ class EventWithStudentsExport implements FromCollection, WithHeadings
         // Define the headings for the exported file
         return [
             'Mã số sinh viên',
-            'Họ và tên',
             'Mail',
+            'Họ và tên',
             'Lớp',
             // Add more headings as needed
         ];

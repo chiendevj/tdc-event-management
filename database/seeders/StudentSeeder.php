@@ -15,15 +15,20 @@ class StudentSeeder extends Seeder
     public function run(): void
     {
 
-        $faker = Faker::create();
+        $faker = Faker::create('vi_VN');
 
         for ($i = 0; $i < 100; $i++) {
+            $year = $faker->randomElement(['222', '223', '224']);
+            $studentId = $year . '11TT' . $faker->unique()->numberBetween(1000, 9999);
+
+            $classYear = 'CD' . substr($year, 1);
+
             DB::table('students')->insert(
                 [
-                    'id' => '22211TT' . $faker->unique()->numberBetween(1000, 9999),
-                    'email' => $faker->unique()->userName . '@mail.tdc.edu.vn',
+                    'id' => $studentId,
+                    'email' => $studentId . '@mail.tdc.edu.vn',
                     'fullname' => $faker->name,
-                    'classname' => 'CD' . $faker->numberBetween(20, 23) . 'TT' . $faker->numberBetween(10, 12),
+                    'classname' => $classYear . 'TT' . $faker->numberBetween(01, 12),
                 ]
             );
         }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Student extends Model
 {
@@ -21,7 +22,6 @@ class Student extends Model
         'conduct_score',
     ];
 
-
     public function events()
     {
         return $this->belongsToMany(Event::class, 'event_student', 'student_id', 'event_id')->withTimestamps();
@@ -30,5 +30,10 @@ class Student extends Model
     public function eventCount()
     {
         return $this->events()->count();
+    }
+
+    public function eventRegisters()
+    {
+        return $this->hasMany(EventRegister::class);
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Trang chủ')
 
 @section('content')
     <div class="w-full bg-[var(--dark-bg)] mx-auto">
@@ -35,7 +35,27 @@
         <h3
             class="text-lg text-center uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit mx-auto">
             Lịch biểu sự kiện</h3>
+        <div class="explain flex items-center justify-center gap-3 mb-4 mt-8">
+            <div class="explain-item flex items-center justify-center gap-2">
+                <div class="explain-color event-upcoming"></div>
+                <p class="explain-text">Sắp diễn ra</p>
+            </div>
+            <div class="explain-item items-center justify-center gap-2 flex">
+                <div class="explain-color event-ongoing"></div>
+                <p class="explain-text">Đang diễn ra</p>
+            </div>
+            <div class="explain-item items-center justify-center gap-2 flex">
+                <div class="explain-color event-past"></div>
+                <p class="explain-text">Đã diễn ra</p>
+            </div>
+            <div class="explain-item items-center justify-center gap-2 flex">
+                <div class="explain-color event-cancelled"></div>
+                <p class="explain-text">Đã hủy</p>
+            </div>
+        </div>
+
         <div class="change_date flex items-center justify-between mt-[20px]">
+
             <div
                 class="icon_prev_date text-[var(--dark-bg)] font-semibold transition-all duration-100 ease-in p-2 flex items-center justify-center w-[32px] h-[32px] hover:text-white hover:bg-[var(--dark-bg)] rounded-full cursor-pointer">
                 <i class="fa-light fa-chevron-left"></i>
@@ -51,9 +71,10 @@
             </div>
         </div>
 
-        <div class="calender_table mt-[20px] w-full mb-8 rounded-sm overflow-hidden">
+        <div class="calender_table mt-[20px] w-full mb-8 rounded-sm overflow-y-auto">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="rounded-sm text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 border border-gray-700 dark:text-gray-400">
+                <thead
+                    class="rounded-sm text-xs border border-[var(--table-border)] text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
                     <th scope="col" class="px-6 py-3 text-center">Thứ 2</th>
                     <th scope="col" class="px-6 py-3 text-center">Thứ 3</th>
                     <th scope="col" class="px-6 py-3 text-center">Thứ 4</th>
@@ -68,7 +89,7 @@
             </table>
         </div>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
         const displayDate = document.querySelector('.display_current_date');
         const btnChangeNextDate = document.querySelector('.icon_next_date');
@@ -76,7 +97,6 @@
         const totalParticipant = document.querySelector('.total_paticipant');
         const totalEvent = document.querySelector('.total_event');
         let events = [];
-        // const colors = ["#eb4d4b", "#6ab04c", "#f0932b", "#0abde3", "#6c5ce7", "#38ada9"];
 
         // Get current date and display
         const currentDate = new Date();
@@ -125,11 +145,11 @@
 
             for (let i = 0; i < 6; i++) {
                 let row = document.createElement('tr');
-                row.classList.add("bg-white","border-b","dark:bg-gray-800","dark:border-gray-700")
+                row.classList.add("bg-white", "border-b", "border-[var(--table-border)]")
 
                 for (let j = 1; j <= 7; j++) {
                     let cell = document.createElement('td');
-                    cell.classList.add("px-6","py-4","dark:text-gray-400");
+                    cell.classList.add("px-6", "py-4", "dark:text-gray-400");
                     let day = document.createElement('span');
                     day.classList.add("day");
 
@@ -177,7 +197,7 @@
                             createEventElement(event, cell);
                         }
                     } else if (eventEndMonth !== eventStartMonth && eventEndMonth === month) {
-                         // case event start in previous month and end in current month
+                        // case event start in previous month and end in current month
                         if (eventEnd.getDate() >= date) {
                             day.classList.add('active');
                             createEventElement(event, cell);
@@ -188,38 +208,81 @@
         }
 
         function createEventElement(event, cell) {
+            const link = document.createElement('a');
             const eventEle = document.createElement('div');
             const eventTitle = document.createElement('h4');
             const eventDescription = document.createElement('p');
-            // const color = colors[Math.floor(Math.random() * colors.length)];
+            const eventTime = document.createElement('p');
+            const detailEventRoute = "{{ route('events.show', ':eventId') }}".replace(':eventId', event.id);
+            link.href = detailEventRoute;
 
-            // eventEle.style.backgroundColor = color;
+            // Check event status and add background color
+            switch (event.status) {
+                case 'Đang diễn ra':
+                    eventEle.classList.add("event-ongoing");
+                    break;
+                case 'Đã diễn ra':
+                    eventEle.classList.add("event-past");
+                    break;
+                case 'Sắp diễn ra':
+                    eventEle.classList.add("event-upcoming");
+                    break;
+                case 'Đã hủy':
+                    eventEle.classList.add("event-cancelled");
+                    break;
+                default:
+                    break;
+            }
+
+
             eventEle.classList.add('event');
             eventTitle.classList.add('event_title');
             eventDescription.classList.add('event_desc');
+            eventTime.classList.add('event_desc');
+
+            eventTime.textContent = moment(event.event_start).format('HH:mm DD/MM/YYYY');
+
             eventTitle.textContent = event.name;
             eventDescription.textContent = event.location;
             eventEle.appendChild(eventTitle);
             eventEle.appendChild(eventDescription);
-            cell.appendChild(eventEle);
+            eventEle.appendChild(eventTime);
+            link.appendChild(eventEle);
+            cell.appendChild(link);
         }
 
 
         async function getEvents(params) {
-            const url = "/api/events";
+            const url = "{{ route('events.all') }}";
             const response = await fetch(url);
             const data = await response.json();
             if (data.success) {
                 events = data.data;
                 return true;
             }
-
             return false;
+        }
+
+        async function getParticipants(params) {
+            const url = "{{ route('students.events.participants.total') }}";
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data.status === 'success') {
+                const formatter = new Intl.NumberFormat('vi-VN');
+                const total = formatter.format(data.data.total_students_participated_in_events);
+                totalParticipant.textContent = total;
+            }
         }
 
         getEvents().then(() => {
             generateCalendar(currentDate.getMonth(), currentDate.getFullYear());
-            totalEvent.textContent = events.length;
+            if (events.length > 0) {
+                const formatter = new Intl.NumberFormat('vi-VN');
+                const total = formatter.format(events.length);
+                totalEvent.textContent = total;
+            }
         });
+
+        getParticipants();
     </script>
 @endsection

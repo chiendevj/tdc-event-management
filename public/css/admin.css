@@ -5,14 +5,15 @@
 }
 
 :root {
-    --dark-bg: #04397f;
+    --dark-bg: rgb(4, 57, 127);
     --blue: #19a0e4;
     --note-text: #2d3436;
-    --table-border: rgb(55 65 81);
+    --table-border: rgb(156 163 175);
     --nav-hover: #fff;
     --red: #ee5253;
-    --event-title: #000;
-    --note: #eccc68;
+    --event-title: #fff;
+    --note: #fff;
+    --gray: #b2bec3;
 }
 
 body {
@@ -70,15 +71,13 @@ body {
     background-color: rgb(34 197 94);
     content: "";
     position: absolute;
-    width: 2px;
+    width: 4px;
     height: 95%;
     left: -2px;
     top: 50%;
     border-radius: 10px;
     transform: translateY(-50%);
 }
-
-
 
 .calender_table td {
     border: 1px solid var(--table-border);
@@ -94,13 +93,12 @@ body {
     align-items: center;
     margin-left: auto;
     padding: 8px;
-    border-radius: 4px;
-    color: #fff;
+    border-radius: 50%;
 }
 
 .day.active {
     color: #fff;
-    background: var(--red);
+    background: var(--dark-bg);
 }
 
 .event_calender {
@@ -124,6 +122,8 @@ body {
 .event_desc {
     max-width: 300px;
     font-size: 14px;
+    color: var(--note);
+    font-weight: 500;
 }
 
 .event {
@@ -350,4 +350,35 @@ body {
 
 .btn_action:hover .tooltip {
     opacity: 1;
+}
+
+.ck.ck-editor {
+    width: 100% !important;
+    position: relative;
+}
+
+.event-past {
+    background-color: #4b4b4b !important;
+    color: white !important;
+}
+
+.event-ongoing {
+    background-color: #1dd1a1 !important;
+    color: white !important;
+}
+
+.event-upcoming {
+    background-color: #0abde3 !important;
+    color: white !important;
+}
+
+.event-cancelled {
+    background-color: #ff6b6b !important;
+    color: white !important;
+}
+
+.explain-color {
+    width: 22px;
+    height: 22px;
+    border-radius: 8px;
 }

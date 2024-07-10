@@ -1,4 +1,5 @@
 module.exports = {
+  darkMode: 'class', // Thêm dòng này để sử dụng class cho dark mode
   content: [
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
@@ -7,6 +8,5 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [
-  ],
+  plugins: [],
 }
