@@ -137,6 +137,7 @@ Route::middleware(['auth'])->group(function () {
     // Route for load more events, search events
     Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
     Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");
+    Route::get('/api/events/trash/search', [EventController::class, 'searchEventsTrash'])->name("events.trash.search");
     // Route for show event
     Route::get('admin/dashboard/events/{id}', [EventController::class, 'show'])->name("events.show");
     Route::get('admin/dashboard/events', [EventController::class, 'index'])->name("events.index");
@@ -163,7 +164,8 @@ Route::middleware(['auth'])->group(function () {
     // Route for export students to excel
     Route::get('admin/dashboard/students/{studentId}/events/export/{academicPeriodId}', [StudentController::class, 'exportStudentEvents'])->name("students.events.export");
     Route::get('admin/dashboard/student/{id}/events/participants/export', [EventController::class, 'exportParticipantsToExcel'])->name('events.export.excel.participants');
-
+    // Route for get total students participated in events
+    Route::get('/api/events/students/total/participants', [StudentController::class, 'getTotalStudentsParticipatedInEvents'])->name("students.events.participants.total");
 
     /**
      *  ============ Social share ============

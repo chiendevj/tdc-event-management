@@ -50,24 +50,6 @@
                     Lọc sự kiện
                 </button>
             </div>
-            <div class="flex items-center justify-center gap-3 w-full lg:w-fit flex-col xl:flex-row">
-                @can('create event')
-                    <a href="{{ route('events.create') }}"
-                        class="block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
-                        Tạo sự kiện mới
-                    </a>
-                    <button
-                    class="btn_export_list block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
-                    Xuất danh sách hiện tại
-                </button>
-
-                <button
-                    class="btn_export_all block p-2 bg-[var(--dark-bg)] hover:opacity-90 transition-all duration-100 ease-linear text-white rounded-sm lg:ml-auto xl:w-fit w-full text-center">
-                    Xuất tất cả sự kiện
-                </button>
-                @endcan
-
-            </div>
         </div>
         <div class="loadmore_animate hidden items-center justify-center relative">
             <div class="dot-spinner">
@@ -154,7 +136,7 @@
             const status = filterStatus.value;
 
             const url = isSearching ?
-                `/api/events/search?search=${searchInput.value}&filter_date_start=${startDate}&filter_date_end=${endDate}&status=${status}&page=${searchPage}` :
+                `/api/events/trash/search?search=${searchInput.value}&filter_date_start=${startDate}&filter_date_end=${endDate}&status=${status}&page=${searchPage}` :
                 `/api/events/trash?page=${page}`;
             try {
                 const response = await fetch(url, {
@@ -180,9 +162,11 @@
                     }
                 } else {
                     if (isSearching && searchPage === 1) {
-                        listEvents.innerHTML = '<p class="text-center absolute w-full">Không có sự kiện nào</p>';
+                        listEvents.innerHTML = '<p class="text-center text-red-500 absolute w-full">Không có sự kiện nào</p>';
                         preventLoad = true;
                         exportEvents = [];
+                    }else {
+                        listEvents.innerHTML = '<p class="text-center text-red-500 absolute w-full">Không có sự kiện nào</p>';
                     }
                 }
             } catch (error) {
@@ -193,13 +177,6 @@
             }
         }
 
-        function confirmDelete(event) {
-            event.preventDefault();
-            const userConfirmed = confirm("Bạn có chắc chắn muốn xóa sự kiện này?");
-            if (userConfirmed) {
-                window.location.href = event.currentTarget.href;
-            }
-        }
 
         function createEventItem(event) {
             const route = "{{ route('events.show', ':id') }}".replace(':id', event.id);
@@ -207,6 +184,26 @@
             const routeRestore ="{{ route('events.move.restore', ':id') }}".replace(':id', event.id);
             const eventItem = document.createElement('div');
             const link = document.createElement('a');
+
+             // Check status of event
+             let style = '';
+            switch (event.status) {
+                case 'Sắp diễn ra':
+                    style = "event-upcoming"
+                    break;
+                case 'Đang diễn ra':
+                    style = "event-ongoing"
+                    break;
+                case 'Đã diễn ra':
+                    style = "event-past"
+                    break;
+                case 'Đã hủy':
+                    isCanceled = true;
+                    style = "event-cancelled"
+                    break;
+                default:
+                    break;
+            }
 
             link.href = route;
 
@@ -236,87 +233,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="p-2">
-                        <h3 class="text-lg font-semibold uppercase">${event.name}</h3>
+                     <div class="p-2">
+                        <h3 class="text-lg font-semibold uppercase whitespace-nowrap overflow-hidden text-ellipsis">${event.name}</h3>
                         <p class="text-gray-400">${event.location}</p>
+                        <p class="text-gray-400 px-2 mt-1 rounded-full text-white w-fit ${style}">${event.status}</p>
                     </div>
                 `;
 
             eventItem.appendChild(link);
             return eventItem;
-        }
-
-        // Export events
-        function exportEvent(type) {
-            const url = "{{ route('events.export.excel.list') }}";
-            if (type === "list") {
-                if (exportEvents.length > 0) {
-                    fetch(url, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                    'content')
-                            },
-                            body: JSON.stringify({
-                                type: type,
-                                events: exportEvents
-                            })
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                return response.blob();
-                            } else {
-                                throw new Error('Failed to download file');
-                            }
-                        })
-                        .then(blob => {
-                            const link = document.createElement('a');
-                            link.href = window.URL.createObjectURL(blob);
-                            link.download = 'events.xlsx';
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Có lỗi xảy ra khi xuất file Excel');
-                        });
-                } else {
-                    alert('Không có sự kiện nào để xuất file Excel');
-                }
-            } else if (type === "all") {
-                fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                'content')
-                        },
-                        body: JSON.stringify({
-                            type: type,
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.blob();
-                        } else {
-                            throw new Error('Failed to download file');
-                        }
-                    })
-                    .then(blob => {
-                        const link = document.createElement('a');
-                        link.href = window.URL.createObjectURL(blob);
-                        link.download = 'events.xlsx';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Có lỗi xảy ra khi xuất file Excel');
-                    });
-            }
         }
 
         window.addEventListener('scroll', lazyLoad);
@@ -372,19 +297,6 @@
             isSearching = true;
             loadMoreEvents();
         });
-
-        // Export Excel
-        if (btnExportExcel) {
-            btnExportExcel.addEventListener('click', () => {
-                exportEvent('list');
-            });
-        }
-
-        if (btnExportExcelAll) {
-            btnExportExcelAll.addEventListener('click', () => {
-                exportEvent('all');
-            });
-        }
 
         // First load
         loadMoreEvents();

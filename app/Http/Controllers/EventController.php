@@ -384,6 +384,70 @@ class EventController extends Controller
     }
 
     /**
+     * Search for events based on the provided filters.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function searchEventsTrash(Request $request)
+    {
+        // Retrieve the search query, filter start date, filter end date, and status from the request
+        $search = $request->search;
+        $filterDateStart = $request->filter_date_start;
+        $filterDateEnd = $request->filter_date_end;
+        $status = $request->status;
+
+        // Create a new query instance for the Event model
+        $query = Event::query();
+
+        // Apply the search filter if a search query is provided
+        if (!empty($search)) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        // Apply the filter start date if provided
+        if (!empty($filterDateStart)) {
+            $query->where('event_start', '>=', $filterDateStart);
+        }
+
+        // Apply the filter end date if provided
+        if (!empty($filterDateEnd)) {
+            $query->where('event_start', '<=', $filterDateEnd);
+        }
+
+        // Apply the status filter if provided
+        if (!empty($status)) {
+            if ($status == 'all') {
+                // Get all events except the ones in the trash
+                $query->where('is_trash', 'like', 1);
+            } else if ($status == "newest") {
+                // Order the events by the creation date in descending order
+                $query->orderBy('created_at', 'desc')->where('is_trash', 'like', 1);
+            } else if ($status == "oldest") {
+                // Order the events by the creation date in ascending order
+                $query->orderBy('created_at', 'asc')->where('is_trash', 'like', 1);;
+            } else if ($status == "featured") {
+                // Filter the events to only include featured events
+                $query->where('is_featured_event', 1)->where('is_trash', 'like', 1);;
+            } else {
+                // Filter the events by the provided status
+                $query->where('status', $status)->where('is_trash', 'like', 1);
+            }
+        }
+
+        // Paginate the results with 8 events per page
+        $events = $query->paginate(8);
+
+        // Return a JSON response with the retrieved events
+        return response()->json([
+            'data' => $events,
+            'success' => true,
+            'message' => 'Events retrieved successfully.'
+        ]);
+    }
+
+
+    /**
      * Display the form for editing an event.
      *
      * @param  int  $id
