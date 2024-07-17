@@ -115,11 +115,13 @@
 
         // Sự kiện input cho studentId
         studentIdInput.addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
             validateInput(this, regexPatterns.studentId, errorMessages.studentId, studentIdError);
         });
 
         // Sự kiện input cho class
         classInput.addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
             validateInput(this, regexPatterns.class, errorMessages.class, classError);
         });
     </script>
