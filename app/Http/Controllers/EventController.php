@@ -11,6 +11,8 @@ use App\Models\Event;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -127,8 +129,11 @@ class EventController extends Controller
         // Handle the event photo upload
         if ($request->hasFile('event_photo')) {
             $file = $request->file('event_photo');
-            $filename = time() . '_' . $file->getClientOriginalName();
+            $filename = 'img_' . Str::uuid() . '.' . $file->getClientOriginalExtension();
             $filePath = $file->storeAs('uploads/events', $filename, 'public');
+
+            Log::info('Uploaded file name: ' . $filename);
+            Log::info('Stored file path: ' . $filePath);
 
             $validatedData['event_photo'] = '/storage/' . $filePath;
         }
@@ -594,9 +599,18 @@ class EventController extends Controller
             return redirect()->back()->with('error', 'Không tìm thấy sự kiện.');
         }
 
+         // Lấy đường dẫn hình ảnh từ event
+        $imagePath = $event->event_photo;
+
         $deleted = $event->delete();
 
         if ($deleted) {
+            if ($imagePath) {
+                // Convert đường dẫn thành đường dẫn thực trong storage
+                $imagePath = str_replace('/storage/', '', $imagePath);
+                Storage::disk('public')->delete($imagePath);
+            }
+
             return redirect()->back()->with('success', 'Sự kiện đã được xóa thành công.');
         } else {
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi xóa sự kiện.');
