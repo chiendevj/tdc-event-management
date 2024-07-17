@@ -18,10 +18,12 @@ class StudentEventsExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        return Event::whereHas('students', function($query) {
+        $data = Event::whereHas('students', function($query) {
             $query->where('student_id', $this->studentId);
         })->where('academic_period_id', $this->academicPeriodId)
           ->get(['id', 'name', 'event_start']);
+        return $data;
+
     }
 
     public function headings(): array

@@ -115,7 +115,8 @@
                     </div>
                     <div class="mb-4">
                         <button id="exportStudentDetail"
-                            class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-sm ease-in transition-all">Xuất toàn bộ thông tin tham gia sự kiện ra Excel
+                            class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-sm ease-in transition-all">Xuất
+                            toàn bộ thông tin tham gia sự kiện ra Excel
                         </button>
                     </div>
                     <div id="studentDetailContent" class="rounded-sm overflow-hidden">
@@ -170,7 +171,7 @@
                         academics.forEach(academic => {
                             console.log(academic);
                             const listEvent = document.createElement('div');
-                            listEvent.classList.add('list_event_participant' , 'mb-4');
+                            listEvent.classList.add('list_event_participant', 'mb-4');
                             listEvent.innerHTML = `
                                <div class="flex items-center justify-between flex-col sm:flex-row lg:flex-row xl:flex-row">
                                      <h3 class="text-left font-semibold my-4">Danh sách sự kiện đã tham gia (${academic.academic_period})</h3>
@@ -198,23 +199,23 @@
                                             ${academic.events.map((event, index) => {
                                             const route = "{{ route('events.show', ':eventId') }}".replace(':eventId', event.id);
                                             return `
-                                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                            <th scope="row"
-                                                                class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
-                                                                ${event.name}
-                                                            </th>
-                                                            <td class="px-6 py-4 text-center">
-                                                                ${event.participants_count}
-                                                            </td>
-                                                            <td class="px-6 py-4 text-center">
-                                                                <div class="flex items-center justify-center gap-3">
-                                                                    <a href="${route}">
-                                                                        Chi tiết
-                                                                    </a>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    `;
+                                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                                    <th scope="row"
+                                                                        class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
+                                                                        ${event.name}
+                                                                    </th>
+                                                                    <td class="px-6 py-4 text-center">
+                                                                        ${event.participants_count}
+                                                                    </td>
+                                                                    <td class="px-6 py-4 text-center">
+                                                                        <div class="flex items-center justify-center gap-3">
+                                                                            <a href="${route}">
+                                                                                Chi tiết
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            `;
                                             }).join('')}
                                         </tbody>
                                     </table>
@@ -228,10 +229,12 @@
                                         ':studentId', studentId);
                             });
 
-                            document.getElementById('exportStudentDetailSemester' + academic.academic_period_id).addEventListener('click', () => {
-                                window.location.href = "{{ route('students.events.export', [':studentId', ':academicPeriodId']) }}"
-                                .replace(':studentId', studentId)
-                                .replace(':academicPeriodId', academic.academic_period_id);
+                            document.getElementById('exportStudentDetailSemester' + academic
+                                .academic_period_id).addEventListener('click', () => {
+                                window.location.href =
+                                    "{{ route('students.events.export', [':studentId', ':academicPeriodId']) }}"
+                                    .replace(':studentId', studentId)
+                                    .replace(':academicPeriodId', academic.academic_period_id);
                             });
                         });
 
