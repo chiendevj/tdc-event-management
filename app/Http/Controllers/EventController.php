@@ -534,7 +534,7 @@ class EventController extends Controller
 
         if ($request->hasFile('event_photo')) {
             $file = $request->file('event_photo');
-            $filename = time() . '_' . $file->getClientOriginalName();
+            $filename = 'img_' . Str::uuid() . '.' . $file->getClientOriginalExtension();
             $filePath = $file->storeAs('uploads/events', $filename, 'public');
 
             $validatedData['event_photo'] = '/storage/' . $filePath;
