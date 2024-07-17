@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.2/css/sharp-regular.css">
 
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.2/css/sharp-light.css">
+    
     <title>@yield('title', 'TDC EVENTS')</title>
 </head>
 
