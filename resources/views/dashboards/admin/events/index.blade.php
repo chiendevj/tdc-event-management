@@ -43,8 +43,8 @@
                         <option value="Sắp diễn ra">Sắp diễn ra</option>
                         <option value="Đang diễn ra">Đang diễn ra</option>
                         <option value="Đã diễn ra">Đã diễn ra</option>
-                        <option value="newest">Mới nhất</option>
-                        <option value="oldest">Cũ nhất</option>
+                        {{-- <option value="newest">Mới nhất</option>
+                        <option value="oldest">Cũ nhất</option> --}}
                         <option value="Đã hủy">Đã hủy</option>
                         <option value="featured">Sự kiện nổi bật</option>
                     </select>
@@ -171,6 +171,7 @@
 
                 const data = await response.json();
                 if (data.data.data.length > 0) {
+                    console.log(data.data.data);
                     data.data.data.forEach(event => {
                         exportEvents.push(event.id);
                         const eventItem = createEventItem(event);
@@ -325,6 +326,7 @@
         function exportEvent(type) {
             const url = "{{ route('events.export.excel.list') }}";
             if (type === "list") {
+                console.log(exportEvents);
                 if (exportEvents.length > 0) {
                     fetch(url, {
                             method: 'POST',
@@ -445,6 +447,7 @@
             preventLoad = false;
             listEvents.innerHTML = '';
             isSearching = true;
+            exportEvents = [];
             loadMoreEvents();
         });
 
