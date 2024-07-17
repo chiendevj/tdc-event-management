@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
             EventCodeSeeder::class,
             EventsTableSeeder::class,
             StudentSeeder::class,
-            EventStudentSeeder::class,
             AcademicPeriodsTableSeeder::class,
         ]);
 
