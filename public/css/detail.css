@@ -26,3 +26,7 @@
     transform: translate3d(10px, 0, 50px);
     backface-visibility: hidden;
 }
+
+.btn-registor {
+    background-color: #20bdff;
+}

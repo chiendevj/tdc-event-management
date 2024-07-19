@@ -22,11 +22,15 @@
                     <span class="font-bold">Ngày kết thúc đăng ký:</span>
                     <span>{{ \Carbon\Carbon::parse($event->registration_end)->format('H:i d/m/Y') }}</span>
                 </p>
-                <p>
+                <p class="mb-5">
                     <span class="font-bold">Ngày diễn ra:</span>
                     <span>{{ \Carbon\Carbon::parse($event->event_start)->format('H:i d/m/Y') }}</span>
                 </p>
-                <p class="font-bold mt-3" >Quét mã dưới đây để đăng ký</p>
+                <div>
+                    <p class="mb-5 font-bold md:inline mr-3">Đăng ký tham gia tại đây</p>
+                    <a href="{{$event->registration_link}}" class="bg-[#19a0e4] text-white py-2 px-3 rounded">Đăng ký</a>
+                </div>
+                <p class="font-bold mt-5 mb-2" >Hoặc quét mã dưới đây để đăng ký</p>
                 <div id="qrCodeSvg">
                     {!! $registrationCode !!}
                 </div>
