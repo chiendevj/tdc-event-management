@@ -599,7 +599,7 @@ class EventController extends Controller
             return redirect()->back()->with('error', 'Không tìm thấy sự kiện.');
         }
 
-         // Lấy đường dẫn hình ảnh từ event
+        // Lấy đường dẫn hình ảnh từ event
         $imagePath = $event->event_photo;
 
         $deleted = $event->delete();
@@ -658,12 +658,38 @@ class EventController extends Controller
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the event with the given ID is not found.
      */
+    // public function getParticipants($eventId)
+    // {
+    //     $event = Event::findOrFail($eventId);
+    //     $students = $event->students;
+    //     return response()->json(["data" => $students, "success" => true, "message" => "Participants retrieved successfully."]);
+    // }
+
     public function getParticipants($eventId)
     {
         $event = Event::findOrFail($eventId);
         $students = $event->students;
-        return response()->json(["data" => $students, "success" => true, "message" => "Participants retrieved successfully."]);
+
+        $data = $students->map(function ($student) use ($eventId) {
+            $registered = DB::table('event_registers')
+                ->where('event_id', $eventId)
+                ->where('student_id', $student->id)
+                ->exists();
+
+            return [
+                'student' => $student,
+                'registered' => $registered
+            ];
+        });
+
+        return response()->json([
+            "data" => $data,
+            "success" => true,
+            "message" => "Participants retrieved successfully."
+        ]);
     }
+
+
 
     /**
      * Move an event to the trash.
@@ -816,11 +842,34 @@ class EventController extends Controller
      * @param int $id The ID of the event.
      * @return \Illuminate\Http\JsonResponse The JSON response containing the registered students' data.
      */
-    public function getRegisteredStudents($id)
+    // public function getRegisteredStudents($id)
+    // {
+    //     $event = Event::find($id);
+    //     $students = $event->eventRegisters()->with('student')->get();
+    //     return response()->json(["data" => $students, "success" => true, "message" => "Students retrieved successfully."]);
+    // }
+    public function getRegisteredStudents($eventId)
     {
-        $event = Event::find($id);
+        $event = Event::findOrFail($eventId);
         $students = $event->eventRegisters()->with('student')->get();
-        return response()->json(["data" => $students, "success" => true, "message" => "Students retrieved successfully."]);
+
+        $data = $students->map(function ($student) use ($eventId) {
+            $attended  = DB::table('event_student')
+                ->where('event_id', $eventId)
+                ->where('student_id', $student->student_id)
+                ->exists();
+
+            return [
+                'student' => $student,
+                'attended' => $attended 
+            ];
+        });
+
+        return response()->json([
+            "data" => $data,
+            "success" => true,
+            "message" => "Participants retrieved successfully."
+        ]);
     }
 
     /**

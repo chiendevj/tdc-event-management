@@ -75,7 +75,7 @@ class AttendanceController extends Controller
         $eventCode->status = true;
         $eventCode->save();
 
-        return view('form.success');
+        return view('form.success')->with('success', "Điểm danh thành công");;
     }
 
     // Sinh viên đăng kí tham gia sự kiện

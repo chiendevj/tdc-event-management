@@ -246,11 +246,12 @@
                                 <th class="px-6 py-4">Mã sinh viên</th>
                                 <th class="px-6 py-4">Họ và tên</th>
                                 <th class="px-6 py-4">Lớp</th>
+                                <th class="px-6 py-4">Đã đăng ký</th>
                             </tr>
                         `;
 
-                        data.data.forEach((student, index) => {
-                            // console.log(student);
+                        data.data.forEach((item, index) => {
+                            // console.log(item);
                             // Create table body
                             const tr = document.createElement('tr');
 
@@ -258,9 +259,12 @@
                                 "dark:border-gray-700");
                             tr.innerHTML = `
                                 <td class="px-6 py-4 text-center">${index + 1}</td>
-                                <td class="px-6 py-4 text-center">${student.pivot.student_id}</td>
-                                <td class="px-6 py-4 text-center">${student.fullname}</td>
-                                <td class="px-6 py-4 text-center">${student.classname}</td>
+                                <td class="px-6 py-4 text-center">${item.student.id}</td>
+                                <td class="px-6 py-4 text-center">${item.student.fullname}</td>
+                                <td class="px-6 py-4 text-center">${item.student.classname}</td>
+                                <td class="px-6 py-4 text-center">${item.registered 
+                                    ? '<i class="fa-solid fa-check text-green-500"></i>' 
+                                    : '<i class="fa-solid fa-times text-red-500"></i>'}</td>
                             `;
 
                             tableBody.appendChild(tr);
@@ -316,11 +320,12 @@
                                 <th class="px-6 py-4">Họ và tên</th>
                                 <th class="px-6 py-4">Lớp</th>
                                 <th class="px-6 py-4">Nội dung quan tâm, câu hỏi</th>
+                                <th class="px-6 py-4">Đã tham gia</th>
                             </tr>
                         `;
 
-                        data.data.forEach((student, index) => {
-                            // console.log(student);
+                        data.data.forEach((item, index) => {
+                            console.log(item);
                             // Create table body
                             const tr = document.createElement('tr');
 
@@ -328,10 +333,13 @@
                                 "dark:border-gray-700");
                             tr.innerHTML = `
                                 <td class="px-6 py-4 text-center">${index + 1}</td>
-                                <td class="px-6 py-4 text-center">${student.student.id}</td>
-                                <td class="px-6 py-4 text-center">${student.student.fullname}</td>
-                                <td class="px-6 py-4 text-center">${student.student.classname}</td>
-                                <td class="px-6 py-4 text-center">${student.question}</td>
+                                <td class="px-6 py-4 text-center">${item.student.student.id}</td>
+                                <td class="px-6 py-4 text-center">${item.student.student.fullname}</td>
+                                <td class="px-6 py-4 text-center">${item.student.student.classname}</td>
+                                <td class="px-6 py-4 text-center">${item.question ?? "Không có"}</td>
+                                 <td class="px-6 py-4 text-center">${item.attended 
+                                    ? '<i class="fa-solid fa-check text-green-500"></i>' 
+                                    : '<i class="fa-solid fa-times text-red-500"></i>'}</td>
                             `;
 
                             tableBody.appendChild(tr);

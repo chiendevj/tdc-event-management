@@ -96,7 +96,7 @@
 
 .btn-attended {
     background-color: var(--blue);
-    color: var(--white);
+    color: #fff;
     border-radius: 10px;
     padding: 10px;
     font-weight: 600;
