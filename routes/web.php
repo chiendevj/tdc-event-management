@@ -7,6 +7,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\QrCodeGeneratorController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SocialShareController;
 use App\Http\Controllers\UploadController;
@@ -166,6 +167,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/dashboard/student/{id}/events/participants/export', [EventController::class, 'exportParticipantsToExcel'])->name('events.export.excel.participants');
     // Route for get total students participated in events
     Route::get('/api/events/students/total/participants', [StudentController::class, 'getTotalStudentsParticipatedInEvents'])->name("students.events.participants.total");
+    // Route for import students from excel
+    Route::post('/import/students', [ExcelController::class, 'import'])->name('excel.students.import');
+
+
 
     /**
      *  ============ Social share ============
