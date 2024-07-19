@@ -3,14 +3,42 @@
 @section('title', 'Sinh viên')
 
 @section('content')
-
     <div class="container mx-auto px-8 py-4 div_wrapper">
+        {{-- Form upload --}}
+        <div class="overlay fixed top-0 left-0 right-0 bottom-0 bg-[rgba(0,0,0,0.2)] z-10"></div>
+        <form method="POST" action="{{ route('excel.students.import') }}" enctype="multipart/form-data"
+            class="import_form p-8 rounded-lg bg-white shadow-lg fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10">
+            @csrf
+            <label for="import_students">
+                <iframe src="https://lottie.host/embed/e743699b-a756-4b11-a6b3-55103552a8fa/0lbq4higLI.json"></iframe>
+                <h3 class="text-sm text-center">
+                    Chọn file dữ liệu cần nhập <span class="text-red-500">tại đây *</span>
+                    <span class="import_file font-semibold text-[var(--dark-bg)] block">
+                    </span>
+                </h3>
+                <input type="file" hidden id="import_students" name="import_students">
+            </label>
+            <button class="mt-4 w-full btn_submit_import p-2 rounded-sm text-white bg-[var(--dark-bg)] flex items-center justify-center gap-3" type="submit">Nhập dữ liệu
+                <div class="fetching_data hidden animate-spin">
+                    <i class="fa-duotone fa-solid fa-spinner-third"></i>
+                </div>
+            </button>
+            <button type="button"
+                class="btn_close_import_form top-[-10px] right-[-10px] w-[20px] h-[20px] bg-white absolute rounded-full p-4 flex items-center cursor-pointer shadow-sm justify-center">
+                <i class="fa-light fa-times"></i>
+            </button>
+        </form>
+
         <div class="p-4">
-            <div class="flex items-center justify-between mb-4 lg:flex-row flex-col gap-3">
+            <div class="flex items-center justify-between mb-4 xl:flex-row flex-col gap-3">
                 <h3 class="uppercase block p-2 font-semibold rounded-sm text-white bg-[var(--dark-bg)] w-fit">
                     Sinh viên tham gia sự kiện
                 </h3>
-                <div class="flex items-center justify-center gap-3">
+                <div class="flex items-center justify-center gap-3 flex-col xl:flex-row">
+                    <button
+                        class="block p-2 rounded-sm text-white w-full xl:w-fit bg-[var(--dark-bg)] btn_show_import_form">
+                        Nhập danh sách sinh viên
+                    </button>
                     <div class="relative border flex items-center h-full justify-start p-2 text-gray-400 w-full xl:w-fit">
                         <select name="course" id="course" class="border-none outline-none min-h-[24px] w-full p-0">
                             <option value="all">Tất cả</option>
@@ -136,12 +164,19 @@
         const paginationBar = document.querySelector('.pagination_bar');
         const filterOption = document.getElementById('course');
         const studentContent = document.getElementById('studentDetailContent');
+        const inputImport = document.getElementById('import_students');
+        const importFile = document.querySelector('.import_file');
+        const importForm = document.querySelector('.import_form');
+        const btnShowImportForm = document.querySelector('.btn_show_import_form');
+        const btnCloseImportForm = document.querySelector('.btn_close_import_form');
+        const overlay = document.querySelector('.overlay');
+        const btnSubmitImport = document.querySelector('.btn_submit_import');
+
 
         filterOption.addEventListener('change', function() {
             const value = this.value;
             const url = "{{ route('students.course.get', ':course') }}".replace(':course', value);
             window.location.href = url;
-
         });
 
         function closeModal() {
@@ -199,23 +234,23 @@
                                             ${academic.events.map((event, index) => {
                                             const route = "{{ route('events.show', ':eventId') }}".replace(':eventId', event.id);
                                             return `
-                                                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                                    <th scope="row"
-                                                                        class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
-                                                                        ${event.name}
-                                                                    </th>
-                                                                    <td class="px-6 py-4 text-center">
-                                                                        ${event.participants_count}
-                                                                    </td>
-                                                                    <td class="px-6 py-4 text-center">
-                                                                        <div class="flex items-center justify-center gap-3">
-                                                                            <a href="${route}">
-                                                                                Chi tiết
-                                                                            </a>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            `;
+                                                                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                                                                <th scope="row"
+                                                                                                    class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
+                                                                                                    ${event.name}
+                                                                                                </th>
+                                                                                                <td class="px-6 py-4 text-center">
+                                                                                                    ${event.participants_count}
+                                                                                                </td>
+                                                                                                <td class="px-6 py-4 text-center">
+                                                                                                    <div class="flex items-center justify-center gap-3">
+                                                                                                        <a href="${route}">
+                                                                                                            Chi tiết
+                                                                                                        </a>
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        `;
                                             }).join('')}
                                         </tbody>
                                     </table>
@@ -314,5 +349,25 @@
         }
 
         inputSearch.addEventListener('input', debounce(handleSearch, 300));
+        inputImport.addEventListener('change', function() {
+            importFile.textContent = this.files[0].name;
+        });
+
+
+        btnShowImportForm.addEventListener('click', function() {
+            importForm.classList.add('active');
+            overlay.classList.add('active');
+        });
+
+        btnCloseImportForm.addEventListener('click', function() {
+            importForm.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        importForm.addEventListener('submit', function() {
+            btnSubmitImport.disabled = true;
+            const fetchingData = document.querySelector('.fetching_data');
+            fetchingData.classList.remove('hidden');
+        });
     </script>
 @endsection
