@@ -134,6 +134,7 @@
         let eventChart = null;
 
         function showEventDetails(eventId) {
+            document.querySelector('.model_title').innerText = `Chi tiết sự kiện`;
             eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
             fetch(`{{ route('events.details', ['id' => ':id']) }}`.replace(':id', eventId))
                 .then(response => response.json())
@@ -186,7 +187,6 @@
                         window.location.href = `{{ route('events.export.excel', ['eventId' => ':eventId']) }}`
                             .replace(':eventId', eventId);
                     };
-                    document.querySelector('.model_title').innerText = `Chi tiết sự kiện`;
                     document.getElementById('eventDetailsModal').classList.remove('hidden');
                 })
                 .catch(error => {
@@ -216,6 +216,7 @@
         }
 
         function showParticipantList(eventId) {
+            document.querySelector('.model_title').innerText = `Danh sách sinh viên tham gia sự kiện`;
             const chartCanvas = document.getElementById('eventChart');
             chartCanvas.classList.add('hidden');
             eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
@@ -262,8 +263,8 @@
                                 <td class="px-6 py-4 text-center">${item.student.id}</td>
                                 <td class="px-6 py-4 text-center">${item.student.fullname}</td>
                                 <td class="px-6 py-4 text-center">${item.student.classname}</td>
-                                <td class="px-6 py-4 text-center">${item.registered 
-                                    ? '<i class="fa-solid fa-check text-green-500"></i>' 
+                                <td class="px-6 py-4 text-center">${item.registered
+                                    ? '<i class="fa-solid fa-check text-green-500"></i>'
                                     : '<i class="fa-solid fa-times text-red-500"></i>'}</td>
                             `;
 
@@ -274,7 +275,6 @@
                         table.appendChild(tableBody);
                         eventDetailsContent.innerHTML = '';
 
-                        document.querySelector('.model_title').innerText = `Danh sách sinh viên tham gia sự kiện`;
                         eventDetailsContent.appendChild(table);
                         document.getElementById('exportExcelBtn').onclick = function() {
                             window.location.href = `{{ route('events.export.excel', ['eventId' => ':eventId']) }}`
@@ -289,6 +289,8 @@
         }
 
         function showRegisteredList(eventId) {
+            document.querySelector('.model_title').innerText =
+                `Danh sách sinh viên đăng ký tham gia sự kiện`;
             const chartCanvas = document.getElementById('eventChart');
             chartCanvas.classList.add('hidden');
             eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
@@ -337,8 +339,8 @@
                                 <td class="px-6 py-4 text-center">${item.student.student.fullname}</td>
                                 <td class="px-6 py-4 text-center">${item.student.student.classname}</td>
                                 <td class="px-6 py-4 text-center">${item.question ?? "Không có"}</td>
-                                 <td class="px-6 py-4 text-center">${item.attended 
-                                    ? '<i class="fa-solid fa-check text-green-500"></i>' 
+                                 <td class="px-6 py-4 text-center">${item.attended
+                                    ? '<i class="fa-solid fa-check text-green-500"></i>'
                                     : '<i class="fa-solid fa-times text-red-500"></i>'}</td>
                             `;
 
@@ -349,7 +351,6 @@
                         table.appendChild(tableBody);
                         eventDetailsContent.innerHTML = '';
 
-                        document.querySelector('.model_title').innerText = `Danh sách sinh viên đăng ký tham gia sự kiện`;
                         eventDetailsContent.appendChild(table);
                         document.getElementById('exportExcelBtn').onclick = function() {
                             window.location.href = `{{ route('events.register.students.export', ':eventId') }}`

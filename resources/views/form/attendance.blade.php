@@ -37,11 +37,11 @@
                         <input type="text" readonly name="class" placeholder="Nhập lớp của bạn">
                         <p id="classError" class="block text-[12px] text-red-500"></p>
                     </div>
-                    <button class="btn-confirm-info" type="button">Xác minh thông tin</button>
-                    <button class="btn-cancel-confirm hidden" type="button">Thông tin không chính xác</button>
                     <div class="mt-4">
                         <input type="hidden" name="event_id" value="{{ $event['id'] }}">
                         <input type="hidden" name="code" value="{{ $event['code'] }}">
+                        <button class="btn-confirm-info" type="button">Xác minh thông tin</button>
+                        <button class="btn-cancel-confirm hidden" type="button">Thông tin không chính xác ?</button>
                         <button class="btn-attended hidden" type="submit">Gửi</button>
                     </div>
                 </form>
