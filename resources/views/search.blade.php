@@ -91,6 +91,26 @@
                 modal.style.display = "flex";
             }
 
+            function formatDate(dateString) {
+                const [datePart, timePart] = dateString.split(' ');
+                const [year, month, day] = datePart.split('-');
+                const [hours, minutes] = timePart.split(':');
+
+                const date = new Date(year, month - 1, day, hours, minutes);
+
+                if (isNaN(date.getTime())) {
+                    return 'Invalid date';
+                }
+
+                const formattedDay = String(date.getDate()).padStart(2, '0');
+                const formattedMonth = String(date.getMonth() + 1).padStart(2, '0');
+                const formattedYear = date.getFullYear();
+                const formattedHours = String(date.getHours()).padStart(2, '0');
+                const formattedMinutes = String(date.getMinutes()).padStart(2, '0');
+
+                return `${formattedDay}/${formattedMonth}/${formattedYear} ${formattedHours}:${formattedMinutes}`;
+            }
+
             function showEvents(data) {
                 modalTitle.parentElement.className = 'flex justify-between items-center px-6 py-4 bg-blue-950';
                 modalTitle.innerHTML =
@@ -104,6 +124,7 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-200 bg-blue-800 uppercase tracking-wider">Tên sự kiện</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-200 bg-blue-800 uppercase tracking-wider">Ngày diễn ra</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -114,7 +135,10 @@
                         html += `
                         <tr class="${bgColorClass}">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="font-medium">${event.id}. </span> ${event.name}
+                                <span class="font-medium">${index + 1}. </span> ${event.name}
+                            </td>
+                             <td class="px-6 py-4 whitespace-nowrap">
+                                ${formatDate(event.event_start)}
                             </td>
                         </tr>
                     `;
