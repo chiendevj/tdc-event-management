@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('event_photo');
             $table->timestamp('event_start')->useCurrent();
             $table->timestamp('event_end')->useCurrent();
-            $table->integer('point')->default(4);
+            // $table->integer('point')->default(4);
             $table->timestamp('registration_start')->useCurrent();
             $table->timestamp('registration_end')->useCurrent();
             $table->integer('registration_count')->default(0);
