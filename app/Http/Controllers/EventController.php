@@ -8,6 +8,7 @@ use App\Exports\ParticipatedEventsExport;
 use App\Exports\StudentRegisterEventExport;
 use App\Models\AcademicPeriod;
 use App\Models\Event;
+use App\Models\Notification;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -75,7 +76,6 @@ class EventController extends Controller
             'event_start' => 'required|date',
             'event_end' => 'required|date',
             'location' => 'required',
-            'point' => 'required|integer',
             'registration_start' => 'required|date',
             'registration_end' => 'required|date',
             'content' => 'required',
@@ -92,8 +92,6 @@ class EventController extends Controller
             'event_end.required' => 'Vui lòng chọn thời gian kết thúc sự kiện.',
             'event_end.date' => 'Định dạng thời gian của ngày kết thúc sự kiện không hợp lệ.',
             'location.required' => 'Vui lòng nhập địa điểm diễn ra sự kiện.',
-            'point.required' => 'Vui lòng nhập điểm tham gia sự kiện.',
-            'point.integer' => 'Điểm tham gia sự kiện phải là một số nguyên.',
             'registration_start.required' => 'Vui lòng chọn thời gian mở đăng ký tham gia sự kiện.',
             'registration_start.date' => 'Định dạng thời gian của thời gian mở đăng ký tham gia sự kiện không hợp lệ.',
             'registration_end.required' => 'Vui lòng chọn thời gian đóng đăng ký tham gia sự kiện.',
@@ -230,7 +228,6 @@ class EventController extends Controller
         $page = $request->input('page', 1);
         $events = Event::where('status', 'like', 'Sắp diễn ra')->where('is_trash', '<>', 1)
             ->paginate(2, ['*'], 'page', $page);
-
         return response()->json($events);
     }
 
@@ -251,7 +248,6 @@ class EventController extends Controller
             ->groupBy('events.id')
             ->orderByDesc('student_count')
             ->where('is_trash', '<>', 1)
-            ->where('status', '<>', "Đã hủy")
             ->paginate(2, ['*'], 'page');
         return response()->json($events);
     }
@@ -486,7 +482,6 @@ class EventController extends Controller
             'event_start' => 'required|date',
             'event_end' => 'required|date',
             'location' => 'required',
-            'point' => 'required|integer',
             'registration_start' => 'required|date',
             'registration_end' => 'required|date',
             'content' => 'required',
@@ -501,8 +496,6 @@ class EventController extends Controller
             'event_end.required' => 'Vui lòng chọn thời gian kết thúc sự kiện.',
             'event_end.date' => 'Định dạng thời gian của ngày kết thúc sự kiện không hợp lệ.',
             'location.required' => 'Vui lòng nhập địa điểm diễn ra sự kiện.',
-            'point.required' => 'Vui lòng nhập điểm tham gia sự kiện.',
-            'point.integer' => 'Điểm tham gia sự kiện phải là một số nguyên.',
             'registration_start.required' => 'Vui lòng chọn thời gian mở đăng ký tham gia sự kiện.',
             'registration_start.date' => 'Định dạng thời gian của thời gian mở đăng ký tham gia sự kiện không hợp lệ.',
             'registration_end.required' => 'Vui lòng chọn thời gian đóng đăng ký tham gia sự kiện.',
@@ -726,6 +719,28 @@ class EventController extends Controller
         $event->status = 'Đã hủy';
         $event->save();
 
+        // Create a notification for the event cancellation
+        $notification = new Notification();
+        $notification->title = 'Thông báo hủy sự kiện';
+        $eventDate = \Carbon\Carbon::parse($event->event_start)->format('d/m/Y');
+
+        $notification->content = "<p>Kính gửi quý thầy cô và các em học sinh,</p>
+            <p>Chúng tôi rất tiếc phải thông báo rằng sự kiện <strong>$event->name</strong> dự kiến diễn ra
+                vào ngày <strong>$eventDate</strong> tại <strong>Trường Cao Đẳng Công Nghệ Thủ Đức</strong> sẽ bị hủy bỏ do
+                <strong>một số lý do ngoài ý muốn.</strong>.</p>
+            <p>Chúng tôi xin lỗi về bất kỳ sự bất tiện nào có thể gây ra và rất biết ơn sự thông cảm của quý thầy cô và
+                các em học sinh trong tình huống này. Chúng tôi đang làm việc để lên lịch lại sự kiện và sẽ thông báo
+                đến mọi người sớm nhất có thể.</p>
+            <p>Nếu cần thêm thông tin hoặc có bất kỳ câu hỏi nào, xin vui lòng liên hệ với chúng tôi qua <strong>email:
+              eventfit@tdc.edu.vn</strong> hoặc số điện thoại: <strong>(028) 22 158 642, Nội bộ: 309</strong>.</p>
+            <p>Một lần nữa, chúng tôi xin chân thành cảm ơn quý thầy cô và các em học sinh đã hiểu và thông cảm.</p>
+            <p>Trân trọng,<br>
+                <strong>Ban Tổ Chức Sự kiện Khoa Công Nghệ Thông Tin, Trường Cao Đằng Công Nghệ Thủ Đức</strong>
+            </p>";
+
+        $notification->expires_at = $event->event_end;
+        $notification->save();
+
         return redirect()->back()->with('success', 'Sự kiện đã được hủy.');
     }
 
@@ -861,7 +876,7 @@ class EventController extends Controller
 
             return [
                 'student' => $student,
-                'attended' => $attended 
+                'attended' => $attended
             ];
         });
 

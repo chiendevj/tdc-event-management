@@ -3,10 +3,38 @@
 @section('title', 'Trang chủ')
 
 @section('content')
+    {{-- Notification bar --}}
+    <div class="fixed bottom-5 right-5 z-50 btn-show-notify hidden">
+        <div class="dot-notify w-2 h-2 rounded-[50%] bg-red-500 absolute top-[-2px] left-[-2px]"></div>
+        <div class="flex items-center gap-3 cursor-pointer bg-white shadow-md rounded-md p-3">
+            <i class="fa-solid fa-bell bell text-[#FFA500]"></i>
+            <span class="text-sm">Thông báo mới</span>
+        </div>
+    </div>
+
+    {{-- Notify board --}}
+    <div class="fixed notify_board bg-white shadow-lg p-8 rounded-lg top-[50%] left-[50%] z-50">
+        <button
+            class="btn_close_noti absolute top-[-10px] right-[-10px] w-[30px] h-[30px] rounded-[50%] bg-white border shadow-sm flex items-center justify-center">
+            <i class="fa-solid fa-times  hover:text-red-500 transition-all duration-100 ease-linear"></i>
+        </button>
+        <div class="flex items-center justify-center flex-col">
+            <div class="mt-4">
+                <h3 class="uppercase text-red-500 font-bold text-lg text-center mb-2 noti-title"></h3>
+                <div class="noti-content"></div>
+            </div>
+            <div class="mt-4 flex items-end justify-end w-full">
+                <button
+                    class="btn_next_notify dot_mark_next_noti w-[40px] h-[40px] border shadow-sm rounded-[50%] flex items-center justify-center text-sm relative">
+                </button>
+            </div>
+        </div>
+    </div>
     {{-- Banner  --}}
     <div class="w-full banner_bg mt_container relative overflow-hidden">
         <div class="slider">
-            <h1 class="temp_text hidden text-[30px] md:text-[42px] font-bold uppercase absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center">
+            <h1
+                class="temp_text hidden text-[30px] md:text-[42px] font-bold uppercase absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center">
                 Chào mừng bạn đến với Sự kiện FIT - TDC
             </h1>
             <div class="list">
@@ -48,6 +76,14 @@
         let next = document.getElementById('next');
         let prev = document.getElementById('prev');
         let dots = document.querySelectorAll('.slider .dots li');
+        const btnCloseNoti = document.querySelector('.btn_close_noti');
+        const bell = document.querySelector('.btn-show-notify');
+        const overlay = document.querySelector('#overlay');
+        const notifyBoard = document.querySelector('.notify_board');
+        const notiTitle = document.querySelector('.noti-title');
+        const notiContent = document.querySelector('.noti-content');
+        const markNextNoti = document.querySelector('.dot_mark_next_noti');
+        const btnNextNoti = document.querySelector('.btn_next_notify');
         const SLIDE_TIMER = 5000;
 
 
@@ -182,25 +218,45 @@
                     eventsContainer.appendChild(noEventsMessage);
                 } else {
                     result.data.forEach(event => {
-                        const eventElement = document.createElement('a');
                         let route = "{{ route('events.detail', ':id') }}".replace(':id', event.id);
+                        const eventElement = document.createElement('a');
+                        // Check status of event
+                        let style = '';
+                        switch (event.status) {
+                            case 'Sắp diễn ra':
+                                style = "event-upcoming"
+                                break;
+                            case 'Đang diễn ra':
+                                style = "event-ongoing"
+                                break;
+                            case 'Đã diễn ra':
+                                style = "event-past"
+                                break;
+                            case 'Đã hủy':
+                                isCanceled = true;
+                                style = "event-cancelled"
+                                break;
+                            default:
+                                break;
+                        }
                         eventElement.classList.add('event-card');
                         eventElement.href = route;
                         eventElement.innerHTML = `
-                <div class="background">
-                    <img src="${event.event_photo}" alt="">
-                </div>
-                <div class="content p-4">
-                    <div class="event-title">
-                        <a href="${route}">
-                            ${event.name}
-                        </a>
-                    </div>
-                    <div class="event-desc">
-                        <div class="event-time"><span>${event.event_start}</span></div>
-                        <div class="event-location"><span>${event.location}</span></div>
-                    </div>
-                </div>
+                        <div class="background">
+                            <img src="${event.event_photo}" alt="">
+                        </div>
+                        <div class="content p-4">
+                            <div class="event-title">
+                                <a href="${route}">
+                                    ${event.name}
+                                </a>
+                            </div>
+                            <div class="event-desc">
+                                <div class="event-time"><span>${event.event_start}</span></div>
+                                <div class="event-location"><span>${event.location}</span></div>
+                                <div class="event-status"><span class="${style}">${event.status}</span></div>
+                            </div>
+                        </div>
             `;
                         eventsContainer.appendChild(eventElement);
                     });
@@ -338,5 +394,57 @@
         // Initial fetch
         fetchEvents('/api/upcoming-events', 'upcoming');
         fetchEvents('/api/featured-events', 'featured');
+
+        // Notification
+        const showNotify = (title, content) => {
+            notiTitle.textContent = title;
+            notiContent.innerHTML = content;
+            notifyBoard.classList.add("active");
+            overlay.classList.add("open");
+        }
+
+        const getNotifications = async () => {
+            const url = "{{ route('notifications.get') }}";
+            const response = await fetch(url);
+            const data = await response.json();
+            return data;
+        }
+
+
+        getNotifications().then((result) => {
+            if (result.status === "success") {
+                if (result.data.length > 0) {
+
+                    let currentNoti = 0;
+                    markNextNoti.textContent = currentNoti + 1 + "/" + result.data.length;
+
+
+                    showNotify(result.data[0].title, result.data[0].content);
+                    bell.classList.remove("hidden");
+                    bell.addEventListener('click', () => {
+                        overlay.classList.toggle("open");
+                        notifyBoard.classList.toggle("active");
+                    });
+
+                    btnCloseNoti.addEventListener('click', () => {
+                        notifyBoard.classList.remove("active")
+                        overlay.classList.remove("open");
+                    });
+
+                    btnNextNoti.addEventListener('click', () => {
+                        notifyBoard.classList.remove("active");
+                        currentNoti++;
+                        if (currentNoti >= result.data.length) {
+                            currentNoti = 0;
+                        }
+                        markNextNoti.textContent = currentNoti + 1 + "/" + result.data.length;
+                        showNotify(result.data[currentNoti].title, result.data[currentNoti].content);
+                        notifyBoard.classList.add("active");
+                    });
+                }
+            }
+        }).catch((err) => {
+            console.log(error);
+        });
     </script>
 @endsection

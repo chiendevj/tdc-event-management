@@ -8,6 +8,7 @@ use App\Http\Controllers\QrCodeGeneratorController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SocialShareController;
 use App\Http\Controllers\UploadController;
@@ -32,6 +33,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [EventController::class, 'getHomeEvents'])->name('home');
 Route::get('/api/upcoming-events', [EventController::class, 'fetchUpcomingEvents']);
 Route::get('/api/featured-events', [EventController::class, 'fetchFeaturedEvents']);
+Route::get('/api/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.get');
 
 Route::get('/tracuu', function () {
     return view('search');

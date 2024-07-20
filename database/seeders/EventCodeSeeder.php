@@ -14,6 +14,6 @@ class EventCodeSeeder extends Seeder
 
     public function run(): void
     {
+        
     }
-    
 }
