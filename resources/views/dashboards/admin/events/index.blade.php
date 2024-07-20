@@ -185,11 +185,13 @@
                     }
                 } else {
                     if (isSearching && searchPage === 1) {
-                        listEvents.innerHTML = '<p class="text-center text-red-500 absolute w-full">Không có sự kiện nào</p>';
+                        listEvents.innerHTML =
+                            '<p class="text-center text-red-500 absolute w-full">Không có sự kiện nào</p>';
                         preventLoad = true;
                         exportEvents = [];
-                    }else {
-                        listEvents.innerHTML = '<p class="text-center text-red-500 absolute w-full">Không có sự kiện nào</p>';
+                    } else {
+                        listEvents.innerHTML =
+                            '<p class="text-center text-red-500 absolute w-full">Không có sự kiện nào</p>';
                     }
                 }
             } catch (error) {
@@ -283,12 +285,12 @@
                                 @endcan
                                  @can('cancel event')
                                 ${!isCanceled ? `<a href="${routeCancel}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]" onclick="return confirmCancel(event)">
-                                                <i class="fa-light fa-ban"></i>
-                                                <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
-                                                    Hủy sự kiện
-                                                    <div class="tooltip-arrow absolute bottom-0"></div>
-                                                    </div>
-                                                    </a>` : ''}
+                                                    <i class="fa-light fa-ban"></i>
+                                                    <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
+                                                        Hủy sự kiện
+                                                        <div class="tooltip-arrow absolute bottom-0"></div>
+                                                        </div>
+                                                        </a>` : ''}
                                 @endcan
                                 @can('qr event')
                                         <a href="${routeQR}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">

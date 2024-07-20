@@ -272,3 +272,28 @@ header {
     color: white !important;
 }
 
+
+.tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid rgb(55 65 81);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.btn_action:hover .tooltip {
+    opacity: 1;
+}
+
+.tooltip {
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+.readed {
+    background-color: #22c55e;
+    color: white !important;
+}

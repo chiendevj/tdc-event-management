@@ -13,7 +13,7 @@
     </div>
 
     {{-- Notify board --}}
-    <div class="fixed notify_board bg-white shadow-lg p-8 rounded-lg top-[50%] left-[50%] z-50">
+    <div class="fixed notify_board w-[80%] lg:w-fit bg-white shadow-lg p-8 rounded-lg top-[50%] left-[50%] z-50">
         <button
             class="btn_close_noti absolute top-[-10px] right-[-10px] w-[30px] h-[30px] rounded-[50%] bg-white border shadow-sm flex items-center justify-center">
             <i class="fa-solid fa-times  hover:text-red-500 transition-all duration-100 ease-linear"></i>
@@ -23,10 +23,18 @@
                 <h3 class="uppercase text-red-500 font-bold text-lg text-center mb-2 noti-title"></h3>
                 <div class="noti-content"></div>
             </div>
-            <div class="mt-4 flex items-end justify-end w-full">
+            <div class="mt-4 flex items-end justify-end w-full gap-2">
                 <button
-                    class="btn_next_notify dot_mark_next_noti w-[40px] h-[40px] border shadow-sm rounded-[50%] flex items-center justify-center text-sm relative">
+                    class="btn_mark_readed w-[40px] text-green-500 h-[40px] btn_action border shadow-sm rounded-[50%] flex items-center justify-center text-sm relative">
+                    <i class="fa-solid fa-check"></i>
+                    <div
+                        class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
+                        Đánh dấu đã đọc thông báo, thông báo này sẽ không hiển thị nữa
+                        <div class="tooltip-arrow absolute bottom-0"></div>
+                    </div>
                 </button>
+                <button
+                    class="btn_next_notify dot_mark_next_noti w-[40px] h-[40px] border shadow-sm rounded-[50%] flex items-center justify-center text-sm relative">0/0</button>
             </div>
         </div>
     </div>
@@ -84,9 +92,15 @@
         const notiContent = document.querySelector('.noti-content');
         const markNextNoti = document.querySelector('.dot_mark_next_noti');
         const btnNextNoti = document.querySelector('.btn_next_notify');
+        const btnMarkReaded = document.querySelector('.btn_mark_readed');
         const SLIDE_TIMER = 5000;
+        let marked = [];
 
+        if (localStorage.getItem('readed_noti')) {
+            marked = JSON.parse(localStorage.getItem('readed_noti'));
+        }
 
+        console.log(marked);
 
         async function createSliderItems() {
             const url = "{{ route('events.get.featured') }}";
@@ -159,7 +173,6 @@
                 document.querySelector('.buttons').style.display = 'none';
             }
         })
-
 
         window.onresize = function(event) {
             reloadSlider();
@@ -396,11 +409,14 @@
         fetchEvents('/api/featured-events', 'featured');
 
         // Notification
-        const showNotify = (title, content) => {
+        const showNotify = (title, content, show = false) => {
             notiTitle.textContent = title;
             notiContent.innerHTML = content;
-            notifyBoard.classList.add("active");
-            overlay.classList.add("open");
+
+            if (show) {
+                notifyBoard.classList.add("active");
+                overlay.classList.add("open");
+            }
         }
 
         const getNotifications = async () => {
@@ -416,10 +432,22 @@
                 if (result.data.length > 0) {
 
                     let currentNoti = 0;
+
+                    while (currentNoti < result.data.length && marked.includes(result.data[currentNoti].id)) {
+                        currentNoti++;
+                    }
+
+
+                    if (currentNoti === result.data.length) {
+                        currentNoti = 0
+                        showNotify(result.data[currentNoti].title, result.data[currentNoti].content);
+                        btnMarkReaded.classList.add('readed');
+                    } else {
+                        showNotify(result.data[currentNoti].title, result.data[currentNoti].content, true);
+                    }
+
                     markNextNoti.textContent = currentNoti + 1 + "/" + result.data.length;
 
-
-                    showNotify(result.data[0].title, result.data[0].content);
                     bell.classList.remove("hidden");
                     bell.addEventListener('click', () => {
                         overlay.classList.toggle("open");
@@ -437,14 +465,28 @@
                         if (currentNoti >= result.data.length) {
                             currentNoti = 0;
                         }
+
+                        if (marked.includes(result.data[currentNoti].id)) {
+                            btnMarkReaded.classList.add('readed');
+                        } else {
+                            btnMarkReaded.classList.remove('readed');
+                        }
+
                         markNextNoti.textContent = currentNoti + 1 + "/" + result.data.length;
                         showNotify(result.data[currentNoti].title, result.data[currentNoti].content);
                         notifyBoard.classList.add("active");
                     });
+
+                    btnMarkReaded.addEventListener('click', () => {
+                        const currentNotiId = result.data[currentNoti].id;
+                        marked.push(currentNotiId);
+                        localStorage.setItem('readed_noti', JSON.stringify(marked));
+                        btnMarkReaded.classList.add('readed');
+                    });
                 }
             }
         }).catch((err) => {
-            console.log(error);
+            console.log(err);
         });
     </script>
 @endsection
