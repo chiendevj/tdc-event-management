@@ -88,9 +88,17 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->input('student_id');
+        // Delete student
+        $student = Student::find($id);
+        if (!$student) {
+            return redirect()->back()->with('error', 'Không tìm thấy sinh viên có mã số này.');
+        }
+
+        $student->delete();
+        return redirect()->back()->with('success', 'Xóa sinh viên thành công.');
     }
 
 

@@ -23,24 +23,26 @@
                 <form action="{{ route('submit.attendance') }}" method="post">
                     @csrf
                     <div class="mt-4">
-                        <label for="">Họ và tên <span>*</span> </label>
-                        <input type="text" name="fullname" placeholder="Nhập họ và tên của bạn">
-                        <p id="fullnameError" class="block text-[12px] text-red-500"></p>
-                    </div>
-                    <div class="mt-4">
                         <label for="">Mã số sinh viên <span>*</span></label>
                         <input type="text" name="student_id" placeholder="Nhập mã số sinh viên của bạn">
                         <p id="studentIdError" class="block text-[12px] text-red-500"></p>
                     </div>
-                    <div class="mt-4">
+                    <div class="mt-4 name_block">
+                        <label for="">Họ và tên <span>*</span></label>
+                        <input type="text" readonly name="fullname" placeholder="Nhập họ và tên của bạn">
+                        <p id="fullnameError" class="block text-[12px] text-red-500"></p>
+                    </div>
+                    <div class="mt-4 class_block">
                         <label for="">Lớp <span>*</span></label>
-                        <input type="text" name="class" placeholder="Nhập lớp của bạn">
+                        <input type="text" readonly name="class" placeholder="Nhập lớp của bạn">
                         <p id="classError" class="block text-[12px] text-red-500"></p>
                     </div>
+                    <button class="btn-confirm-info" type="button">Xác minh thông tin</button>
+                    <button class="btn-cancel-confirm hidden" type="button">Thông tin không chính xác</button>
                     <div class="mt-4">
                         <input type="hidden" name="event_id" value="{{ $event['id'] }}">
                         <input type="hidden" name="code" value="{{ $event['code'] }}">
-                        <button class="btn-attended" type="submit">Gửi</button>
+                        <button class="btn-attended hidden" type="submit">Gửi</button>
                     </div>
                 </form>
             </div>
@@ -58,6 +60,11 @@
         const fullnameError = document.getElementById('fullnameError');
         const studentIdError = document.getElementById('studentIdError');
         const classError = document.getElementById('classError');
+        const nameBlock = document.querySelector('.name_block');
+        const classBlock = document.querySelector('.class_block');
+        const btnConfirmInfo = document.querySelector('.btn-confirm-info');
+        const btnCancelConfirm = document.querySelector('.btn-cancel-confirm');
+        let checkInfor = false;
 
         // Định nghĩa các biểu thức regex và thông báo lỗi
         const regexPatterns = {
@@ -123,6 +130,51 @@
         classInput.addEventListener('input', function() {
             this.value = this.value.toUpperCase();
             validateInput(this, regexPatterns.class, errorMessages.class, classError);
+        });
+
+        // Sự kiện click cho nút xác minh thông tin
+        btnConfirmInfo.addEventListener('click', function(studentId) {
+            if (!checkInfor) {
+                if (studentIdInput.value !== '') {
+                    checkInfor = true;
+                    const url = '{{ route('students.get', ':studentId') }}'.replace(':studentId', studentIdInput
+                        .value);
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                fullnameInput.value = data.data.fullname;
+                                classInput.value = data.data.classname;
+                                nameBlock.classList.add('confirmed');
+                                classBlock.classList.add('confirmed');
+                                btnConfirmInfo.textContent = 'Đây là thông tin của bạn ?';
+                                btnCancelConfirm.classList.remove('hidden');
+                            } else {
+                                studentIdError.innerHTML = "Mã số sinh viên không tồn tại";
+                                studentIdInput.style.borderBottom = '1px solid red';
+                            }
+                        });
+                } else {
+                    studentIdError.innerHTML = "Vui lòng nhập mã số sinh viên";
+                    studentIdInput.style.borderBottom = '1px solid red';
+                }
+            }else {
+                document.querySelector('.btn-attended').classList.remove('hidden');
+                btnCancelConfirm.classList.add('hidden');
+                btnConfirmInfo.classList.add('hidden');
+                checkInfor = false;
+            }
+        });
+
+        // Sự kiện click cho nút hủy xác minh thông tin
+        btnCancelConfirm.addEventListener('click', function() {
+            fullnameInput.value = '';
+            classInput.value = '';
+            nameBlock.classList.remove('confirmed');
+            classBlock.classList.remove('confirmed');
+            btnConfirmInfo.textContent = 'Xác minh thông tin';
+            btnCancelConfirm.classList.add('hidden');
+            checkInfor = false;
         });
     </script>
 @endsection

@@ -169,7 +169,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/events/students/total/participants', [StudentController::class, 'getTotalStudentsParticipatedInEvents'])->name("students.events.participants.total");
     // Route for import students from excel
     Route::post('/import/students', [ExcelController::class, 'import'])->name('excel.students.import');
-
+    // Route for delete student
+    Route::post('admin/dashboard/students/delete', [StudentController::class, 'destroy'])->name('students.delete');
 
 
     /**
