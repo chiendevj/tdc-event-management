@@ -18,7 +18,9 @@
                 </h3>
                 <input type="file" hidden id="import_students" name="import_students">
             </label>
-            <button class="mt-4 w-full btn_submit_import p-2 rounded-sm text-white bg-[var(--dark-bg)] flex items-center justify-center gap-3" type="submit">Nhập dữ liệu
+            <button
+                class="mt-4 w-full btn_submit_import p-2 rounded-sm text-white bg-[var(--dark-bg)] flex items-center justify-center gap-3"
+                type="submit">Nhập dữ liệu
                 <div class="fetching_data hidden animate-spin">
                     <i class="fa-duotone fa-solid fa-spinner-third"></i>
                 </div>
@@ -135,19 +137,37 @@
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
             <div
-                class="inline-block align-bottom bg-gray-100 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full lg:max-w-4xl xl:max-w-6xl">
+                class="inline-block align-bottom bg-gray-100 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full lg:max-w-4xl xl:max-w-6xl">
                 <div class="bg-gray-100 p-6">
                     <div class="flex justify-between items-center mb-2">
-                        <h2 class="text-xl font-semibold model_title">Chi tiết tham gia sự kiện của sinh viên</h2>
+                        <h2 class="text-xl font-semibold model_title uppercase">Chi tiết tham gia sự kiện của sinh viên</h2>
                         <button class="text-gray-600 hover:text-gray-900 text-3xl" onclick="closeModal()">&times;</button>
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-4 flex items-center justify-start gap-2">
                         <button id="exportStudentDetail"
-                            class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-sm ease-in transition-all">Xuất
-                            toàn bộ thông tin tham gia sự kiện ra Excel
+                            class="btn_action relative bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-sm ease-in transition-all">
+                            <i class="fa-light fa-file-excel"></i>
+                            <div
+                                class="absolute z-10 w-fit text-nowrap top-[-100%] left-[50%] translate-x-[-50%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
+                                Xuất toàn bộ danh sách sự kiện ra Excel
+                                <div class="tooltip-arrow absolute bottom-0"></div>
+                            </div>
                         </button>
+                        <form id="deleteStudent" action="{{ route('students.delete') }}" method="POST"
+                            class="btn_action relative bg-red-500 hover:bg-red-600 text-white rounded-sm ease-in transition-all">
+                            @csrf
+                            <button class="btn_delete_student w-full h-full py-2 px-4" type="button">
+                                <i class="fa-light fa-trash"></i>
+                            </button>
+                            <input type="text" name="student_id" id="student_id" hidden>
+                            <div
+                                class="absolute z-10 w-fit text-nowrap top-[-100%] left-[50%] translate-x-[-50%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
+                                Xóa sinh viên khỏi hệ thống
+                                <div class="tooltip-arrow absolute bottom-0"></div>
+                            </div>
+                        </form>
                     </div>
-                    <div id="studentDetailContent" class="rounded-sm overflow-hidden">
+                    <div id="studentDetailContent" class="rounded-sm">
                         <!-- Nội dung chi tiết sự kiện sẽ được tải vào đây -->
                     </div>
                     <canvas id="eventChart" width="400" height="200" class="hidden"></canvas>
@@ -171,6 +191,9 @@
         const btnCloseImportForm = document.querySelector('.btn_close_import_form');
         const overlay = document.querySelector('.overlay');
         const btnSubmitImport = document.querySelector('.btn_submit_import');
+        const formDeleteStudent = document.getElementById('deleteStudent');
+        const btnDeleteStudent = document.querySelector('.btn_delete_student');
+        const inputStudentId = document.getElementById('student_id');
 
 
         filterOption.addEventListener('change', function() {
@@ -194,24 +217,38 @@
                         const student = data.data;
                         const detail = document.createElement('div');
                         detail.innerHTML = `
-                        <p>Mã số sinh viên: ${student.id}</p>
-                        <p>Họ và tên: ${student.fullname}</p>
-                        <p>Lớp: ${student.classname}</p>
-                        <p>Số sự kiện tham gia: ${student.events_count}</p>
+                        <p><span class="font-semibold">Mã số sinh viên:</span> ${student.id}</p>
+                        <p><span class="font-semibold">Họ và tên:</span> ${student.fullname}</p>
+                        <p><span class="font-semibold">Lớp:</span> ${student.classname}</p>
+                        <p><span class="font-semibold">Số sự kiện tham gia:</span> ${student.events_count}</p>
                       `;
 
                         studentContent.appendChild(detail);
 
+                        btnDeleteStudent.addEventListener('click', () => {
+                            inputStudentId.value = studentId;
+                            // confirm delete
+                            if (!confirm('Bạn có chắc chắn muốn xóa sinh viên này không?')) {
+                                return;
+                            }
+
+                            formDeleteStudent.submit();
+                        });
 
                         academics.forEach(academic => {
-                            console.log(academic);
                             const listEvent = document.createElement('div');
                             listEvent.classList.add('list_event_participant', 'mb-4');
                             listEvent.innerHTML = `
                                <div class="flex items-center justify-between flex-col sm:flex-row lg:flex-row xl:flex-row">
                                      <h3 class="text-left font-semibold my-4">Danh sách sự kiện đã tham gia (${academic.academic_period})</h3>
                                       <button id="exportStudentDetailSemester${academic.academic_period_id}"
-                                        class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-sm ease-in transition-all">Xuất danh sách sự kiện ra Excel
+                                        class="btn_action relative bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-sm ease-in transition-all">
+                                        <i class="fa-light fa-file-excel"></i>
+                                        <div
+                                            class="absolute z-10 w-fit text-nowrap top-[-100%] left-[50%] translate-x-[-50%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
+                                            Xuất danh sách sự kiện ra Excel
+                                            <div class="tooltip-arrow absolute bottom-0"></div>
+                                        </div>
                                     </button>
                                 </div>
                                 <div class="rounded-sm overflow-hidden">
@@ -232,25 +269,25 @@
                                         </thead>
                                         <tbody>
                                             ${academic.events.map((event, index) => {
-                                            const route = "{{ route('events.show', ':eventId') }}".replace(':eventId', event.id);
-                                            return `
-                                                                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                                                                <th scope="row"
-                                                                                                    class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
-                                                                                                    ${event.name}
-                                                                                                </th>
-                                                                                                <td class="px-6 py-4 text-center">
-                                                                                                    ${event.participants_count}
-                                                                                                </td>
-                                                                                                <td class="px-6 py-4 text-center">
-                                                                                                    <div class="flex items-center justify-center gap-3">
-                                                                                                        <a href="${route}">
-                                                                                                            Chi tiết
-                                                                                                        </a>
-                                                                                                    </div>
-                                                                                                </td>
-                                                                                            </tr>
-                                                                                        `;
+                                                const route = "{{ route('events.show', ':eventId') }}".replace(':eventId', event.id);
+                                                return `
+                                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                                <th scope="row"
+                                                                    class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
+                                                                    ${event.name}
+                                                                </th>
+                                                                <td class="px-6 py-4 text-center">
+                                                                    ${event.participants_count}
+                                                                </td>
+                                                                <td class="px-6 py-4 text-center">
+                                                                    <div class="flex items-center justify-center gap-3">
+                                                                        <a href="${route}">
+                                                                            Chi tiết
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        `;
                                             }).join('')}
                                         </tbody>
                                     </table>
