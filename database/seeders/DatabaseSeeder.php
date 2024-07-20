@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             EventsTableSeeder::class,
             StudentSeeder::class,
             AcademicPeriodsTableSeeder::class,
+            NotificationSeeder::class,
         ]);
 
     }

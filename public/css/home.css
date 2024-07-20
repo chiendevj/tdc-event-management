@@ -87,6 +87,20 @@ body {
     border-radius: 99px;
 }
 
+.event-card .event-cancel span {
+    font-weight: 600;
+    background: var(--red);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 99px;
+}
+
+.event-card .event-status span {
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 99px;
+}
+
 @media (min-width: 768px) {
     .event-card .event-title a {
         font-size: 20px;
@@ -237,3 +251,24 @@ header {
         background-position: 200% 50%;
     }
 }
+
+.event-past {
+    background-color: #4b4b4b !important;
+    color: white !important;
+}
+
+.event-ongoing {
+    background-color: #1dd1a1 !important;
+    color: white !important;
+}
+
+.event-upcoming {
+    background-color: #0abde3 !important;
+    color: white !important;
+}
+
+.event-cancelled {
+    background-color: #ff6b6b !important;
+    color: white !important;
+}
+

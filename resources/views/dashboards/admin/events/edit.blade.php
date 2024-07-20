@@ -91,14 +91,14 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-col lg:flex-row xl:flex-row gap-8 sm:gap-8 lg:gap-3 xl:gap-3 mt-8">
-                    <label for="point" class="flex flex-col items-start gap-2 w-full">
+                    {{-- <label for="point" class="flex flex-col items-start gap-2 w-full">
                         <span class="text-sm">Điểm tham gia sự kiện <span class="text-sm text-red-500">*</span></span>
                         <input type="number" name="point" id="point" class="p-2 border rounded-sm outline-none w-full"
                             value="{{ old('point', $event->point) }}">
                         @error('point')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
-                    </label>
+                    </label> --}}
 
                     <label for="status" class="flex flex-col items-start gap-2 w-full">
                         <span class="text-sm">Trạng thái của sự kiện <span class="text-sm text-red-500">*</span></span>
