@@ -235,7 +235,14 @@ header {
 
 .temp_text {
     background: rgb(0, 0, 0);
-    background: linear-gradient(90deg, rgb(4, 57, 127) 0%, rgba(255,255,255,1) 4%, rgb(4, 57, 127) 8%, rgb(4, 57, 127) 100%, rgb(4, 57, 127) 100%);
+    background: linear-gradient(
+        90deg,
+        rgb(4, 57, 127) 0%,
+        rgba(255, 255, 255, 1) 4%,
+        rgb(4, 57, 127) 8%,
+        rgb(4, 57, 127) 100%,
+        rgb(4, 57, 127) 100%
+    );
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
@@ -272,7 +279,6 @@ header {
     color: white !important;
 }
 
-
 .tooltip-arrow {
     width: 0;
     height: 0;
@@ -296,4 +302,15 @@ header {
 .readed {
     background-color: #22c55e;
     color: white !important;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.noti-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.noti-content {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }

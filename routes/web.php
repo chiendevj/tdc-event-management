@@ -173,6 +173,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/import/students', [ExcelController::class, 'import'])->name('excel.students.import');
     // Route for delete student
     Route::post('admin/dashboard/students/delete', [StudentController::class, 'destroy'])->name('students.delete');
+    // Seawrch students
+    Route::get('admin/dashboard/students/search/{searchValue}', [StudentController::class, 'searchStudents'])->name('students.search');
 
 
     /**
