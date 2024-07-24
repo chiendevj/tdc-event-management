@@ -21,7 +21,7 @@
         <div class="flex items-center justify-center flex-col">
             <div class="mt-4">
                 <h3 class="uppercase text-red-500 font-bold text-lg text-center mb-2 noti-title"></h3>
-                <div class="noti-content"></div>
+                <div class="noti-content max-h-[65vh] overflow-auto"></div>
             </div>
             <div class="mt-4 flex items-end justify-end w-full gap-2">
                 <button

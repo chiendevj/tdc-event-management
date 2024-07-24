@@ -271,23 +271,23 @@
                                             ${academic.events.map((event, index) => {
                                                 const route = "{{ route('events.show', ':eventId') }}".replace(':eventId', event.id);
                                                 return `
-                                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                                <th scope="row"
-                                                                    class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
-                                                                    ${event.name}
-                                                                </th>
-                                                                <td class="px-6 py-4 text-center">
-                                                                    ${event.participants_count}
-                                                                </td>
-                                                                <td class="px-6 py-4 text-center">
-                                                                    <div class="flex items-center justify-center gap-3">
-                                                                        <a href="${route}">
-                                                                            Chi tiết
-                                                                        </a>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        `;
+                                                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                                        <th scope="row"
+                                                                            class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
+                                                                            ${event.name}
+                                                                        </th>
+                                                                        <td class="px-6 py-4 text-center">
+                                                                            ${event.participants_count}
+                                                                        </td>
+                                                                        <td class="px-6 py-4 text-center">
+                                                                            <div class="flex items-center justify-center gap-3">
+                                                                                <a href="${route}">
+                                                                                    Chi tiết
+                                                                                </a>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                `;
                                             }).join('')}
                                         </tbody>
                                     </table>
@@ -326,8 +326,7 @@
 
             paginationBar.classList.add('hidden');
 
-
-            const url = "{{ route('students.get', ':studentId') }}".replace(':studentId', value);
+            const url = "{{ route('students.search', ':searchValue') }}".replace(':searchValue', value);
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             fetch(url, {
@@ -341,33 +340,42 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === "success") {
-                        const student = data.data;
-                        tableBody.innerHTML = `
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
-                                    1
-                                </th>
-                                <td class="px-6 py-4 text-center">
-                                    ${student.fullname}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    ${student.id}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    ${student.classname}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    ${student.events.length}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <button class="text-blue-600 hover:underline"
-                                        onclick="showStudentEventDetail('${student.id}')">
-                                        Chi tiết
-                                    </button>
-                                </td>
-                            </tr>
-                      `;
+                        tableBody.innerHTML = '';
+                        const students = data.data.data;
+                        console.log(students);
+                        if (students.length > 0) {
+                            students.forEach((student, index) => {
+                                tableBody.innerHTML += `
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 dark:text-white break-words whitespace-normal">
+                                        ${index + 1}
+                                    </th>
+                                    <td class="px-6 py-4 text-center">
+                                        ${student.fullname}
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        ${student.id}
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        ${student.classname}
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        ${student.events_count}
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <button class="text-blue-600 hover:underline"
+                                            onclick="showStudentEventDetail('${student.id}')">
+                                            Chi tiết
+                                        </button>
+                                    </td>
+                                </tr>
+                        `;
+                            })
+                        } else {
+                            tableBody.innerHTML =
+                                `<tr><td colspan="6" class="text-center p-4 text-red-500">Không tìm thấy sinh viên</td></tr>`;
+                        }
                     } else {
                         tableBody.innerHTML =
                             `<tr><td colspan="6" class="text-center p-4 text-red-500">Không tìm thấy sinh viên</td></tr>`;

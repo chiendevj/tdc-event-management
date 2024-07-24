@@ -201,6 +201,22 @@ class StudentController extends Controller
         ]);
     }
 
+    public function searchStudents($searchValue)
+    {
+        $students = Student::where('id', 'like', '%' . $searchValue . '%')
+            ->orWhere('fullname', 'like', '%' . $searchValue . '%')
+            ->orWhere('classname', 'like', '%' . $searchValue . '%')
+            ->withCount('events')
+            ->orderByDesc('events_count')
+            ->paginate(20);
+
+            return response()->json([
+                "data" => $students,
+                "status" => "success",
+                "message" => "Search students successfully!"
+            ]);
+    }
+
     public function exportStudentEvents($studentId, $academicPeriodId)
     {
         $student = Student::find($studentId);

@@ -724,7 +724,10 @@ class EventController extends Controller
         $notification->title = 'Thông báo hủy sự kiện';
         $eventDate = \Carbon\Carbon::parse($event->event_start)->format('d/m/Y');
 
-        $notification->content = "<p>Kính gửi quý thầy cô và các em học sinh,</p>
+        $photo = url($event->event_photo);
+
+        $notification->content = "<img src='$photo' alt='Ảnh sự kiện' class='my-4 rounded-lg'/>
+            <p>Kính gửi quý thầy cô và các em học sinh,</p>
             <p>Chúng tôi rất tiếc phải thông báo rằng sự kiện <strong>$event->name</strong> dự kiến diễn ra
                 vào ngày <strong>$eventDate</strong> tại <strong>Trường Cao Đẳng Công Nghệ Thủ Đức</strong> sẽ bị hủy bỏ do
                 <strong>một số lý do ngoài ý muốn.</strong>.</p>
