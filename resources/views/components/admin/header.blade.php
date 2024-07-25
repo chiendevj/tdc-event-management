@@ -84,7 +84,7 @@
                     </ul>
                 </li>
             </ul>
-        </div>
+    </div>
         {{-- Navbar end --}}
 
         <div class="admin flex items-center justify-start gap-2 relative">
