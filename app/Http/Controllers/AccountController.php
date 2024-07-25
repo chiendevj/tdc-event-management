@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -59,34 +60,36 @@ class AccountController extends Controller
 
     public function update(Request $request, User $account)
     {
-        // Validate the request
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $account->id,
-            'password' => 'nullable|min:8|confirmed',
+            'password' => 'nullable',
             'role' => 'required_if:role_select,true|exists:roles,name'
         ]);
 
-        // Update account details
         $account->update([
             'name' => $request->name,
             'email' => $request->email,
         ]);
 
-        // If password is provided, update it
-        if ($request->filled('password')) {
-            $account->update([
-                'password' => bcrypt($request->password),
-            ]);
+        if ($request->password) {
+            if (!Hash::check($request->password, $account->password)) {
+                $account->update([
+                    'password' => bcrypt($request->password),
+                ]);
+            } else {
+                return redirect()->route('accounts.index')->with('error', 'Mật khẩu mới không được trùng với mật khẩu cũ.');
+            }
         }
 
-        // Update role if the user is not a super-admin
         if (!$account->hasRole('super-admin')) {
             $account->syncRoles([$request->role]);
         }
 
         return redirect()->route('accounts.index')->with('success', 'Cập nhật tài khoản thành công.');
     }
+
+
 
     public function destroy(User $account)
     {
