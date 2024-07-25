@@ -283,24 +283,34 @@ class EventController extends Controller
      * @return \Illuminate\Contracts\View\View
      */
     public function show($id, Request $request)
-    {
-        $event = Event::find($id);
-        $students = Student::where('event_id', $id)
-            ->join('event_registers', 'event_registers.student_id', '=', 'students.id')
-            ->select('students.*')
-            ->get();
+{
+    $event = Event::find($id);
+    $students = Student::where('event_id', $id)
+        ->join('event_registers', 'event_registers.student_id', '=', 'students.id')
+        ->select('students.*')
+        ->get();
 
-        $classCounts = Student::where('event_id', $id)
-            ->join('event_registers', 'event_registers.student_id', '=', 'students.id')
-            ->select('students.classname', DB::raw('count(*) as count'))
-            ->groupBy('students.classname')
-            ->pluck('count', 'students.classname')
-            ->toArray();
+    $classCounts = Student::where('event_id', $id)
+        ->join('event_registers', 'event_registers.student_id', '=', 'students.id')
+        ->select('students.classname', DB::raw('count(*) as count'))
+        ->groupBy('students.classname')
+        ->pluck('count', 'students.classname')
+        ->toArray();
 
-        $nonce = Str::random(8);
-        // dd($classCounts);
-        return view('dashboards.admin.events.show', ['event' => $event, 'students' => $students, 'classCounts' => $classCounts])->with('title', $event->name)->with('url', $request->url())->with('image', url($event->event_photo))->with('nonce', $nonce);
-    }
+    $nonce = Str::random(8);
+
+    // Tạo URL giao diện người dùng
+    $userFacingUrl = url("/sukien/{$id}");
+    return view('dashboards.admin.events.show', [
+        'event' => $event,
+        'students' => $students,
+        'classCounts' => $classCounts
+    ])->with('title', $event->name)
+      ->with('url', $userFacingUrl)
+      ->with('image', url($event->event_photo))
+      ->with('nonce', $nonce);
+}
+
 
     /**
      * Display the details of an event.
