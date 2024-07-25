@@ -7,6 +7,7 @@ use App\Models\EventCode;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -14,12 +15,34 @@ class QrCodeGeneratorController extends Controller
 {
     public function create($id)
     {
-        $codeCount = EventCode::where('event_id', $id)->count();
+        $totalCount = EventCode::where('event_id', $id)->count();
+        $countCreatedCodes = DB::select('
+        SELECT DATE_FORMAT(created_at, \'%Y-%m-%d %H:%i\') as datetime, COUNT(*) as count
+        FROM event_codes
+        WHERE event_id = :event_id
+        GROUP BY datetime
+        ORDER BY datetime DESC',
+         ['event_id' => $id]);
+
         return view('dashboards.admin.qr-codes.create', [
             'eventId' => $id,
-            'codeCount' => $codeCount
+            'totalCount' => $totalCount,
+            'countCreatedCodes' => $countCreatedCodes
         ]);
     }
+
+    public function deleteQRByDate(Request $request, $id){
+        $datetime = $request->input('datetime');
+        DB::table('event_codes')
+            ->where('event_id', $id)
+            ->whereRaw('DATE_FORMAT(created_at, \'%Y-%m-%d %H:%i\') = ?', [$datetime])
+            ->delete();
+
+        return redirect()->back()->with('status', 'QR Codes deleted successfully.');
+
+    }
+
+
     public function store(Request $request, $id) {
         $eventId = $id;
         $quantity = $request->input('quantity', 1);
@@ -52,12 +75,9 @@ class QrCodeGeneratorController extends Controller
             flush();
         }
 
-        return redirect()->route('qr-codes.show', ['id' => $eventId]);
+        return response()->json(['success' => true]);
     }
 
-    public function generateEventCodeRegister() {
-        
-    }
 
     public function show(String $id) {
         $qrCodes = [];
@@ -72,8 +92,6 @@ class QrCodeGeneratorController extends Controller
             ];
         }
 
-        $eventName =  $event->name;
-
-        return view('dashboards.admin.qr-codes.show', ['qrCodes' => $qrCodes, 'event_name' => $eventName]);
+        return view('dashboards.admin.qr-codes.show', ['qrCodes' => $qrCodes, 'event' => $event]);
     }
 }

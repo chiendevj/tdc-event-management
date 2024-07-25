@@ -19,9 +19,9 @@
             <div class="w-full md:w-1/3 mb-6 text-center">
                 {{-- <h2 class="text-xl font-bold">Điều hướng</h2> --}}
                 <ul class="mt-2">
-                    <li><a href="{{ route('dashboard') }}" class="hover:text-yellow-300">Trang chủ</a></li>
-                    <li><a href="{{ route('events.index') }}" class="hover:text-yellow-300">Sự kiện</a></li>
-                    <li><a href="{{ route('statisticals.index') }}" class="hover:text-yellow-300">Thống kê</a></li>
+                    <li><a href="{{ route('home') }}" class="hover:text-yellow-300">Trang chủ</a></li>
+                    <li><a href="{{ route('calendar-event') }}" class="hover:text-yellow-300">Lịch sự kiện</a></li>
+                    <li><a href="{{ route('tra-cuu') }}" class="hover:text-yellow-300">Tra cứu</a></li>
                 </ul>
             </div>
             <!-- Liên hệ -->

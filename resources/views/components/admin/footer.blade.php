@@ -15,6 +15,14 @@
                     <a href="#" class="text-white hover:text-blue-700 mr-4"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
+            <!-- Điều hướng -->
+            <div class="w-full md:w-1/3 mb-6 text-center">
+                <ul class="mt-2">
+                    <li><a href="{{ route('dashboard') }}" class="hover:text-yellow-300">Trang chủ</a></li>
+                    <li><a href="{{ route('events.index') }}" class="hover:text-yellow-300">Sự kiện</a></li>
+                    <li><a href="{{ route('statisticals.index') }}" class="hover:text-yellow-300">Thống kê</a></li>
+                </ul>
+            </div>
             <!-- Liên hệ -->
             <div class="w-full md:w-1/2 mb-6 text-right">
                 <h2 class="text-xl font-bold">Liên hệ</h2>
