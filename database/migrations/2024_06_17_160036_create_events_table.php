@@ -19,8 +19,8 @@ return new class extends Migration
             $table->timestamp('event_start')->useCurrent();
             $table->timestamp('event_end')->useCurrent();
             // $table->integer('point')->default(4);
-            $table->timestamp('registration_start')->useCurrent();
-            $table->timestamp('registration_end')->useCurrent();
+            $table->timestamp('registration_start')->nullable();
+            $table->timestamp('registration_end')->nullable();
             $table->integer('registration_count')->default(0);
             $table->text('content')->nullable();
             $table->text('registration_link')->nullable();
