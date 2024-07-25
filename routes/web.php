@@ -137,6 +137,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/dashboard/events/{id}/qr-codes', [QrCodeGeneratorController::class, 'create'])->name("qr-codes.create");
     Route::get('admin/dashboard/events/{id}/qr-codes/show', [QrCodeGeneratorController::class, 'show'])->name("qr-codes.show");
     Route::post('admin/dashboard/events/{id}/qr-codes', [QrCodeGeneratorController::class, 'store'])->name("qr-codes.store");
+    Route::delete('admin/dashboard/events/{id}/qr-codes', [QrCodeGeneratorController::class, 'deleteQRByDate'])->name("qr-codes.delete");
     // Route for load more events, search events
     Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
     Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");

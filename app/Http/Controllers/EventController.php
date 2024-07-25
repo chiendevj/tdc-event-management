@@ -227,7 +227,7 @@ class EventController extends Controller
     {
         $page = $request->input('page', 1);
         $events = Event::where('status', 'like', 'Sắp diễn ra')->where('is_trash', '<>', 1)
-            ->paginate(2, ['*'], 'page', $page);
+            ->paginate(8, ['*'], 'page', $page);
         return response()->json($events);
     }
 
@@ -248,7 +248,7 @@ class EventController extends Controller
             ->groupBy('events.id')
             ->orderByDesc('student_count')
             ->where('is_trash', '<>', 1)
-            ->paginate(2, ['*'], 'page');
+            ->paginate(8, ['*'], 'page');
         return response()->json($events);
     }
 
