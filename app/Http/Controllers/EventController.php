@@ -76,8 +76,6 @@ class EventController extends Controller
             'event_start' => 'required|date',
             'event_end' => 'required|date',
             'location' => 'required',
-            'registration_start' => 'required|date',
-            'registration_end' => 'required|date',
             'content' => 'required',
             'status' => 'required',
         ];
@@ -92,10 +90,6 @@ class EventController extends Controller
             'event_end.required' => 'Vui lòng chọn thời gian kết thúc sự kiện.',
             'event_end.date' => 'Định dạng thời gian của ngày kết thúc sự kiện không hợp lệ.',
             'location.required' => 'Vui lòng nhập địa điểm diễn ra sự kiện.',
-            'registration_start.required' => 'Vui lòng chọn thời gian mở đăng ký tham gia sự kiện.',
-            'registration_start.date' => 'Định dạng thời gian của thời gian mở đăng ký tham gia sự kiện không hợp lệ.',
-            'registration_end.required' => 'Vui lòng chọn thời gian đóng đăng ký tham gia sự kiện.',
-            'registration_end.date' => 'Định dạng thời gian của thời gian đóng đăng ký tham gia sự kiện không hợp lệ.',
             'content.required' => 'Hãy thêm một số nội dung cho sự kiện này.',
             'status.required' => 'Vui lòng chọn trạng thái sự kiện.'
         ];
@@ -110,19 +104,39 @@ class EventController extends Controller
                 ->withInput();
         }
 
-        // Check if the registration end time is before the registration start time
-        if (strtotime($request->registration_end) <= strtotime($request->registration_start)) {
+        if (isset($request->registration_start) && !isset($request->registration_end)) {
             return redirect()->back()
-                ->withErrors(['registration_end' => 'Thời gian đóng đăng ký tham gia sự kiện phải sau thời gian mở.'])
+                ->withErrors(['registration_end' => 'Vui lòng chọn thời gian kết thúc đăng ký sự kiện.'])
                 ->withInput();
         }
 
-        // Check if the event start time is before the registration start time
-        if (strtotime($request->event_start) <= strtotime($request->registration_start)) {
+        if (!isset($request->registration_start) && isset($request->registration_end)) {
             return redirect()->back()
-                ->withErrors(['registration_start' => 'Thời gian mở đăng ký sự kiện phải trước thời gian bắt đầu sự kiện.'])
+                ->withErrors(['registration_start' => 'Vui lòng chọn thời gian bắt đầu đăng ký sự kiện.'])
                 ->withInput();
         }
+
+        if (isset($request->registration_start) && isset($request->registration_end)) {
+            // Valid here
+            $validatedData['registration_start'] = $request->registration_start;
+            $validatedData['registration_end'] = $request->registration_end;
+
+            // Check if the registration end time is before the registration start time
+            if (strtotime($request->registration_end) <= strtotime($request->registration_start)) {
+                return redirect()->back()
+                    ->withErrors(['registration_end' => 'Thời gian đóng đăng ký tham gia sự kiện phải sau thời gian mở.'])
+                    ->withInput();
+            }
+
+            // Check if the event start time is before the registration start time
+            if (strtotime($request->event_start) <= strtotime($request->registration_start)) {
+                return redirect()->back()
+                    ->withErrors(['registration_start' => 'Thời gian mở đăng ký sự kiện phải trước thời gian bắt đầu sự kiện.'])
+                    ->withInput();
+            }
+        }
+
+
 
         // Handle the event photo upload
         if ($request->hasFile('event_photo')) {
@@ -173,7 +187,7 @@ class EventController extends Controller
 
             // Save the event
             $event->save();
-            return redirect()->back()->with('success', 'Sự kiện đã được tạo thành công.');
+            return redirect()->route('events.index')->with('success', 'Sự kiện đã được tạo thành công.');
         } else {
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi tạo sự kiện.');
         }
@@ -283,33 +297,33 @@ class EventController extends Controller
      * @return \Illuminate\Contracts\View\View
      */
     public function show($id, Request $request)
-{
-    $event = Event::find($id);
-    $students = Student::where('event_id', $id)
-        ->join('event_registers', 'event_registers.student_id', '=', 'students.id')
-        ->select('students.*')
-        ->get();
+    {
+        $event = Event::find($id);
+        $students = Student::where('event_id', $id)
+            ->join('event_registers', 'event_registers.student_id', '=', 'students.id')
+            ->select('students.*')
+            ->get();
 
-    $classCounts = Student::where('event_id', $id)
-        ->join('event_registers', 'event_registers.student_id', '=', 'students.id')
-        ->select('students.classname', DB::raw('count(*) as count'))
-        ->groupBy('students.classname')
-        ->pluck('count', 'students.classname')
-        ->toArray();
+        $classCounts = Student::where('event_id', $id)
+            ->join('event_registers', 'event_registers.student_id', '=', 'students.id')
+            ->select('students.classname', DB::raw('count(*) as count'))
+            ->groupBy('students.classname')
+            ->pluck('count', 'students.classname')
+            ->toArray();
 
-    $nonce = Str::random(8);
+        $nonce = Str::random(8);
 
-    // Tạo URL giao diện người dùng
-    $userFacingUrl = url("/sukien/{$id}");
-    return view('dashboards.admin.events.show', [
-        'event' => $event,
-        'students' => $students,
-        'classCounts' => $classCounts
-    ])->with('title', $event->name)
-      ->with('url', $userFacingUrl)
-      ->with('image', url($event->event_photo))
-      ->with('nonce', $nonce);
-}
+        // Tạo URL giao diện người dùng
+        $userFacingUrl = url("/sukien/{$id}");
+        return view('dashboards.admin.events.show', [
+            'event' => $event,
+            'students' => $students,
+            'classCounts' => $classCounts
+        ])->with('title', $event->name)
+            ->with('url', $userFacingUrl)
+            ->with('image', url($event->event_photo))
+            ->with('nonce', $nonce);
+    }
 
 
     /**
@@ -492,8 +506,6 @@ class EventController extends Controller
             'event_start' => 'required|date',
             'event_end' => 'required|date',
             'location' => 'required',
-            'registration_start' => 'required|date',
-            'registration_end' => 'required|date',
             'content' => 'required',
             'status' => 'required',
         ];
@@ -506,10 +518,6 @@ class EventController extends Controller
             'event_end.required' => 'Vui lòng chọn thời gian kết thúc sự kiện.',
             'event_end.date' => 'Định dạng thời gian của ngày kết thúc sự kiện không hợp lệ.',
             'location.required' => 'Vui lòng nhập địa điểm diễn ra sự kiện.',
-            'registration_start.required' => 'Vui lòng chọn thời gian mở đăng ký tham gia sự kiện.',
-            'registration_start.date' => 'Định dạng thời gian của thời gian mở đăng ký tham gia sự kiện không hợp lệ.',
-            'registration_end.required' => 'Vui lòng chọn thời gian đóng đăng ký tham gia sự kiện.',
-            'registration_end.date' => 'Định dạng thời gian của thời gian đóng đăng ký tham gia sự kiện không hợp lệ.',
             'content.required' => 'Hãy thêm một số nội dung cho sự kiện này.',
             'status.required' => 'Vui lòng chọn trạng thái sự kiện.'
         ];
@@ -522,16 +530,36 @@ class EventController extends Controller
                 ->withInput();
         }
 
-        if (strtotime($request->registration_end) <= strtotime($request->registration_start)) {
+        if (isset($request->registration_start) && !isset($request->registration_end)) {
             return redirect()->back()
-                ->withErrors(['registration_end' => 'Thời gian đóng đăng ký tham gia sự kiện phải sau thời gian mở.'])
+                ->withErrors(['registration_end' => 'Vui lòng chọn thời gian kết thúc đăng ký sự kiện.'])
                 ->withInput();
         }
 
-        if (strtotime($request->event_start) <= strtotime($request->registration_start)) {
+        if (!isset($request->registration_start) && isset($request->registration_end)) {
             return redirect()->back()
-                ->withErrors(['registration_start' => 'Thời gian mở đăng ký sự kiện phải trước thời gian bắt đầu sự kiện.'])
+                ->withErrors(['registration_start' => 'Vui lòng chọn thời gian bắt đầu đăng ký sự kiện.'])
                 ->withInput();
+        }
+
+        if (isset($request->registration_start) && isset($request->registration_end)) {
+            // Valid here
+            $validatedData['registration_start'] = $request->registration_start;
+            $validatedData['registration_end'] = $request->registration_end;
+
+            // Check if the registration end time is before the registration start time
+            if (strtotime($request->registration_end) <= strtotime($request->registration_start)) {
+                return redirect()->back()
+                    ->withErrors(['registration_end' => 'Thời gian đóng đăng ký tham gia sự kiện phải sau thời gian mở.'])
+                    ->withInput();
+            }
+
+            // Check if the event start time is before the registration start time
+            if (strtotime($request->event_start) <= strtotime($request->registration_start)) {
+                return redirect()->back()
+                    ->withErrors(['registration_start' => 'Thời gian mở đăng ký sự kiện phải trước thời gian bắt đầu sự kiện.'])
+                    ->withInput();
+            }
         }
 
 
