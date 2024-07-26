@@ -76,16 +76,29 @@ class StatisticalController extends Controller
     }
 
     public function eventDetails($id)
-    {
-        $event = Event::with(['students' => function ($query) {
-            $query->select('students.id', 'students.classname');
-        }])->findOrFail($id);
+{
+    $event = Event::with(['students' => function ($query) {
+        $query->select('students.id', 'students.classname');
+    }])->find($id);
 
-        $classStatistics = $event->students->groupBy('classname')->map->count();
+    $classStatistics = $event->students->groupBy('classname')->map->count();
 
-        return response()->json([
-            'event' => $event,
-            'classStatistics' => $classStatistics,
-        ]);
-    }
+    $registrations = DB::table('event_registers')
+        ->where('event_id', $id)
+        ->get()
+        ->groupBy('student_id')
+        ->map->count();
+
+    // Count the unique student IDs
+    $totalRegistrations = $registrations->count();
+
+    return response()->json([
+        'event' => $event,
+        'classStatistics' => $classStatistics,
+        'registrations' => $registrations,
+        'totalRegistrations' => $totalRegistrations, // Added this line
+    ]);
+}
+
+
 }
