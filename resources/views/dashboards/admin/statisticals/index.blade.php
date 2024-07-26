@@ -103,9 +103,6 @@
                     <!-- Nội dung chi tiết sự kiện sẽ được tải vào đây -->
                 </div>
                 <canvas id="eventChart" width="400" height="200" class="hidden"></canvas>
-                <div id="registeredStudentsContent" class="mt-6 hidden">
-                    <!-- Nội dung chi tiết sự kiện sẽ được tải vào đây -->
-                </div>
             </div>
         </div>
     </div>
@@ -116,7 +113,6 @@
     let eventChart = null;
 
     function showEventDetails(eventId) {
-        document.querySelector('.model_title').innerText = `Chi tiết sự kiện`;
         eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
         fetch(`{{ route('events.details', ['id' => ':id']) }}`.replace(':id', eventId))
             .then(response => response.json())
@@ -136,6 +132,7 @@
 
                 eventDetailsContent.innerHTML = `
                     <p><strong>Tên sự kiện:</strong> ${data.event.name}</p>
+                    <p><strong>Tổng sinh viên đăng ký:</strong> ${data.totalRegistrations}</p>
                     <p><strong>Tổng sinh viên tham gia:</strong> ${data.event.students.length}</p>
                     <p><strong>Ngày bắt đầu:</strong> ${formatDate(data.event.event_start)}</p>
                     <p><strong>Ngày kết thúc:</strong> ${formatDate(data.event.event_end)}</p>
@@ -143,18 +140,30 @@
 
                 const classLabels = Object.keys(data.classStatistics);
                 const classCounts = Object.values(data.classStatistics);
+
+                const registrationLabels = Object.keys(data.registrations);
+                const registrationCounts = Object.values(data.registrations);
+
                 chartCanvas.classList.remove('hidden');
                 eventChart = new Chart(chartContext, {
                     type: 'bar',
                     data: {
                         labels: classLabels,
                         datasets: [{
-                            label: 'Số lượng sinh viên tham gia',
-                            data: classCounts,
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
+                            label: 'Số lượng sinh viên đăng ký',
+                            data: registrationCounts,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 1
-                        }]
+                        },
+                        {
+                                label: 'Số lượng sinh viên tham gia',
+                                data: classCounts,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 2
+                            }
+                        ]
                     },
                     options: {
                         scales: {
@@ -169,6 +178,7 @@
                     window.location.href = `{{ route('events.export.excel', ['eventId' => ':eventId']) }}`
                         .replace(':eventId', eventId);
                 };
+                document.querySelector('.model_title').innerText = `Chi tiết sự kiện`;
                 document.getElementById('eventDetailsModal').classList.remove('hidden');
             })
             .catch(error => {
@@ -279,7 +289,7 @@
         fetch(`{{ route('events.register.students', ['id' => ':id']) }}`.replace(':id', eventId))
             .then(response => response.json())
             .then(data => {
-               
+
                 if (!data.data || data.data.length === 0) {
                     document.getElementById('exportExcelBtn').style.display = 'none';
                     eventDetailsContent.innerHTML = `<p><em class="text-lg text-red-500">Không có sinh viên nào tham gia sự kiện này.</em></p>`;
@@ -336,9 +346,9 @@
 
                     eventDetailsContent.appendChild(table);
                     document.getElementById('exportExcelBtn').onclick = function() {
-                    window.location.href = `{{ route('events.register.students.export', ':eventId') }}`
-                        .replace(':eventId', eventId);
-                };
+                        window.location.href = `{{ route('events.register.students.export', ':eventId') }}`
+                            .replace(':eventId', eventId);
+                    };
                     document.getElementById('eventDetailsModal').classList.remove('hidden');
                 }
             })
