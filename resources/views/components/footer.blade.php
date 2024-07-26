@@ -2,7 +2,7 @@
     <div class="container mx-auto py-8 px-4">
         <div class="flex flex-wrap">
             <!-- Logo và Mô tả -->
-            <div class="w-full md:w-1/3 mb-6">
+            <div class="w-full md:w-1/2 mb-6">
                 <h1 class="text-lg text-white font-semibold">
                     <a href="{{ route('dashboard') }}">
                         <img src="{{ asset('assets/logo/fit_circle.png') }}" alt="FIT TDC" class="w-[50px] h-[50px] rounded-full">
@@ -15,17 +15,9 @@
                     <a href="#" class="text-white hover:text-blue-700 mr-4"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
-            <!-- Điều hướng -->
-            <div class="w-full md:w-1/3 mb-6 text-center">
-                {{-- <h2 class="text-xl font-bold">Điều hướng</h2> --}}
-                <ul class="mt-2">
-                    <li><a href="{{ route('home') }}" class="hover:text-yellow-300">Trang chủ</a></li>
-                    <li><a href="{{ route('calendar-event') }}" class="hover:text-yellow-300">Lịch sự kiện</a></li>
-                    <li><a href="{{ route('tra-cuu') }}" class="hover:text-yellow-300">Tra cứu</a></li>
-                </ul>
-            </div>
+            
             <!-- Liên hệ -->
-            <div class="w-full md:w-1/3 mb-6 text-right">
+            <div class="w-full md:w-1/2 mb-6 text-right">
                 <h2 class="text-xl font-bold">Liên hệ</h2>
                 <ul class="mt-2">
                     <li><span class="font-bold">Địa chỉ: </span>53 Võ Văn Ngân, Phường Linh Chiểu, TP. Thủ Đức, TP. Hồ Chí Minh</li>

@@ -298,60 +298,47 @@ class EventController extends Controller
      * @return \Illuminate\Contracts\View\View
      */
 
-public function show($id, Request $request)
-{
-    $event = Event::find($id);
-    $students = Student::join('event_registers', 'event_registers.student_id', '=', 'students.id')
-        ->where('event_registers.event_id', $id)
-        ->select('students.*')
-        ->get();
-
-    $classCounts = Student::join('event_registers', 'event_registers.student_id', '=', 'students.id')
-        ->where('event_registers.event_id', $id)
-        ->select('students.classname', DB::raw('count(*) as count'))
-        ->groupBy('students.classname')
-        ->pluck('count', 'students.classname')
-        ->toArray();
-
-    // Get registered students count per month
-    $registeredCounts = DB::table('event_registers')
-        ->where('event_id', $id)
-        ->select(DB::raw('YEAR(created_at) as year'), DB::raw('MONTH(created_at) as month'), DB::raw('count(*) as count'))
-        ->groupBy('year', 'month')
-        ->orderBy('year', 'asc')
-        ->orderBy('month', 'asc')
-        ->get()
-        ->mapWithKeys(function ($item) {
-            return [Carbon::create($item->year, $item->month)->format('Y-m') => $item->count];
-        });
-
-    // Get attended students count per month (assuming an 'attended' column in event_student table)
-    $attendedCounts = DB::table('event_student')
-        ->where('event_id', $id)
-        ->select(DB::raw('YEAR(updated_at) as year'), DB::raw('MONTH(updated_at) as month'), DB::raw('count(*) as count'))
-        ->groupBy('year', 'month')
-        ->orderBy('year', 'asc')
-        ->orderBy('month', 'asc')
-        ->get()
-        ->mapWithKeys(function ($item) {
-            return [Carbon::create($item->year, $item->month)->format('Y-m') => $item->count];
-        });
-
-    $nonce = Str::random(8);
-
-    // Tạo URL giao diện người dùng
-    $userFacingUrl = url("/sukien/{$id}");
-    return view('dashboards.admin.events.show', [
-        'event' => $event,
-        'students' => $students,
-        'classCounts' => $classCounts,
-        'registeredCounts' => $registeredCounts,
-        'attendedCounts' => $attendedCounts
-    ])->with('title', $event->name)
-      ->with('url', $userFacingUrl)
-      ->with('image', url($event->event_photo))
-      ->with('nonce', $nonce);
-}
+     public function show($id, Request $request)
+     {
+         $event = Event::find($id);
+         $students = Student::join('event_registers', 'event_registers.student_id', '=', 'students.id')
+             ->where('event_registers.event_id', $id)
+             ->select('students.*')
+             ->get();
+     
+         $classCounts = Student::join('event_registers', 'event_registers.student_id', '=', 'students.id')
+             ->where('event_registers.event_id', $id)
+             ->select('students.classname', DB::raw('count(*) as count'))
+             ->groupBy('students.classname')
+             ->pluck('count', 'students.classname')
+             ->toArray();
+     
+         // Get total registered students count
+         $totalRegisteredCount = DB::table('event_registers')
+             ->where('event_id', $id)
+             ->count();
+     
+         // Get total attended students count
+         $totalAttendedCount = DB::table('event_student')
+             ->where('event_id', $id)
+             ->count();
+     
+         $nonce = Str::random(8);
+     
+         // Tạo URL giao diện người dùng
+         $userFacingUrl = url("/sukien/{$id}");
+         return view('dashboards.admin.events.show', [
+             'event' => $event,
+             'students' => $students,
+             'classCounts' => $classCounts,
+             'totalRegisteredCount' => $totalRegisteredCount,
+             'totalAttendedCount' => $totalAttendedCount
+         ])->with('title', $event->name)
+           ->with('url', $userFacingUrl)
+           ->with('image', url($event->event_photo))
+           ->with('nonce', $nonce);
+     }
+     
 
 
 
