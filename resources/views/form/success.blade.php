@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Đăng ký')
+@section('title', $title )
 
 @section('content')
 <div class="banner_display mt-[100px]">

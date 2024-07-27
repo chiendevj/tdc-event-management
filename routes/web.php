@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [EventController::class, 'getHomeEvents'])->name('home');
 Route::get('/api/upcoming-events', [EventController::class, 'fetchUpcomingEvents']);
 Route::get('/api/featured-events', [EventController::class, 'fetchFeaturedEvents']);
+Route::get('/api/all-events', [EventController::class, 'getAllEventUser']);
 Route::get('/api/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.get');
 Route::get('/api/students/{id}', [StudentController::class, "getStudentsById"])->name("students.get");
 Route::get('/forget/password/form', [MailController::class, "showResetPasswordForm"])->name("forget.password.form");

@@ -66,7 +66,7 @@
             <div id="upcoming-pagination" class="pagination-bar mt-6"></div>
         </div>
         <div class="big-event">
-            <h1 class="title font-bold uppercase text_title"><span>Sự kiện</span> <span class="text_title">nổi bật</span>
+            <h1 class="title font-bold uppercase text_title"><span>Tất cả</span> <span class="text_title">Sự kiện</span>
             </h1>
             <div id="featured-loading" class="">
 
@@ -113,7 +113,8 @@
                     }
 
                     data.data.forEach((item, key) => {
-                        let div = document.createElement('div');
+                        let div = document.createElement('a');
+                        div.href = "{{ route('events.detail', ':id') }}".replace(':id', item.id);
                         div.className = 'item';
                         div.innerHTML = `<img src="${item.event_photo}" alt="">`;
                         slider.appendChild(div);
@@ -302,7 +303,7 @@
                 if (data.current_page > 1) {
                     const linkUrl = listType === 'upcoming' ?
                         `/api/upcoming-events?page=${data.current_page - 1}` :
-                        `/api/featured-events?page=${data.current_page - 1}`;
+                        `/api/all-events?page=${data.current_page - 1}`;
                     fetchEvents(linkUrl, listType);
                 }
             });
@@ -328,7 +329,7 @@
                 fistPage.addEventListener('click', function() {
                     const linkUrl = listType === 'upcoming' ?
                         `/api/upcoming-events?page=${page}` :
-                        `/api/featured-events?page=${page}`;
+                        `/api/all-events?page=${page}`;
                     fetchEvents(linkUrl, listType);
                 })
                 paginationContainer.appendChild(fistPage);
@@ -353,7 +354,7 @@
                 pageLink.addEventListener('click', () => {
                     const linkUrl = listType === 'upcoming' ?
                         `/api/upcoming-events?page=${page}` :
-                        `/api/featured-events?page=${page}`;
+                        `/api/all-events?page=${page}`;
                     fetchEvents(linkUrl, listType);
                 });
                 paginationContainer.appendChild(pageLink);
@@ -375,7 +376,7 @@
                 lastPage.addEventListener('click', () => {
                     const linkUrl = listType === 'upcoming' ?
                         `/api/upcoming-events?page=${total_pages}` :
-                        `/api/featured-events?page=${total_pages}`;
+                        `/api/all-events?page=${total_pages}`;
                     fetchEvents(linkUrl, listType);
                 });
                 paginationContainer.appendChild(lastPage);
@@ -396,7 +397,7 @@
                 if (data.current_page < data.last_page) {
                     const linkUrl = listType === 'upcoming' ?
                         `/api/upcoming-events?page=${data.current_page + 1}` :
-                        `/api/featured-events?page=${data.current_page + 1}`;
+                        `/api/all-events?page=${data.current_page + 1}`;
                     fetchEvents(linkUrl, listType);
                 }
             });
@@ -406,7 +407,7 @@
 
         // Initial fetch
         fetchEvents('/api/upcoming-events', 'upcoming');
-        fetchEvents('/api/featured-events', 'featured');
+        fetchEvents('/api/all-events', 'featured');
 
         // Notification
         const showNotify = (title, content, show = false) => {
