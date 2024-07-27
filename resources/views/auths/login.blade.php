@@ -52,6 +52,8 @@
             <button class="rounded-lg border text-sm text-gray-200 border-blue-500 bg-blue-400 hover:bg-blue-600 transition-colors duration-300 ease-in p-2 outline-none w-full">
                 Đăng nhập
             </button>
+
+            <a href="{{ route('forget.password.form') }}" class="text-blue-600 text-sm text-center">Quên mật khẩu ?</a>
         </form>
     </div>
     <div>
