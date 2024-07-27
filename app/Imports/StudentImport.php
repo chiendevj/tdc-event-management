@@ -15,13 +15,14 @@ class StudentImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        if (isset($row['ma_sinh_vien']) && isset($row['ho_lot']) && isset($row['ten']) && isset($row['ma_lop']) && isset($row['email'])) {
+        if (isset($row['ma_sinh_vien']) && isset($row['ho_lot']) && isset($row['ten']) && isset($row['ma_lop']) && isset($row['email']) && isset($row['ngay_sinh'])) {
             return Student::firstOrCreate(
                 ['id' => $row['ma_sinh_vien']],
                 [
                     'fullname' => $row['ho_lot'] . ' ' . $row['ten'],
                     'classname' => $row['ma_lop'],
                     'email' => $row['email'],
+                    'birth' => $row['ngay_sinh'],
                 ]
             );
         }
