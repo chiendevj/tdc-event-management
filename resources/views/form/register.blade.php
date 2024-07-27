@@ -145,6 +145,7 @@
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
+                        console.log(data)
                             if (data.status === 'success') {
                                 checkInfor = true;
                                 fullnameInput.value = data.data.fullname;
