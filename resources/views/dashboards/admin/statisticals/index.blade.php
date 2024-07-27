@@ -193,12 +193,21 @@
     }
 
     function closeModal() {
+        const chartCanvas = document.getElementById('eventChart');
+    const toggleButton = document.getElementById('toggleChartBtn');
+
         document.getElementById('exportExcelBtn').style.display = 'flex';
         document.getElementById('eventDetailsModal').classList.add('hidden');
         if (eventChart) {
             eventChart.destroy();
             eventChart = null;
         }
+
+        if (chartCanvas.chart) {
+                            chartCanvas.chart.destroy();
+                            chartCanvas.chart = null;
+                        }
+                        toggleButton.innerText = 'Hiển thị Biểu Đồ';
     }
 
     function formatDate(dateString) {
