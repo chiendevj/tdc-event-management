@@ -191,3 +191,5 @@ Route::get('/auth/login', [AuthController::class, "showLogin"])->name("login");
 Route::post('/auth/login', [AuthController::class, "login"])->name("handle_login");
 Route::post('/auth/logout', [AuthController::class, "logout"])->name("handle_logout");
 Route::post('/upload', [UploadController::class, 'upload'])->name('upload');
+Route::post('/auth/change-password', [AccountController::class, 'changePassword'])->name('change_password');
+
