@@ -8,6 +8,7 @@ use App\Http\Controllers\QrCodeGeneratorController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SocialShareController;
@@ -35,6 +36,13 @@ Route::get('/api/upcoming-events', [EventController::class, 'fetchUpcomingEvents
 Route::get('/api/featured-events', [EventController::class, 'fetchFeaturedEvents']);
 Route::get('/api/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.get');
 Route::get('/api/students/{id}', [StudentController::class, "getStudentsById"])->name("students.get");
+Route::get('/forget/password/form', [MailController::class, "showResetPasswordForm"])->name("forget.password.form");
+Route::post('/api/forget/password', [MailController::class, "resetPassword"])->name("forget.password");
+Route::get('/forget/password/confirm', [MailController::class, "showConfirmTokenForm"])->name("forget.password.confirm");
+Route::get('/forget/password/change/form', [MailController::class, "showChangePasswordForm"])->name("forget.password.change.form");
+Route::post('/forget/password/change', [MailController::class, "changePassword"])->name("forget.password.change");
+Route::post('/api/forget/password/confirm', [MailController::class, "confirmToken"])->name("forget.password.confirm.token");
+
 
 
 Route::get('/tracuu', function () {
