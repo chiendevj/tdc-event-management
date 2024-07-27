@@ -34,6 +34,8 @@ Route::get('/', [EventController::class, 'getHomeEvents'])->name('home');
 Route::get('/api/upcoming-events', [EventController::class, 'fetchUpcomingEvents']);
 Route::get('/api/featured-events', [EventController::class, 'fetchFeaturedEvents']);
 Route::get('/api/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.get');
+Route::get('/api/students/{id}', [StudentController::class, "getStudentsById"])->name("students.get");
+
 
 Route::get('/tracuu', function () {
     return view('search');
@@ -160,7 +162,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/events/participants/students', [StudentController::class, 'getStudentsByEventCount'])->name("events.participants.students");
     // Route for show students
     Route::get('admin/dashboard/students', [StudentController::class, "dashboard"])->name("students.index");
-    Route::get('/api/students/{id}', [StudentController::class, "getStudentsById"])->name("students.get");
     // Route get academic periods
     Route::get('/api/academic-periods', [AcademicPeriodController::class, "getAcademicPeriods"])->name("academic_period.get");
     // Route for filter students by academic period
