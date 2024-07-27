@@ -298,47 +298,47 @@ class EventController extends Controller
      * @return \Illuminate\Contracts\View\View
      */
 
-     public function show($id, Request $request)
-     {
-         $event = Event::find($id);
-         $students = Student::join('event_registers', 'event_registers.student_id', '=', 'students.id')
-             ->where('event_registers.event_id', $id)
-             ->select('students.*')
-             ->get();
-     
-         $classCounts = Student::join('event_registers', 'event_registers.student_id', '=', 'students.id')
-             ->where('event_registers.event_id', $id)
-             ->select('students.classname', DB::raw('count(*) as count'))
-             ->groupBy('students.classname')
-             ->pluck('count', 'students.classname')
-             ->toArray();
-     
-         // Get total registered students count
-         $totalRegisteredCount = DB::table('event_registers')
-             ->where('event_id', $id)
-             ->count();
-     
-         // Get total attended students count
-         $totalAttendedCount = DB::table('event_student')
-             ->where('event_id', $id)
-             ->count();
-     
-         $nonce = Str::random(8);
-     
-         // Tạo URL giao diện người dùng
-         $userFacingUrl = url("/sukien/{$id}");
-         return view('dashboards.admin.events.show', [
-             'event' => $event,
-             'students' => $students,
-             'classCounts' => $classCounts,
-             'totalRegisteredCount' => $totalRegisteredCount,
-             'totalAttendedCount' => $totalAttendedCount
-         ])->with('title', $event->name)
-           ->with('url', $userFacingUrl)
-           ->with('image', url($event->event_photo))
-           ->with('nonce', $nonce);
-     }
-     
+    public function show($id, Request $request)
+    {
+        $event = Event::find($id);
+        $students = Student::join('event_registers', 'event_registers.student_id', '=', 'students.id')
+            ->where('event_registers.event_id', $id)
+            ->select('students.*')
+            ->get();
+
+        $classCounts = Student::join('event_registers', 'event_registers.student_id', '=', 'students.id')
+            ->where('event_registers.event_id', $id)
+            ->select('students.classname', DB::raw('count(*) as count'))
+            ->groupBy('students.classname')
+            ->pluck('count', 'students.classname')
+            ->toArray();
+
+        // Get total registered students count
+        $totalRegisteredCount = DB::table('event_registers')
+            ->where('event_id', $id)
+            ->count();
+
+        // Get total attended students count
+        $totalAttendedCount = DB::table('event_student')
+            ->where('event_id', $id)
+            ->count();
+
+        $nonce = Str::random(8);
+
+        // Tạo URL giao diện người dùng
+        $userFacingUrl = url("/sukien/{$id}");
+        return view('dashboards.admin.events.show', [
+            'event' => $event,
+            'students' => $students,
+            'classCounts' => $classCounts,
+            'totalRegisteredCount' => $totalRegisteredCount,
+            'totalAttendedCount' => $totalAttendedCount
+        ])->with('title', $event->name)
+            ->with('url', $userFacingUrl)
+            ->with('image', url($event->event_photo))
+            ->with('nonce', $nonce);
+    }
+
 
 
 
@@ -717,6 +717,12 @@ class EventController extends Controller
         $event = Event::findOrFail($eventId);
         $students = $event->students;
 
+        // Group students by class and count participations
+        $classParticipations = $students->groupBy('classname')
+            ->map(function ($classGroup) {
+                return $classGroup->count();
+            });
+
         $data = $students->map(function ($student) use ($eventId) {
             $registered = DB::table('event_registers')
                 ->where('event_id', $eventId)
@@ -730,11 +736,14 @@ class EventController extends Controller
         });
 
         return response()->json([
+            "event" => $event,
             "data" => $data,
+            "classParticipations" => $classParticipations,
             "success" => true,
             "message" => "Participants retrieved successfully."
         ]);
     }
+
 
 
 
@@ -925,6 +934,12 @@ class EventController extends Controller
         $event = Event::findOrFail($eventId);
         $students = $event->eventRegisters()->with('student')->get();
 
+        // Group students by class and count registrations
+        $classRegistrations = $students->groupBy('student.classname')
+            ->map(function ($classGroup) {
+                return $classGroup->count();
+            });
+
         $data = $students->map(function ($student) use ($eventId) {
             $attended  = DB::table('event_student')
                 ->where('event_id', $eventId)
@@ -938,11 +953,14 @@ class EventController extends Controller
         });
 
         return response()->json([
+            "event" => $event,
             "data" => $data,
+            "classRegistrations" => $classRegistrations,
             "success" => true,
             "message" => "Participants retrieved successfully."
         ]);
     }
+
 
     /**
      * Export the registration data of an event to an Excel file.
