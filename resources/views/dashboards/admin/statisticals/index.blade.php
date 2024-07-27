@@ -83,7 +83,6 @@
 </div>
 
 <!-- Modal -->
-<!-- Modal -->
 <div id="eventDetailsModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity">
@@ -117,6 +116,7 @@
         fetch(`{{ route('events.details', ['id' => ':id']) }}`.replace(':id', eventId))
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 const eventDetailsContent = document.getElementById('eventDetailsContent');
                 const chartCanvas = document.getElementById('eventChart');
                 const chartContext = chartCanvas.getContext('2d');
@@ -138,11 +138,13 @@
                     <p><strong>Ngày kết thúc:</strong> ${formatDate(data.event.event_end)}</p>
                 `;
 
-                const classLabels = Object.keys(data.classStatistics);
-                const classCounts = Object.values(data.classStatistics);
+                // Get all unique class names
+                const allClasses = new Set([...Object.keys(data.classStatistics), ...Object.keys(data.registrationStatistics)]);
 
-                const registrationLabels = Object.keys(data.registrations);
-                const registrationCounts = Object.values(data.registrations);
+                // Prepare data arrays
+                const classLabels = Array.from(allClasses);
+                const classCounts = classLabels.map(cls => data.classStatistics[cls] || 0);
+                const registrationCounts = classLabels.map(cls => data.registrationStatistics[cls] || 0);
 
                 chartCanvas.classList.remove('hidden');
                 eventChart = new Chart(chartContext, {
@@ -150,13 +152,13 @@
                     data: {
                         labels: classLabels,
                         datasets: [{
-                            label: 'Số lượng sinh viên đăng ký',
-                            data: registrationCounts,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        },
-                        {
+                                label: 'Số lượng sinh viên đăng ký  ',
+                                data: registrationCounts,
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            },
+                            {
                                 label: 'Số lượng sinh viên tham gia',
                                 data: classCounts,
                                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -209,12 +211,14 @@
 
     function showParticipantList(eventId) {
         document.querySelector('.model_title').innerText = `Danh sách sinh viên tham gia sự kiện`;
-        const chartCanvas = document.getElementById('eventChart');
-        chartCanvas.classList.add('hidden');
         eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
         fetch(`{{ route('events.participants', ['id' => ':id']) }}`.replace(':id', eventId))
             .then(response => response.json())
             .then(data => {
+                const chartCanvas = document.getElementById('eventChart');
+                const chartContext = chartCanvas.getContext('2d');
+
+                console.log(data);
                 if (data.data.length === 0) {
 
                     document.getElementById('exportExcelBtn').style.display =
@@ -268,6 +272,46 @@
                     eventDetailsContent.innerHTML = '';
 
                     eventDetailsContent.appendChild(table);
+
+                    const classLabels = Object.keys(data.classParticipations);
+                    const participantCounts = Object.values(data.classParticipations);
+
+                    chartCanvas.classList.remove('hidden');
+                    eventChart = new Chart(chartContext, {
+                        type: 'bar',
+                        data: {
+                            labels: classLabels,
+                            datasets: [{
+                                label: 'Số lượng sinh viên tham gia',
+                                data: participantCounts,
+                                backgroundColor: 'rgba(230, 126, 34, 0.3)',
+                                borderColor: 'rgba(230, 126, 34, 1.0)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: `Thống kê sinh viên theo lớp tham gia sự kiện ${data.event.name} `,
+                                    font: {
+                                        size: 20,
+                                        weight: 'bold'
+                                    },
+                                    padding: {
+                                        top: 20,
+                                        bottom: 20
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
                     document.getElementById('exportExcelBtn').onclick = function() {
                         window.location.href = `{{ route('events.export.excel', ['eventId' => ':eventId']) }}`
                             .replace(':eventId', eventId);
@@ -282,13 +326,14 @@
 
     function showRegisteredList(eventId) {
         document.querySelector('.model_title').innerText = `Danh sách sinh viên đăng ký tham gia sự kiện`;
-        const chartCanvas = document.getElementById('eventChart');
-        chartCanvas.classList.add('hidden');
         eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
 
         fetch(`{{ route('events.register.students', ['id' => ':id']) }}`.replace(':id', eventId))
             .then(response => response.json())
             .then(data => {
+                const eventDetailsContent = document.getElementById('eventDetailsContent');
+                const chartCanvas = document.getElementById('eventChart');
+                const chartContext = chartCanvas.getContext('2d');
 
                 if (!data.data || data.data.length === 0) {
                     document.getElementById('exportExcelBtn').style.display = 'none';
@@ -345,6 +390,46 @@
                     eventDetailsContent.innerHTML = '';
 
                     eventDetailsContent.appendChild(table);
+
+                    const classLabels = Object.keys(data.classRegistrations);
+                    const classRegistrationsCounts = Object.values(data.classRegistrations);
+
+                    chartCanvas.classList.remove('hidden');
+                    eventChart = new Chart(chartContext, {
+                        type: 'bar',
+                        data: {
+                            labels: classLabels,
+                            datasets: [{
+                                label: 'Số lượng sinh viên đăng ký',
+                                data: classRegistrationsCounts,
+                                backgroundColor: 'rgba(46, 204, 113,0.2)',
+                                borderColor: 'rgba(46, 204, 113,1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: `Thống kê sinh viên theo lớp đăng ký sự kiện ${data.event.name} `,
+                                    font: {
+                                        size: 20,
+                                        weight: 'bold'
+                                    },
+                                    padding: {
+                                        top: 20,
+                                        bottom: 20
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
                     document.getElementById('exportExcelBtn').onclick = function() {
                         window.location.href = `{{ route('events.register.students.export', ':eventId') }}`
                             .replace(':eventId', eventId);
@@ -356,5 +441,6 @@
                 console.error('Error fetching participants:', error);
             });
     }
+
 </script>
 @endsection
