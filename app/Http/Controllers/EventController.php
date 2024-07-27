@@ -279,7 +279,7 @@ class EventController extends Controller
     {
         $limit = 8;
 
-        $events = Event::orderBy('created_at', 'desc')
+        $events = Event::orderBy('event_start', 'desc')
             ->where('is_trash', '<>',  1)
             ->paginate($limit, ['*'], 'page', $request->page);
 

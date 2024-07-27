@@ -32,6 +32,10 @@
                         <input type="text" readonly name="fullname" placeholder="Nhập họ và tên của bạn">
                         <p id="fullnameError" class="block text-[12px] text-red-500"></p>
                     </div>
+                    <div class="mt-4 birthday_block">
+                        <label for="">Ngày sinh <span>*</span> </label>
+                        <input type="text" readonly name="birthday" placeholder="Nhập ngày sinh của bạn">
+                    </div>
                     <div class="mt-4 class_block">
                         <label for="">Lớp <span>*</span></label>
                         <input type="text" readonly name="class" placeholder="Nhập lớp của bạn">
@@ -57,11 +61,13 @@
         const fullnameInput = document.querySelector('input[name="fullname"]');
         const studentIdInput = document.querySelector('input[name="student_id"]');
         const classInput = document.querySelector('input[name="class"]');
+        const birthdayInput = document.querySelector('input[name="birthday"]');
         const fullnameError = document.getElementById('fullnameError');
         const studentIdError = document.getElementById('studentIdError');
         const classError = document.getElementById('classError');
         const nameBlock = document.querySelector('.name_block');
         const classBlock = document.querySelector('.class_block');
+        const birthdayBlock = document.querySelector('.birthday_block');
         const btnConfirmInfo = document.querySelector('.btn-confirm-info');
         const btnCancelConfirm = document.querySelector('.btn-cancel-confirm');
         let checkInfor = false;
@@ -145,8 +151,10 @@
                             if (data.status === 'success') {
                                 fullnameInput.value = data.data.fullname;
                                 classInput.value = data.data.classname;
+                                birthdayInput.value = data.data.birth;
                                 nameBlock.classList.add('confirmed');
                                 classBlock.classList.add('confirmed');
+                                birthdayBlock.classList.add('confirmed');
                                 btnConfirmInfo.textContent = 'Đây là thông tin của bạn ?';
                                 btnCancelConfirm.classList.remove('hidden');
                             } else {
@@ -170,8 +178,10 @@
         btnCancelConfirm.addEventListener('click', function() {
             fullnameInput.value = '';
             classInput.value = '';
+            birtdayInput.value = '';
             nameBlock.classList.remove('confirmed');
             classBlock.classList.remove('confirmed');
+            birthdayBlock.classList.remove('confirmed');
             btnConfirmInfo.textContent = 'Xác minh thông tin';
             btnCancelConfirm.classList.add('hidden');
             checkInfor = false;
