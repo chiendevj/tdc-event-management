@@ -263,6 +263,16 @@ class EventController extends Controller
             ->groupBy('events.id')
             ->orderByDesc('student_count')
             ->where('is_trash', '<>', 1)
+            ->where('status', 'Đã diễn ra')
+            ->paginate(8, ['*'], 'page');
+        return response()->json($events);
+    }
+
+    public function getAllEventUser()
+    {
+        $events = Event::select('events.*')
+            ->orderByDesc('event_start')
+            ->where('is_trash', '<>', 1)
             ->paginate(8, ['*'], 'page');
         return response()->json($events);
     }

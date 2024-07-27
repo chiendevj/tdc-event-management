@@ -1,4 +1,4 @@
-<header class="shadow-md fixed top-0 left-0 right-0" id="navbar">
+<header class="shadow-md fixed top-0 left-0 right-0 z-[100]" id="navbar">
     <nav class="navbar flex justify-between items-center w-[92%] mx-auto">
         <div>
             <img class="md:w-44 w-32 py-3 cursor-pointer" src="{{ asset('assets/logo/logo_fit_tdc.png') }}" alt="Logo FIT">
