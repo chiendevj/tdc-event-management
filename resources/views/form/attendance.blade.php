@@ -3,7 +3,7 @@
 @section('title', 'Điểm danh')
 
 @section('content')
-    <div class="background-tdc-attendence">
+    <div class="background-tdc-attendence mt_container">
         <div class="attendence-box">
             <h1 class="attendence-form-title"><span>Điểm danh</span> </br> tham gia sự kiện</h1>
             <div class="container mx-auto md:w-[50%] form-attendence">
@@ -160,6 +160,7 @@
                             } else {
                                 studentIdError.innerHTML = "Mã số sinh viên không tồn tại";
                                 studentIdInput.style.borderBottom = '1px solid red';
+                                checkInfor = false;
                             }
                         });
                 } else {
