@@ -165,13 +165,15 @@
 
 .attendence-box form .question_block,
 .attendence-box form .name_block,
-.attendence-box form .class_block {
+.attendence-box form .class_block,
+.attendence-box form .birthday_block {
     display: none;
 }
 
 
 .attendence-box form .question_block.confirmed,
 .attendence-box form .name_block.confirmed,
-.attendence-box form .class_block.confirmed {
+.attendence-box form .class_block.confirmed,
+.attendence-box form .birthday_block.confirmed {
     display: flex;
 }
