@@ -20,6 +20,7 @@ class Student extends Model
         'fullname',
         'classname',
         'conduct_score',
+        'birth'
     ];
 
     public function events()
