@@ -95,8 +95,12 @@
                     <h2 class="text-xl font-semibold model_title">Chi tiết sự kiện</h2>
                     <button class="text-gray-600 hover:text-gray-900 text-3xl" onclick="closeModal()">&times;</button>
                 </div>
-                <div class="mb-4">
+                <div class="mb-4 flex gap-4">
                     <button id="exportExcelBtn" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-sm ease-in transition-all">Xuất Excel</button>
+                    <button id="toggleChartBtn" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-sm ease-in transition-all">
+                        Hiển thị Biểu Đồ
+                    </button>
+
                 </div>
                 <div id="eventDetailsContent" class="rounded-sm overflow-hidden">
                     <!-- Nội dung chi tiết sự kiện sẽ được tải vào đây -->
@@ -113,10 +117,10 @@
 
     function showEventDetails(eventId) {
         eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
+        document.getElementById('toggleChartBtn').style.display = 'none'
         fetch(`{{ route('events.details', ['id' => ':id']) }}`.replace(':id', eventId))
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 const eventDetailsContent = document.getElementById('eventDetailsContent');
                 const chartCanvas = document.getElementById('eventChart');
                 const chartContext = chartCanvas.getContext('2d');
@@ -210,147 +214,180 @@
     }
 
     function showParticipantList(eventId) {
-        document.querySelector('.model_title').innerText = `Danh sách sinh viên tham gia sự kiện`;
-        eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
-        fetch(`{{ route('events.participants', ['id' => ':id']) }}`.replace(':id', eventId))
-            .then(response => response.json())
-            .then(data => {
-                const chartCanvas = document.getElementById('eventChart');
-                const chartContext = chartCanvas.getContext('2d');
+    document.querySelector('.model_title').innerText = `Danh sách sinh viên tham gia sự kiện`;
+    const eventDetailsContent = document.getElementById('eventDetailsContent');
+    const chartCanvas = document.getElementById('eventChart');
+    const chartContext = chartCanvas.getContext('2d');
+    const exportExcelBtn = document.getElementById('exportExcelBtn');
+    const toggleButton = document.getElementById('toggleChartBtn');
 
-                console.log(data);
-                if (data.data.length === 0) {
+    eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
 
-                    document.getElementById('exportExcelBtn').style.display =
-                        'none';
-                    eventDetailsContent.innerHTML =
-                        `<p><em class="text-lg text-red-500">Không có sinh viên nào tham gia sự kiện này.</em></p>`;
-                    document.getElementById('eventDetailsModal').classList.remove('hidden');
-                    return;
+    fetch(`{{ route('events.participants', ['id' => ':id']) }}`.replace(':id', eventId))
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+
+            if (data.data.length === 0) {
+                exportExcelBtn.style.display = 'none';
+                toggleButton.style.display = 'none'; // Hide the toggle button
+                eventDetailsContent.innerHTML = `<p><em class="text-lg text-red-500">Không có sinh viên nào tham gia sự kiện này.</em></p>`;
+                document.getElementById('eventDetailsModal').classList.remove('hidden');
+                return;
+            } else {
+                // Show the export button
+                exportExcelBtn.style.display = 'block';
+                
+                // Create table
+                const table = document.createElement('table');
+                table.classList.add("w-full", "text-sm", "text-left", "text-gray-500", "dark:text-gray-400");
+                const tableBody = document.createElement('tbody');
+                const tableHeader = document.createElement('thead');
+
+                // Create table header
+                tableHeader.classList.add("text-xs", "text-gray-700", "uppercase", "bg-gray-50",
+                    "dark:bg-gray-700", "dark:text-gray-400", "text-center");
+                tableHeader.innerHTML = `
+                    <tr>
+                        <th class="px-6 py-4">STT</th>
+                        <th class="px-6 py-4">Mã sinh viên</th>
+                        <th class="px-6 py-4">Họ và tên</th>
+                        <th class="px-6 py-4">Lớp</th>
+                        <th class="px-6 py-4">Đã đăng ký</th>
+                    </tr>
+                `;
+
+                data.data.forEach((item, index) => {
+                    // Create table body
+                    const tr = document.createElement('tr');
+
+                    tr.classList.add("bg-white", "border-b", "dark:bg-gray-800", "dark:border-gray-700");
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 text-center">${index + 1}</td>
+                        <td class="px-6 py-4 text-center">${item.student.id}</td>
+                        <td class="px-6 py-4 text-center">${item.student.fullname}</td>
+                        <td class="px-6 py-4 text-center">${item.student.classname}</td>
+                        <td class="px-6 py-4 text-center">${item.registered
+                            ? '<i class="fa-solid fa-check text-green-500"></i>'
+                            : '<i class="fa-solid fa-times text-red-500"></i>'}</td>
+                    `;
+
+                    tableBody.appendChild(tr);
+                });
+
+                table.appendChild(tableHeader);
+                table.appendChild(tableBody);
+                eventDetailsContent.innerHTML = '';
+
+                eventDetailsContent.appendChild(table);
+
+                // Show or hide chart toggle button based on data availability
+                if (Object.keys(data.classParticipations).length === 0) {
+                    toggleButton.style.display = 'none'; // Hide button if no chart data
                 } else {
-                    // Create table
-                    const table = document.createElement('table');
-                    table.classList.add("w-full", "text-sm", "text-left", "text-gray-500", "dark:text-gray-400");
-                    const tableBody = document.createElement('tbody');
-                    const tableHeader = document.createElement('thead');
+                    toggleButton.style.display = 'block'; // Show button if chart data is available
+                }
 
-                    // Create table header
-                    tableHeader.classList.add("text-xs", "text-gray-700", "uppercase", "bg-gray-50",
-                        "dark:bg-gray-700", "dark:text-gray-400", "text-center");
-                    tableHeader.innerHTML = `
-                            <tr>
-                                <th class="px-6 py-4">STT</th>
-                                <th class="px-6 py-4">Mã sinh viên</th>
-                                <th class="px-6 py-4">Họ và tên</th>
-                                <th class="px-6 py-4">Lớp</th>
-                                <th class="px-6 py-4">Đã đăng ký</th>
-                            </tr>
-                        `;
+                // Toggle button functionality
+                let chartDisplayed = false;
 
-                    data.data.forEach((item, index) => {
-                        // console.log(item);
-                        // Create table body
-                        const tr = document.createElement('tr');
-
-                        tr.classList.add("bg-white", "border-b", "dark:bg-gray-800",
-                            "dark:border-gray-700");
-                        tr.innerHTML = `
-                                <td class="px-6 py-4 text-center">${index + 1}</td>
-                                <td class="px-6 py-4 text-center">${item.student.id}</td>
-                                <td class="px-6 py-4 text-center">${item.student.fullname}</td>
-                                <td class="px-6 py-4 text-center">${item.student.classname}</td>
-                                <td class="px-6 py-4 text-center">${item.registered
-                                    ? '<i class="fa-solid fa-check text-green-500"></i>'
-                                    : '<i class="fa-solid fa-times text-red-500"></i>'}</td>
-                            `;
-
-                        tableBody.appendChild(tr);
-                    })
-
-                    table.appendChild(tableHeader);
-                    table.appendChild(tableBody);
-                    eventDetailsContent.innerHTML = '';
-
-                    eventDetailsContent.appendChild(table);
-
-                    const classLabels = Object.keys(data.classParticipations);
-                    const participantCounts = Object.values(data.classParticipations);
-
-                    chartCanvas.classList.remove('hidden');
-                    eventChart = new Chart(chartContext, {
-                        type: 'bar',
-                        data: {
-                            labels: classLabels,
-                            datasets: [{
-                                label: 'Số lượng sinh viên tham gia',
-                                data: participantCounts,
-                                backgroundColor: 'rgba(230, 126, 34, 0.3)',
-                                borderColor: 'rgba(230, 126, 34, 1.0)',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: `Thống kê sinh viên theo lớp tham gia sự kiện ${data.event.name} `,
-                                    font: {
-                                        size: 20,
-                                        weight: 'bold'
+                toggleButton.onclick = function() {
+                    if (chartDisplayed) {
+                        if (chartCanvas.chart) {
+                            chartCanvas.chart.destroy();
+                            chartCanvas.chart = null;
+                        }
+                        toggleButton.innerText = 'Hiển thị Biểu Đồ';
+                    } else {
+                        if (!chartCanvas.chart) {
+                            chartCanvas.chart = new Chart(chartContext, {
+                                type: 'bar',
+                                data: {
+                                    labels: Object.keys(data.classParticipations),
+                                    datasets: [{
+                                        label: 'Số lượng sinh viên tham gia',
+                                        data: Object.values(data.classParticipations),
+                                        backgroundColor: 'rgba(230, 126, 34, 0.3)',
+                                        borderColor: 'rgba(230, 126, 34, 1.0)',
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: `Thống kê sinh viên theo lớp tham gia sự kiện ${data.event.name}`,
+                                            font: {
+                                                size: 20,
+                                                weight: 'bold'
+                                            },
+                                            padding: {
+                                                top: 20,
+                                                bottom: 20
+                                            }
+                                        }
                                     },
-                                    padding: {
-                                        top: 20,
-                                        bottom: 20
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
                                     }
                                 }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
+                            });
                         }
-                    });
+                        toggleButton.innerText = 'Ẩn Biểu Đồ';
+                    }
+                    chartDisplayed = !chartDisplayed;
+                };
 
-                    document.getElementById('exportExcelBtn').onclick = function() {
-                        window.location.href = `{{ route('events.export.excel', ['eventId' => ':eventId']) }}`
-                            .replace(':eventId', eventId);
-                    };
-                    document.getElementById('eventDetailsModal').classList.remove('hidden');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching participants:', error);
-            });
-    }
+                exportExcelBtn.onclick = function() {
+                    window.location.href = `{{ route('events.export.excel', ['eventId' => ':eventId']) }}`
+                        .replace(':eventId', eventId);
+                };
+
+                document.getElementById('eventDetailsModal').classList.remove('hidden');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching participants:', error);
+        });
+}
+
 
     function showRegisteredList(eventId) {
-        document.querySelector('.model_title').innerText = `Danh sách sinh viên đăng ký tham gia sự kiện`;
-        eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
+    document.querySelector('.model_title').innerText = `Danh sách sinh viên đăng ký tham gia sự kiện`;
+    const eventDetailsContent = document.getElementById('eventDetailsContent');
+    const chartCanvas = document.getElementById('eventChart');
+    const chartContext = chartCanvas.getContext('2d');
 
-        fetch(`{{ route('events.register.students', ['id' => ':id']) }}`.replace(':id', eventId))
-            .then(response => response.json())
-            .then(data => {
-                const eventDetailsContent = document.getElementById('eventDetailsContent');
-                const chartCanvas = document.getElementById('eventChart');
-                const chartContext = chartCanvas.getContext('2d');
+    eventDetailsContent.innerHTML = '<p>Đang tải...</p>';
 
-                if (!data.data || data.data.length === 0) {
-                    document.getElementById('exportExcelBtn').style.display = 'none';
-                    eventDetailsContent.innerHTML = `<p><em class="text-lg text-red-500">Không có sinh viên nào tham gia sự kiện này.</em></p>`;
-                    document.getElementById('eventDetailsModal').classList.remove('hidden');
-                    return;
-                } else {
-                    // Create table
-                    const table = document.createElement('table');
-                    table.classList.add("w-full", "text-sm", "text-left", "text-gray-500", "dark:text-gray-400");
-                    const tableBody = document.createElement('tbody');
-                    const tableHeader = document.createElement('thead');
+    fetch(`{{ route('events.register.students', ['id' => ':id']) }}`.replace(':id', eventId))
+        .then(response => response.json())
+        .then(data => {
+            const exportExcelBtn = document.getElementById('exportExcelBtn');
+            const toggleButton = document.getElementById('toggleChartBtn');
+            
+            if (!data.data || data.data.length === 0) {
+                exportExcelBtn.style.display = 'none';
+                toggleButton.style.display = 'none'; // Hide the toggle button
+                eventDetailsContent.innerHTML = `<p><em class="text-lg text-red-500">Không có sinh viên nào tham gia sự kiện này.</em></p>`;
+                document.getElementById('eventDetailsModal').classList.remove('hidden');
+                return;
+            } else {
+                // Show the export button
+                exportExcelBtn.style.display = 'block';
+                
+                // Create table
+                const table = document.createElement('table');
+                table.classList.add("w-full", "text-sm", "text-left", "text-gray-500", "dark:text-gray-400");
+                const tableBody = document.createElement('tbody');
+                const tableHeader = document.createElement('thead');
 
-                    // Create table header
-                    tableHeader.classList.add("text-xs", "text-gray-700", "uppercase", "bg-gray-50",
-                        "dark:bg-gray-700", "dark:text-gray-400", "text-center");
-                    tableHeader.innerHTML = `
+                // Create table header
+                tableHeader.classList.add("text-xs", "text-gray-700", "uppercase", "bg-gray-50",
+                    "dark:bg-gray-700", "dark:text-gray-400", "text-center");
+                tableHeader.innerHTML = `
                     <tr>
                         <th class="px-6 py-4">STT</th>
                         <th class="px-6 py-4">Mã sinh viên</th>
@@ -361,19 +398,19 @@
                     </tr>
                 `;
 
-                    data.data.forEach((item, index) => {
-                        if (!item.student || !item.student.student) {
-                            console.error('Missing student data for item:', item);
-                            return;
-                        }
+                data.data.forEach((item, index) => {
+                    if (!item.student || !item.student.student) {
+                        console.error('Missing student data for item:', item);
+                        return;
+                    }
 
-                        const student = item.student.student;
+                    const student = item.student.student;
 
-                        // Create table body
-                        const tr = document.createElement('tr');
+                    // Create table body
+                    const tr = document.createElement('tr');
 
-                        tr.classList.add("bg-white", "border-b", "dark:bg-gray-800", "dark:border-gray-700");
-                        tr.innerHTML = `
+                    tr.classList.add("bg-white", "border-b", "dark:bg-gray-800", "dark:border-gray-700");
+                    tr.innerHTML = `
                         <td class="px-6 py-4 text-center">${index + 1}</td>
                         <td class="px-6 py-4 text-center">${student.id}</td>
                         <td class="px-6 py-4 text-center">${student.fullname}</td>
@@ -382,65 +419,85 @@
                         <td class="px-6 py-4 text-center">${item.attended ? '<i class="fa-solid fa-check text-green-500"></i>' : '<i class="fa-solid fa-times text-red-500"></i>'}</td>
                     `;
 
-                        tableBody.appendChild(tr);
-                    });
+                    tableBody.appendChild(tr);
+                });
 
-                    table.appendChild(tableHeader);
-                    table.appendChild(tableBody);
-                    eventDetailsContent.innerHTML = '';
+                table.appendChild(tableHeader);
+                table.appendChild(tableBody);
+                eventDetailsContent.innerHTML = '';
 
-                    eventDetailsContent.appendChild(table);
+                eventDetailsContent.appendChild(table);
 
-                    const classLabels = Object.keys(data.classRegistrations);
-                    const classRegistrationsCounts = Object.values(data.classRegistrations);
+                // Show or hide chart toggle button based on data availability
+                if (Object.keys(data.classRegistrations).length === 0) {
+                    toggleButton.style.display = 'none'; // Hide button if no chart data
+                } else {
+                    toggleButton.style.display = 'block'; // Show button if chart data is available
+                }
 
-                    chartCanvas.classList.remove('hidden');
-                    eventChart = new Chart(chartContext, {
-                        type: 'bar',
-                        data: {
-                            labels: classLabels,
-                            datasets: [{
-                                label: 'Số lượng sinh viên đăng ký',
-                                data: classRegistrationsCounts,
-                                backgroundColor: 'rgba(46, 204, 113,0.2)',
-                                borderColor: 'rgba(46, 204, 113,1)',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: `Thống kê sinh viên theo lớp đăng ký sự kiện ${data.event.name} `,
-                                    font: {
-                                        size: 20,
-                                        weight: 'bold'
+                // Toggle button functionality
+                let chartDisplayed = false;
+                
+                toggleButton.onclick = function() {
+                    if (chartDisplayed) {
+                        if (chartCanvas.chart) {
+                            chartCanvas.chart.destroy();
+                            chartCanvas.chart = null;
+                        }
+                        toggleButton.innerText = 'Hiển thị Biểu Đồ';
+                    } else {
+                        if (!chartCanvas.chart) {
+                            chartCanvas.chart = new Chart(chartContext, {
+                                type: 'bar',
+                                data: {
+                                    labels: Object.keys(data.classRegistrations),
+                                    datasets: [{
+                                        label: 'Số lượng sinh viên đăng ký',
+                                        data: Object.values(data.classRegistrations),
+                                        backgroundColor: 'rgba(46, 204, 113,0.2)',
+                                        borderColor: 'rgba(46, 204, 113,1)',
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: `Thống kê sinh viên theo lớp đăng ký sự kiện ${data.event.name} `,
+                                            font: {
+                                                size: 20,
+                                                weight: 'bold'
+                                            },
+                                            padding: {
+                                                top: 20,
+                                                bottom: 20
+                                            }
+                                        }
                                     },
-                                    padding: {
-                                        top: 20,
-                                        bottom: 20
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
                                     }
                                 }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
+                            });
                         }
-                    });
+                        toggleButton.innerText = 'Ẩn Biểu Đồ';
+                    }
+                    chartDisplayed = !chartDisplayed;
+                };
 
-                    document.getElementById('exportExcelBtn').onclick = function() {
-                        window.location.href = `{{ route('events.register.students.export', ':eventId') }}`
-                            .replace(':eventId', eventId);
-                    };
-                    document.getElementById('eventDetailsModal').classList.remove('hidden');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching participants:', error);
-            });
-    }
+                document.getElementById('exportExcelBtn').onclick = function() {
+                    window.location.href = `{{ route('events.register.students.export', ':eventId') }}`
+                        .replace(':eventId', eventId);
+                };
+                document.getElementById('eventDetailsModal').classList.remove('hidden');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching participants:', error);
+        });
+}
 
 </script>
 @endsection
