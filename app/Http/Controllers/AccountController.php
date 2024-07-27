@@ -101,4 +101,27 @@ class AccountController extends Controller
 
         return redirect()->route('accounts.index')->with('success', 'Tài khoản đã được xóa thành công.');
     }
+
+    public function changePassword(Request $request)
+    {
+        // Xác thực dữ liệu đầu vào
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required',
+        ]);
+
+        $user = auth()->user();
+
+        // Kiểm tra mật khẩu hiện tại
+        if (!Hash::check($request->current_password, $user->password)) {
+            return redirect()->back()->with('error', 'Mật khẩu hiện tại không chính xác .');
+        }
+
+        // Cập nhật mật khẩu mới
+        $user->update([
+            'password' => bcrypt($request->new_password),
+        ]);
+
+        return redirect()->back()->with('success', 'Mật khẩu đã được cập nhật thành công.');
+    }
 }

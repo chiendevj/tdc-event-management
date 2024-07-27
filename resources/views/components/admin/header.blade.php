@@ -84,7 +84,7 @@
                     </ul>
                 </li>
             </ul>
-    </div>
+        </div>
         {{-- Navbar end --}}
 
         <div class="admin flex items-center justify-start gap-2 relative">
@@ -114,11 +114,16 @@
                     <li>
                         <form action="{{ route('handle_logout') }}" method="POST">
                             @csrf
-                            <button class="flex gap-2 justify-center items-center text-black">
+                            <button class="flex gap-2 justify-center items-center text-black hover:text-blue-500">
                                 Đăng xuất
                                 <i class="fa-light fa-right-from-bracket"></i>
                             </button>
                         </form>
+                    </li>
+                    <li>
+                        <button class="flex gap-2 justify-center items-center text-black hover:text-blue-500" id="change_password">
+                            Đổi mật khẩu
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -138,5 +143,53 @@
         btn_close_menu_mobile.addEventListener('click', () => {
             menu_mobile.classList.remove('active');
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const changePasswordBtn = document.getElementById('change_password');
+            const changePasswordModal = document.getElementById('changePasswordModal');
+            const closeChangePasswordModalBtn = document.getElementById('closeChangePasswordModal');
+
+            // Show modal when "Đổi mật khẩu" button is clicked
+            changePasswordBtn.addEventListener('click', function() {
+                changePasswordModal.classList.remove('hidden');
+            });
+
+            // Close modal when "Hủy" button is clicked
+            closeChangePasswordModalBtn.addEventListener('click', function() {
+                changePasswordModal.classList.add('hidden');
+            });
+
+            // Optionally close the modal when clicking outside of it
+            window.addEventListener('click', function(event) {
+                if (event.target === changePasswordModal) {
+                    changePasswordModal.classList.add('hidden');
+                }
+            });
+        });
     </script>
 </header>
+<!-- Change Password Modal -->
+<div id="changePasswordModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-6 rounded-lg w-1/3">
+        <h2 class="text-lg font-bold mb-4">Đổi mật khẩu</h2>
+        <form action="{{ route('change_password') }}" method="POST">
+            @csrf
+            <div class="mb-4">
+                <label for="current_password" class="block text-[14px] font-medium text-blue-900">Mật khẩu hiện tại <span class="text-red-500">*</span></label>
+                <input type="password" name="current_password" id="current_password" class="mt-1 p-2 outline outline-gray-300 outline-2 rounded-sm block w-full text-blue-900 placeholder:text-sm" placeholder="Nhập mật khẩu hiện tại" required>
+                @error('current_password')
+                <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="mb-4">
+                <label for="new_password" class="block text-[14px] font-medium text-blue-900">Mật khẩu mới <span class="text-red-500">*</span></label>
+                <input type="password" name="new_password" id="new_password" class="mt-1 p-2 outline outline-gray-300 outline-2 rounded-sm block w-full text-blue-900 placeholder:text-sm" placeholder="Nhập mật khẩu mới" required>
+
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Đổi mật khẩu</button>
+                <button type="button" id="closeChangePasswordModal" class="ml-4 bg-gray-300 text-gray-700 px-4 py-2 rounded-md">Hủy</button>
+            </div>
+        </form>
+    </div>
+</div>
