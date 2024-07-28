@@ -3,7 +3,7 @@
 @section('title', 'Đăng ký')
 
 @section('content')
-    <div class="background-tdc-attendence">
+    <div class="background-tdc-attendence mt_container">
         <div class="attendence-box">
             <h1 class="attendence-form-title">Cập nhật lại mật khẩu</h1>
             <div class="container mx-auto md:w-[50%] form-attendence">

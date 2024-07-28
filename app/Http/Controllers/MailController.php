@@ -23,10 +23,7 @@ class MailController extends Controller
         $user = User::where('email', $email)->first();
 
         if (!$user) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Email not found'
-            ]);
+            return redirect()->back()->with('error', 'Tài khoản không tồn tại');
         }
 
         // Generate a token code
