@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Đăng ký')
+@section('title', 'Thay đổi mật khẩu')
 
 @section('content')
     <div class="background-tdc-attendence mt_container">
