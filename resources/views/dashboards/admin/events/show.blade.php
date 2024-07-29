@@ -9,7 +9,7 @@
        <div class="col-span-12 md:col-span-8 p-4">
                 <h1 class="font-bold my-4" style="color: #19a0e4; font-size: 25px">{{ $event->name }}</h1>
                 <div class="banner">
-                    <img src="{{ $event->photo }}" alt=""
+                    <img src="{{ $event->event_photo }}" alt=""
                         srcset=""
                         style="width: 100%;
                         background-color: #fff;
