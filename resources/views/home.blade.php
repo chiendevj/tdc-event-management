@@ -13,7 +13,7 @@
     </div>
 
     {{-- Notify board --}}
-    <div class="fixed notify_board w-[80%] lg:w-fit bg-white shadow-lg p-8 rounded-lg top-[50%] left-[50%] z-50">
+    <div class="fixed notify_board w-[80%] lg:w-fit bg-white shadow-lg p-8 rounded-lg top-[50%] left-[50%] z-50" style="z-index: 999">
         <button
             class="btn_close_noti absolute top-[-10px] right-[-10px] w-[30px] h-[30px] rounded-[50%] bg-white border shadow-sm flex items-center justify-center">
             <i class="fa-solid fa-times  hover:text-red-500 transition-all duration-100 ease-linear"></i>
