@@ -6,12 +6,21 @@
 <link rel="stylesheet" href="{{ asset('css/ckeditor.css') }}">
 <div class="w-full container mx-auto detail">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-        <div class="col-span-12 md:col-span-8 p-4">
-            <h2 class="text-lg font-bold mt-4">Nội dung của sự kiện</h2>
-            <div class="content ck-content">
-                {!! $event->content !!}
+       <div class="col-span-12 md:col-span-8 p-4">
+                <h1 class="font-bold my-4" style="color: #19a0e4; font-size: 25px">{{ $event->name }}</h1>
+                <div class="banner">
+                    <img src="/storage/uploads/events/img_3fe9e3cc-16e9-4825-a35f-4b34a79bcc52.jpg" alt=""
+                        srcset=""
+                        style="width: 100%;
+                        background-color: #fff;
+                        box-shadow: 0 0 5px #ccc;
+                        padding: 10px;">
+                </div>
+                <h2 class="text-md font-bold mt-4">Nội dung của sự kiện</h2>
+                <div class="content ck-content">
+                    {!! $event->content !!}
+                </div>
             </div>
-        </div>
         <div class="col-span-12 md:col-span-4 p-4">
             <h2 class="text-lg font-bold">Biểu đồ số lượng sinh viên đăng ký và tham gia</h2>
             <canvas id="classChart" width="300" height="300"></canvas>
