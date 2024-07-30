@@ -135,9 +135,12 @@
             const endDate = filterEndDate.value;
             const status = filterStatus.value;
 
+            const eventTrashSearchRoute = "{{ route('events.trash.search') }}" + `?search=${searchInput.value}&filter_date_start=${startDate}&filter_date_end=${endDate}&status=${status}&page=${searchPage}`;
+            const eventTrashRoute = "{{ route('events.trash.more') }}" + `?page=${page}`;
             const url = isSearching ?
-                `/api/events/trash/search?search=${searchInput.value}&filter_date_start=${startDate}&filter_date_end=${endDate}&status=${status}&page=${searchPage}` :
-                `/api/events/trash?page=${page}`;
+                eventTrashSearchRoute :
+                eventTrashRoute;
+
             try {
                 const response = await fetch(url, {
                     method: 'GET',

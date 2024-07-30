@@ -203,19 +203,31 @@ class StudentController extends Controller
 
     public function searchStudents($searchValue)
     {
-        $students = Student::where('id', 'like', '%' . $searchValue . '%')
-            ->orWhere('fullname', 'like', '%' . $searchValue . '%')
-            ->orWhere('classname', 'like', '%' . $searchValue . '%')
+        $students = Student::where(function ($query) use ($searchValue) {
+            $query->where('id', 'like', '%' . $searchValue . '%')
+                ->orWhere('fullname', 'like', '%' . $searchValue . '%')
+                ->orWhere('classname', 'like', '%' . $searchValue . '%');
+        })
             ->withCount('events')
             ->orderByDesc('events_count')
-            ->paginate(20);
+            ->get();
 
+        if ($students->isEmpty()) {
             return response()->json([
-                "data" => $students,
+                "data" => [],
                 "status" => "success",
-                "message" => "Search students successfully!"
+                "message" => "No students found!"
             ]);
+        }
+
+        return response()->json([
+            "data" => $students,
+            "status" => "success",
+            "message" => "Search students successfully!"
+        ]);
     }
+
+
 
     public function exportStudentEvents($studentId, $academicPeriodId)
     {
