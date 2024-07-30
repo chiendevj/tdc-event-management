@@ -157,9 +157,13 @@
             const endDate = filterEndDate.value;
             const status = filterStatus.value;
 
+            const eventSearchRoute = "{{ route('events.search') }}" + `?search=${searchInput.value}&filter_date_start=${startDate}&filter_date_end=${endDate}&status=${status}&page=${searchPage}`;
+            const eventMoreRoute = "{{ route('events.more') }}" + `?page=${page}`;
+
             const url = isSearching ?
-                `/api/events/search?search=${searchInput.value}&filter_date_start=${startDate}&filter_date_end=${endDate}&status=${status}&page=${searchPage}` :
-                `/api/events/more?page=${page}`;
+                eventSearchRoute :
+                eventMoreRoute;
+
             try {
                 const response = await fetch(url, {
                     method: 'GET',
@@ -171,7 +175,6 @@
 
                 const data = await response.json();
                 if (data.data.data.length > 0) {
-                    console.log(data.data.data);
                     data.data.data.forEach(event => {
                         exportEvents.push(event.id);
                         const eventItem = createEventItem(event);
@@ -325,7 +328,6 @@
         function exportEvent(type) {
             const url = "{{ route('events.export.excel.list') }}";
             if (type === "list") {
-                console.log(exportEvents);
                 if (exportEvents.length > 0) {
                     fetch(url, {
                             method: 'POST',

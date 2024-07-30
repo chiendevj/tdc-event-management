@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             StudentSeeder::class,
             AcademicPeriodsTableSeeder::class,
             NotificationSeeder::class,
+            AdminRouteSeeder::class,
         ]);
-
     }
 }
