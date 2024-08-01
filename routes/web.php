@@ -43,7 +43,8 @@ Route::get('/forget/password/confirm', [MailController::class, "showConfirmToken
 Route::get('/forget/password/change/form', [MailController::class, "showChangePasswordForm"])->name("forget.password.change.form");
 Route::post('/forget/password/change', [MailController::class, "changePassword"])->name("forget.password.change");
 Route::post('/api/forget/password/confirm', [MailController::class, "confirmToken"])->name("forget.password.confirm.token");
-
+Route::get('api/events/featured', [EventController::class, 'getFeaturedEvents'])->name('events.get.featured');
+Route::get('/tim-kiem', [EventController::class, 'getEventBySearch'])->name('events.all.search');
 
 
 Route::get('/tracuu', function () {
@@ -51,12 +52,12 @@ Route::get('/tracuu', function () {
 })->name('tra-cuu');
 
 Route::get('/search', [StudentController::class, 'searchEventsByStudent'])->name('search_events_by_student');
-Route::get('/sukien/{id}', [EventController::class, 'detail'])->name('events.detail');
+Route::get('/su-kien/{name}-{id}', [EventController::class, 'detail'])->where(['name' => '[\w-]+', 'id' => '[\d]+'])->name('events.detail');
 Route::get('/qr-codes', [QrCodeGeneratorController::class, 'generate']);
 Route::get('/diemdanh/{code}', [AttendanceController::class, 'attend'])->name('attend');
 Route::post('/diemdanh', [AttendanceController::class, 'submitAttendance'])->name('submit.attendance');
-Route::get('/sukien/{id}/dangky', [AttendanceController::class, 'register'])->name('regiter');
-Route::post('/sukien/dangky', [AttendanceController::class, 'submitRegister'])->name('submit.register');
+Route::get('/su-kien/{name}-{id}/dangky', [AttendanceController::class, 'register'])->where(['name' => '[\w-]+', 'id' => '[\d]+'])->name('regiter');
+Route::post('/su-kien/dangky', [AttendanceController::class, 'submitRegister'])->name('submit.register');
 Route::get('/calendar-event', [ScheduleController::class, 'index'])->name('calendar-event');
 
 
@@ -108,7 +109,6 @@ Route::middleware(['auth', 'role_or_permission:restore event'])->group(function 
 Route::middleware(['auth', 'role_or_permission:featured event'])->group(function () {
     // Route for featured event
     Route::get('admin/dashboard/events/featured/{id}', [EventController::class, 'featuredEvent'])->name('events.featured');
-    Route::get('api/events/featured', [EventController::class, 'getFeaturedEvents'])->name('events.get.featured');
 });
 
 // Routes only use for admin have permission to cancel event
@@ -149,6 +149,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/dashboard/events/{id}/qr-codes/show', [QrCodeGeneratorController::class, 'show'])->name("qr-codes.show");
     Route::post('admin/dashboard/events/{id}/qr-codes', [QrCodeGeneratorController::class, 'store'])->name("qr-codes.store");
     Route::delete('admin/dashboard/events/{id}/qr-codes', [QrCodeGeneratorController::class, 'deleteQRByDate'])->name("qr-codes.delete");
+    Route::delete('admin/dashboard/events/{event_id}/qr-codes/delete', [QrCodeGeneratorController::class, 'deleteByEventId'])->name("qr-codes.deleteByEventId");
     // Route for load more events, search events
     Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
     Route::get('/api/events/search', [EventController::class, 'search'])->name("events.search");

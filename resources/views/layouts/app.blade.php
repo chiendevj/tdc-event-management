@@ -14,7 +14,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
     {{-- Favicon --}}
     <link rel="shortcut icon" href="{{ asset('assets/logo/logo_removebg.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -44,13 +46,23 @@
     <script src="{{ asset('js/app.js') }}"></script>
 
     <script>
-        $('.owl-carousel').owlCarousel({
+        $('.upcoming-carousel').owlCarousel({
             loop: true,
             margin: 10,
-            dots:true,
+            dots: true,
             autoplay: true,
             autoplayTimeout: 3000,
             items: 1,
+        })
+
+        $('.event-carousel').owlCarousel({
+            loop: true,
+            margin: 10,
+            dots: true,
+            nav:true,
+            items: 1,
+            autoplay: true,
+            autoplayTimeout: 3000,
         })
     </script>
 </body>

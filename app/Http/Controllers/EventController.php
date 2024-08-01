@@ -8,8 +8,10 @@ use App\Exports\ParticipatedEventsExport;
 use App\Exports\StudentRegisterEventExport;
 use App\Models\AcademicPeriod;
 use App\Models\Event;
+use App\Models\EventRegister;
 use App\Models\Notification;
 use App\Models\Student;
+use App\Models\StudentEvent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -156,7 +158,7 @@ class EventController extends Controller
 
         // Set the registration link for the event
         if ($event) {
-            $event->registration_link = url('/sukien/' . $event->id . '/dangky');
+            $event->registration_link = url('/su-kien/' . Str::slug($request->name) . '-' . $event->id . '/dangky');
 
             // Determine the academic year and semester based on the event start date
             $eventStartDate = \Carbon\Carbon::parse($event->event_start);
@@ -219,15 +221,9 @@ class EventController extends Controller
     {
         $upcomingEvents  = Event::where('status', 'like', 'Sắp diễn ra')
             ->where('is_trash', '<>', 1)
-            ->paginate(2, ['*'], 'upcoming_page');
+            ->get();
 
-        $featuredEvents  = Event::select('events.*', DB::raw('COUNT(event_student.student_id) as student_count'))
-            ->leftJoin('event_student', 'events.id', '=', 'event_student.event_id')
-            ->groupBy('events.id')
-            ->orderByDesc('student_count')
-            ->paginate(2, ['*'], 'featured_page');
-
-        return view('home', compact('upcomingEvents', 'featuredEvents'));
+        return view('home', compact('upcomingEvents'));
     }
 
     /**
@@ -238,11 +234,9 @@ class EventController extends Controller
      * @param \Illuminate\Http\Request $request The HTTP request object.
      * @return \Illuminate\Http\JsonResponse The JSON response containing the upcoming events.
      */
-    public function fetchUpcomingEvents(Request $request)
+    public function fetchUpcomingEvents()
     {
-        $page = $request->input('page', 1);
-        $events = Event::where('status', 'like', 'Sắp diễn ra')->where('is_trash', '<>', 1)
-            ->paginate(8, ['*'], 'page', $page);
+        $events = Event::where('status', 'like', 'Sắp diễn ra')->where('is_trash', '<>', 1)->get();
         return response()->json($events);
     }
 
@@ -268,12 +262,21 @@ class EventController extends Controller
         return response()->json($events);
     }
 
+    public function getEventBySearch(Request $request) {
+        $key = '%' . $request->input('key') . '%';
+        $events = Event::where('name', 'like', $key)
+                        ->orWhere('status', 'like', $key)
+                        ->orWhere('location', 'like', $key)
+                        ->get();
+        return response()->json($events);
+    }
+
     public function getAllEventUser()
     {
         $events = Event::select('events.*')
             ->orderByDesc('event_start')
             ->where('is_trash', '<>', 1)
-            ->paginate(8, ['*'], 'page');
+            ->paginate(9, ['*'], 'page');
         return response()->json($events);
     }
 
@@ -292,6 +295,14 @@ class EventController extends Controller
         $events = Event::orderBy('event_start', 'desc')
             ->where('is_trash', '<>',  1)
             ->paginate($limit, ['*'], 'page', $request->page);
+
+
+        $events->getCollection()->transform(function ($event) {
+            $event->attended_count = $event->students()->count();
+            $event->registed_count = $event->eventRegisters()->count();
+            $event->code_count = $event->eventCodes()->count();
+            return $event;
+        });
 
         return response()->json([
             'data' => $events,
@@ -358,7 +369,7 @@ class EventController extends Controller
      * @param int $id The ID of the event.
      * @return \Illuminate\View\View The view displaying the event details.
      */
-    public function detail($id)
+    public function detail($name, $id)
     {
         $event = Event::find($id);
         $registrationCode = QrCode::generate($event->registration_link);

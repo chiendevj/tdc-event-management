@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Lịch sự kiện')
+@section('title', 'Lịch sự kiện | Event Zone | FIT-TDC | Khoa Công nghệ thông tin - Cao đẳng Công nghệ Thủ Đức')
 
 @section('content')
     <div class="w-[92%] container mx-auto mt-[120px]">
@@ -63,12 +63,24 @@
                 },
                 eventClick: function(info) {
                     let eventId = info.event.id;
-                    let eventDetailUrl = "{{ route('events.detail', ':id') }}".replace(':id', eventId);
+                    let name = info.event.title;
+                    let eventDetailUrl = "{{ route('events.detail', ['name' => ':name', 'id' => ':id']) }}".replace(':name', slug(name) ).replace(':id', eventId);
                     window.location.href = eventDetailUrl;
                 }
             });
             calendar.render();
         });
+
+        function slug(str) {
+            return String(str)
+                .normalize("NFKD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[đĐ]/g, "d") //Xóa dấu
+                .trim()
+                .toLowerCase() //Cắt khoảng trắng đầu, cuối và chuyển chữ thường
+                .replace(/[^a-z0-9\s-]/g, "") //Xóa ký tự đặc biệt
+                .replace(/[\s-]+/g, "-"); //Thay khoảng trắng bằng dấu -, ko cho 2 -- liên tục
+        }
 
         //_______________________End Calendar___________________________________//
     </script>

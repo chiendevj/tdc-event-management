@@ -8,6 +8,7 @@ use App\Models\EventRegister;
 use App\Models\Student;
 use App\Models\StudentEvent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AttendanceController extends Controller
 {
@@ -79,7 +80,7 @@ class AttendanceController extends Controller
     }
 
     // Sinh viên đăng kí tham gia sự kiện
-    public function register($id) {
+    public function register($name, $id) {
         $event = Event::find($id);
         return view('form.register', ['event' => $event]);
     }
