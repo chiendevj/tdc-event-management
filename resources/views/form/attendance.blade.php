@@ -179,7 +179,7 @@
         btnCancelConfirm.addEventListener('click', function() {
             fullnameInput.value = '';
             classInput.value = '';
-            birtdayInput.value = '';
+            birthdayInput.value = '';
             nameBlock.classList.remove('confirmed');
             classBlock.classList.remove('confirmed');
             birthdayBlock.classList.remove('confirmed');

@@ -30,6 +30,11 @@
                     <a href="{{ route('accounts.index') }}">Tài khoản</a>
                 </li>
                 @endrole
+                @role('super-admin')
+                <li class="border-b-2 border-[var(--dark-bg)] hover:border-[var(--nav-hover)] {{ Route::is('config.show') ? 'border-[var(--nav-hover)]' : '' }}  transition-all duration-100 ease-in">
+                    <a href="{{ route('config.show') }}">Cấu hình</a>
+                </li>
+                @endrole
                 <li class="border-b-2 border-b-transparent w-fit hover:border-[var(--nav-hover)] transition-all duration-100 ease-in">
                     <a href="/">Trở về trang người dùng</a>
                 </li>
@@ -73,6 +78,11 @@
                 @role('super-admin')
                 <li class="border-b-2 border-[var(--dark-bg)] hover:border-[var(--nav-hover)] {{ Route::is('accounts.index') ? 'border-[var(--nav-hover)]' : '' }} transition-all duration-100 ease-in">
                     <a href="{{ route('accounts.index') }}">Tài khoản</a>
+                </li>
+                @endrole
+                @role('super-admin')
+                <li class="border-b-2 border-[var(--dark-bg)] hover:border-[var(--nav-hover)] {{ Route::is('config.show') ? 'border-[var(--nav-hover)]' : '' }}  transition-all duration-100 ease-in">
+                    <a href="{{ route('config.show') }}">Cấu hình</a>
                 </li>
                 @endrole
                 <li class="border-b-2 has_child border-b-[var(--dark-bg)] hover:border-[var(--nav-hover)] transition-all duration-100 ease-in cursor-pointer relative">

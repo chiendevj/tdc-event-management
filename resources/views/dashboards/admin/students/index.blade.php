@@ -341,8 +341,7 @@
                 .then(data => {
                     if (data.status === "success") {
                         tableBody.innerHTML = '';
-                        const students = data.data.data;
-                        console.log(students);
+                        const students = data.data;
                         if (students.length > 0) {
                             students.forEach((student, index) => {
                                 tableBody.innerHTML += `
