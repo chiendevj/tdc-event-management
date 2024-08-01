@@ -58,6 +58,7 @@
         </div>
     </div>
     <div class="w-[92%] container mx-auto">
+        @if (count($upcomingEvents) > 0)
         <div class="big-event">
             <h1 class="title font-bold uppercase text_title"><span>Sắp diễn ra</span> <span class="text_title">|
                     Upcoming</span></h1>
@@ -68,12 +69,6 @@
             </div>
             <div id="upcoming-loading" class="hidden">Đang tải...</div>
             <div class="mt-5 mx-auto md:w-[80%]">
-                @if (count($upcomingEvents) <= 0)
-                    <div class="upcoming-empty">
-                        <img src="{{ asset('assets/images/empty-box.png') }}" alt="" srcset="">
-                        <p>Chưa có sự kiện mới</p>
-                    </div>
-                @endif
                 <div class="owl-carousel event-carousel owl-theme" id="upcoming-events">
                     @foreach ($upcomingEvents as $event)
                         <div class="event-card m-2 md:flex">
@@ -109,6 +104,7 @@
             </div>
             <div id="upcoming-pagination" class="pagination-bar mt-6"></div>
         </div>
+        @endif
         <div class="big-event">
             <h1 class="title font-bold uppercase text_title"><span class="text_title">Event Zone</span>
             </h1>

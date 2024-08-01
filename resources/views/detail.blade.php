@@ -38,6 +38,7 @@
         </div>
         <div class="col-span-4  p-4">
             <!-- Nội dung của cột 20% -->
+            @if (count($upcomingEvents) > 0)
             <h1 class="title font-bold uppercase"><span>Sắp diễn ra</span></h1>
             <div class="owl-carousel upcoming-carousel  owl-theme">
                 @foreach ($upcomingEvents as $event)
@@ -61,6 +62,7 @@
                 </div>
                 @endforeach
             </div>
+            @endif
 
         </div>
     </div>
