@@ -18,7 +18,7 @@
             <div class="flex items-center w-full lg:w-fit justify-between gap-3">
                 <div class="relative border h-full w-full flex items-center justify-between p-2">
                     <input type="text" name="search" placeholder="Tìm kiếm sự kiện"
-                        class="outline-none border-none p-0 rounded-sm min-w-[400px] min-h-[24px]">
+                        class="outline-none border-none p-0 rounded-sm w-fit md:min-w-[400px] min-h-[24px]">
                     <div class="text-gray-400">
                         <i class="fa-light fa-magnifying-glass"></i>
                     </div>
@@ -28,12 +28,12 @@
         <div class="w-full flex items-center justify-between flex-col gap-3 lg:flex-row">
             <div class="flex items-center w-full lg:w-fit justify-start gap-3 flex-col lg:flex-col xl:flex-row">
                 <div class="relative border lg:w-fit flex items-center h-full justify-start p-2 text-gray-400 w-full">
-                    <label for="filter_date_start" class="">Ngày bắt đầu:</label>
+                    <label for="filter_date_start" class="whitespace-nowrap">Ngày bắt đầu:</label>
                     <input type="date" name="filter_date_start" id="filter_date_start"
                         class="border-none outline-none p-0 flex-1 lg:w-fit">
                 </div>
                 <div class="relative w-full lg:w-fit border flex items-center h-full justify-start p-2 text-gray-400">
-                    <label for="filter_date_end">Ngày kết thúc:</label>
+                    <label for="filter_date_end" class="whitespace-nowrap">Ngày kết thúc:</label>
                     <input type="date" name="filter_date_end" id="filter_date_end"
                         class="border-none p-0 flex-1 outline-none lg:w-fit">
                 </div>
@@ -258,11 +258,12 @@
 
             link.href = route;
 
-            eventItem.classList.add('event_item', 'border', 'rounded-sm', 'overflow-hidden');
-
+            eventItem.classList.add('event_item', 'border', 'rounded-[5px]');
             link.innerHTML = `
                     <div class="overflow-hidden relative">
+                         <div class="background">
                         <img src="${event.event_photo}" alt="" class="overflow-hidden hover:scale-105 transition-all event_img duration-100 ease-in w-full">
+                        </div>
                         <div class="action_hover absolute top-0 left-0 bottom-0 flex items-center justify-center right-0 bg-[rgba(0,0,0,0.2)]" style="backdrop-filter: blur(5px)">
                             <div class="flex items-center justify-center gap-2">
                                  @can('edit event')
@@ -285,12 +286,12 @@
                                 @endcan
                                  @can('cancel event')
                                 ${!isCanceled ? `<a href="${routeCancel}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]" onclick="return confirmCancel(event)">
-                                                    <i class="fa-light fa-ban"></i>
-                                                    <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
-                                                        Hủy sự kiện
-                                                        <div class="tooltip-arrow absolute bottom-0"></div>
-                                                        </div>
-                                                        </a>` : ''}
+                                                        <i class="fa-light fa-ban"></i>
+                                                        <div class="absolute z-10 w-fit text-nowrap top-[-100%] inline-block px-3 py-2 text-[12px] text-white transition-opacity duration-300 rounded-sm shadow-sm tooltip bg-gray-700">
+                                                            Hủy sự kiện
+                                                            <div class="tooltip-arrow absolute bottom-0"></div>
+                                                            </div>
+                                                            </a>` : ''}
                                 @endcan
                                 @can('qr event')
                                         <a href="${routeQR}" class="btn_qr btn_action flex items-center justify-center p-4 rounded-sm bg-white text-black w-[36px] h-[36px]">
@@ -313,15 +314,48 @@
                             </div>
                         </div>
                     </div>
-                    <div class="p-2">
-                        <h3 class="text-lg font-semibold uppercase whitespace-nowrap overflow-hidden text-ellipsis">${event.name}</h3>
-                        <p class="text-gray-400">${event.location}</p>
-                        <p class="text-gray-400 px-2 mt-1 rounded-full text-white w-fit ${style}">${event.status}</p>
+                    <div class="p-2 event-content">
+                        <h3 class="text-md py-2 font-semibold uppercase whitespace-nowrap overflow-hidden text-ellipsis">${event.name}</h3>
+                        <div class="event-tag event-time"><i class="fa-light fa-calendar"></i> <span>${formatDate(event.event_start)}</span></div>
+                        <div class="event-tag event-location"><i class="fa-light fa-location-dot"></i><span>${event.location}</span></div>
+                        <p class="text-gray-400 px-2 py-[2px] mt-1 rounded-full text-white text-[13px] w-fit ${style}">${event.status}</p>
                     </div>
+                    <div class="line mx-2 h-[1px] bg-gray-300"></div>
+                    <div class="p-2 event-footer mb-2">
+                         <div class="item-tooltip">
+        <p class="event-tag text-gray-400 px-2 py-[2px] mt-1 rounded-full text-[13px] w-fit bg-green-500 text-white">
+            <i class="fa-light fa-user-pen"></i> ${event.registed_count}
+        </p>
+        <span class="tooltip-text">Số người đã đăng ký</span>
+    </div>
+    <div class="item-tooltip">
+        <p class="event-tag text-gray-400 px-2 py-[2px] mt-1 rounded-full text-[13px] w-fit bg-blue-500 text-white">
+            <i class="fa-light fa-user-check"></i> ${event.attended_count}
+        </p>
+        <span class="tooltip-text">Số người đã tham gia</span>
+    </div>
+    <div class="item-tooltip">
+        <p class="event-tag text-gray-400 px-2 py-[2px] mt-1 rounded-full text-[13px] w-fit bg-yellow-400 text-white">
+            <i class="fa-light fa-qrcode"></i> ${event.code_count}
+        </p>
+        <span class="tooltip-text">Số mã QR đã phát hành</span>
+    </div>
+    </div>
                 `;
 
             eventItem.appendChild(link);
             return eventItem;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+            return `${day}-${month}-${year} ${hours}:${minutes}`;
         }
 
         // Export events

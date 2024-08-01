@@ -10,7 +10,7 @@
     font-size: 30px;
     color: var(--blue);
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
 .detail .title span {
@@ -25,8 +25,44 @@
     -moz-text-fill-color: transparent;
     transform: translate3d(10px, 0, 50px);
     backface-visibility: hidden;
+    padding: 10px 0;
 }
 
 .btn-registor {
     background-color: #20bdff;
+}
+
+.event-details {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-width: 500px;
+    margin-top: 20px;
+}
+
+.event-details h4 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.event-info {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.event-info li {
+    padding: 8px 0;
+    font-size: 15px;
+    color: #555;
+}
+
+.event-info li strong {
+    color: #000;
+}
+
+.event-info li:not(:last-child) {
+    border-bottom: 1px solid #ddd;
 }

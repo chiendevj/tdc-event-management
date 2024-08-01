@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Điểm danh')
+@section('title', $event['name'] . '| Event Zone FIT-TDC')
 
 @section('content')
     <div class="background-tdc-attendence mt_container">

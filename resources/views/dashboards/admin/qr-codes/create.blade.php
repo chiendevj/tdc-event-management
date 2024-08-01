@@ -25,8 +25,19 @@
             <div class="block pb-3"> <span class="font-medium">Tổng số lượng QR đã được tạo</span></div>
             <div class="flex justify-between">
                 <div>{{ $totalCount }}</div>
-                <a href="{{ route('qr-codes.show', ['id' => $eventId]) }}"
-                    class="bg-[#04397f] text-white px-5 py-[10px] rounded-md hover:bg-[#1c5fb7]">Xem</a>
+                <div class="flex gap-3">
+                    <a href="{{ route('qr-codes.show', ['id' => $eventId]) }}"
+                        class="bg-[#04397f] text-white px-5 py-[10px] rounded-md hover:bg-[#1c5fb7]">Xem
+                    </a>
+                    <form action="{{ route('qr-codes.deleteByEventId', ['event_id' => $eventId]) }}" method="POST"
+                        onsubmit="confirm('Bạn có muốn xóa tất cả số mã này?')">
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit" class="bg-red-500 text-white px-5 py-[10px] rounded-md hover:bg-red-600"><i
+                                class="fa-regular fa-trash-can"></i></button>
+                    </form>
+                </div>
             </div>
         </div>
         @foreach ($countCreatedCodes as $countCreatedCode)
@@ -132,7 +143,7 @@
                 loading.style.display = 'block';
 
                 const formData = new FormData(form);
-                
+
                 try {
                     const response = await fetch(form.action, {
                         method: 'POST',
@@ -142,19 +153,18 @@
                             'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
                         }
                     })
-                    
+
                     const data = await response.json();
-                    
-                    if(data.success) {
+
+                    if (data.success) {
                         window.location.href = "{{ route('qr-codes.show', ['id' => $eventId]) }}";
 
-                    }else {
+                    } else {
                         console.error("Fail to generate QR code: ", data);
                     }
                 } catch (error) {
                     console.error("Error QR code: ", error);
-                }
-                finally {
+                } finally {
                     loading.style.display = 'none';
                 }
 

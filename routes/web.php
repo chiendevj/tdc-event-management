@@ -42,17 +42,21 @@ Route::get('/api/all-events', [EventController::class, 'getAllEventUser']);
 Route::get('/api/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.get');
 Route::get('/api/students/{id}', [StudentController::class, "getStudentsById"])->name("students.get");
 
+
+Route::get('api/events/featured', [EventController::class, 'getFeaturedEvents'])->name('events.get.featured');
+Route::get('/tim-kiem', [EventController::class, 'getEventBySearch'])->name('events.all.search');
+
 Route::get('/tracuu', function () {
     return view('search');
 })->name('tra-cuu');
 
 Route::get('/search', [StudentController::class, 'searchEventsByStudent'])->name('search_events_by_student');
-Route::get('/sukien/{id}', [EventController::class, 'detail'])->name('events.detail');
+Route::get('/su-kien/{name}-{id}', [EventController::class, 'detail'])->where(['name' => '[\w-]+', 'id' => '[\d]+'])->name('events.detail');
 Route::get('/qr-codes', [QrCodeGeneratorController::class, 'generate']);
 Route::get('/diemdanh/{code}', [AttendanceController::class, 'attend'])->name('attend');
 Route::post('/diemdanh', [AttendanceController::class, 'submitAttendance'])->name('submit.attendance');
-Route::get('/sukien/{id}/dangky', [AttendanceController::class, 'register'])->name('regiter');
-Route::post('/sukien/dangky', [AttendanceController::class, 'submitRegister'])->name('submit.register');
+Route::get('/su-kien/{name}-{id}/dangky', [AttendanceController::class, 'register'])->where(['name' => '[\w-]+', 'id' => '[\d]+'])->name('regiter');
+Route::post('/su-kien/dangky', [AttendanceController::class, 'submitRegister'])->name('submit.register');
 Route::get('/calendar-event', [ScheduleController::class, 'index'])->name('calendar-event');
 
 // Auth routes

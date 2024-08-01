@@ -94,4 +94,9 @@ class QrCodeGeneratorController extends Controller
 
         return view('dashboards.admin.qr-codes.show', ['qrCodes' => $qrCodes, 'event' => $event]);
     }
+
+    public function deleteByEventId($event_id) {
+        EventCode::where('event_id', $event_id)->delete();
+        return redirect()->back()->with('status', 'QR Codes deleted successfully.');
+    }
 }
