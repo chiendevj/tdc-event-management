@@ -805,6 +805,7 @@ class EventController extends Controller
 
         // Create a notification for the event cancellation
         $notification = new Notification();
+        $notification->event_id = $event->id;
         $notification->title = 'Thông báo hủy sự kiện';
         $eventDate = \Carbon\Carbon::parse($event->event_start)->format('d/m/Y');
 
