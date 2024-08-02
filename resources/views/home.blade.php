@@ -95,7 +95,7 @@
                                 </div>
                                 <hr>
                                 <div class="event-register mb-2 mt-6 mx-auto">
-                                    <a href="${event.registration_link}" class="btn-register">Đăng ký</a>
+                                    <a href="{{$event->registration_link}}" class="btn-register">Đăng ký</a>
                                 </div>
                             </div>
                         </div>
