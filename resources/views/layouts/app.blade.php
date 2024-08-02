@@ -42,6 +42,7 @@
     <script src='{{ asset('js/fullcalendar/index.global.min.js') }}'></script>
     <script src="{{ asset('js/owlcarousel/jquery.min.js') }}"></script>
     <script src="{{ asset('js/owlcarousel/owl.carousel.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" charset="UTF-8"></script>
     <script src="{{ asset('js/navbar.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
 

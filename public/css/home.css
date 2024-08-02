@@ -195,32 +195,13 @@ body {
     }
 }
 
-.upcoming-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 30px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 5px #ccc;
-}
-
-
-.upcoming-empty img{
-    width: 20%;
-}
-
-.upcoming-empty p {
-    font-weight: bold;
-    padding-top: 10px;
-}
 
 /* Search All Events */
 .search-block {
     text-align: center;
     position: relative;
     display: flex;
+    justify-content: center;
 }
 .events_search {
     border: 1px solid #ccc;
@@ -361,10 +342,11 @@ body {
 
     .search-block {
         text-align: left;
+        justify-content: right;
     }
 
     .search-results ul {
-        left: 0;
+        right: 0;
         transform: translateX(0);
         width: 50%;
     }
