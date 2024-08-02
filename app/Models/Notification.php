@@ -14,6 +14,7 @@ class Notification extends Model
         'message',
         'expires_at',
         'status',
+        'event_id',
     ];
 
     protected $casts = [
