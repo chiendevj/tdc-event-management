@@ -628,7 +628,8 @@
         <i class="fa-solid fa-magnifying-glass"></i>
         `;
         searchInput.addEventListener('input', function(e) {
-            fetchEventBySearch(e.target.value);
+            let key = e.target.value;
+            fetchEventBySearch(key);
         })
 
         async function fetchEventBySearch(key) {
@@ -651,6 +652,9 @@
                 const response = await fetch(url);
 
                 const results = await response.json();
+                console.log("Key: ", key);
+                console.log(results);
+
                 searchIcon.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>';
                 eventSearch.innerHTML = "";
                 if (results.length <= 0) {
@@ -704,6 +708,9 @@
                             window.location.href = route;
                         })
                     });
+
+                    var instance = new Mark(eventSearch);
+                    instance.mark(key, { accuracy: "partially" });
                 });
             }
         }
