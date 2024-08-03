@@ -58,6 +58,7 @@ Route::post('/diemdanh', [AttendanceController::class, 'submitAttendance'])->nam
 Route::get('/su-kien/{name}-{id}/dangky', [AttendanceController::class, 'register'])->where(['name' => '[\w-]+', 'id' => '[\d]+'])->name('regiter');
 Route::post('/su-kien/dangky', [AttendanceController::class, 'submitRegister'])->name('submit.register');
 Route::get('/calendar-event', [ScheduleController::class, 'index'])->name('calendar-event');
+Route::get('api/events/featured', [EventController::class, 'getFeaturedEvents'])->name('events.get.featured');
 
 // Auth routes
 Route::get('/auth/login', [AuthController::class, "showLogin"])->name("login");
@@ -125,7 +126,7 @@ if (Schema::hasTable('settings')) {
             Route::middleware(['auth', 'role_or_permission:featured event'])->group(function () {
                 // Route for featured event
                 Route::get('admin/dashboard/events/featured/{id}', [EventController::class, 'featuredEvent'])->name('events.featured');
-                Route::get('api/events/featured', [EventController::class, 'getFeaturedEvents'])->name('events.get.featured');
+                
             });
 
             // Routes only use for admin have permission to cancel event

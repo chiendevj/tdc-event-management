@@ -166,10 +166,10 @@
                         return false;
                     }
 
-                    data.data.forEach((item, key) => {
+                    data.data.forEach((item, key) => { 
                         let div = document.createElement('a');
                         let route = "{{ route('events.detail', ['name' => ':name', 'id' => ':id']) }}"
-                            .replace(':name', slug(event.name)).replace(':id', event.id);
+                            .replace(':name', slug(item.name)).replace(':id', item.id);
                         div.href = route;
                         div.className = 'item';
                         div.innerHTML = `<img src="${item.event_photo}" alt="">`;
