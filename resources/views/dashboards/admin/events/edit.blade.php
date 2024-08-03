@@ -109,6 +109,7 @@
                                 {{ old('status', $event->status) == 'Đang diễn ra' ? 'selected' : '' }}>Đang diễn ra</option>
                             <option value="Đã diễn ra" {{ old('status', $event->status) == 'Đã diễn ra' ? 'selected' : '' }}>Đã
                                 diễn ra</option>
+                            <option value="Đã hủy" {{ old('status', $event->status) == 'Đã hủy' ? 'selected' : '' }}>Đã hủy</option>
                         </select>
                         @error('status')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
