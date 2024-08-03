@@ -150,6 +150,8 @@
         const btnMarkReaded = document.querySelector('.btn_mark_readed');
         const SLIDE_TIMER = 5000;
         let marked = [];
+        let active = 0;
+
 
         if (localStorage.getItem('readed_noti')) {
             marked = JSON.parse(localStorage.getItem('readed_noti'));
@@ -161,7 +163,6 @@
             return await fetch(url)
                 .then(response => response.json())
                 .then(data => {
-
                     if (data.data.length === 0) {
                         return false;
                     }
@@ -169,7 +170,7 @@
                     data.data.forEach((item, key) => {
                         let div = document.createElement('a');
                         let route = "{{ route('events.detail', ['name' => ':name', 'id' => ':id']) }}"
-                            .replace(':name', slug(event.name)).replace(':id', event.id);
+                            .replace(':name', slug(item.name)).replace(':id', item.id);
                         div.href = route;
                         div.className = 'item';
                         div.innerHTML = `<img src="${item.event_photo}" alt="">`;
@@ -183,27 +184,27 @@
                     lengthItems = items.length - 1;
                     return true;
                 }).catch(error => {
+                    console.log(error)
                     return false;
                 });
         }
 
+        function reloadSlider() {
+            slider.style.left = -items[active].offsetLeft + 'px';
+            //
+            let last_active_dot = document.querySelector('.slider .dots li.active');
+            last_active_dot.classList.remove('active');
+            dots[active].classList.add('active');
+
+            clearInterval(refreshInterval);
+            refreshInterval = setInterval(() => {
+                next.click()
+            }, SLIDE_TIMER);
+        }
+
         createSliderItems().then(result => {
-            function reloadSlider() {
-                slider.style.left = -items[active].offsetLeft + 'px';
-                //
-                let last_active_dot = document.querySelector('.slider .dots li.active');
-                last_active_dot.classList.remove('active');
-                dots[active].classList.add('active');
-
-                clearInterval(refreshInterval);
-                refreshInterval = setInterval(() => {
-                    next.click()
-                }, SLIDE_TIMER);
-            }
-
             if (result) {
                 let lengthItems = items.length - 1;
-                let active = 0;
 
                 next.onclick = function() {
                     active = active + 1 <= lengthItems ? active + 1 : 0;
