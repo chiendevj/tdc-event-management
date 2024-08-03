@@ -167,7 +167,7 @@
                         return false;
                     }
 
-                    data.data.forEach((item, key) => { 
+                    data.data.forEach((item, key) => {
                         let div = document.createElement('a');
                         let route = "{{ route('events.detail', ['name' => ':name', 'id' => ':id']) }}"
                             .replace(':name', slug(item.name)).replace(':id', item.id);
@@ -228,15 +228,17 @@
                         reloadSlider();
                     })
                 })
+
+                window.onresize = function(event) {
+                    reloadSlider();
+                };
             } else {
                 document.querySelector('.temp_text').style.display = 'block';
                 document.querySelector('.buttons').style.display = 'none';
             }
         })
 
-        window.onresize = function(event) {
-            reloadSlider();
-        };
+
 
         // Events
         function formatDate(dateString) {
@@ -515,6 +517,7 @@
 
 
         getNotifications().then((result) => {
+            console.log(result)
             if (result.status === "success") {
                 if (result.data.length > 0) {
 

@@ -14,13 +14,10 @@ class NotificationController extends Controller
         $now = Carbon::now();
 
         $notifications = Notification::where('status', 1)
-            ->where(function ($query) use ($now) {
-                $query->whereNull('expires_at')
-                    ->orWhere('expires_at', '>', $now);
-            })
+            ->where('expires_at', '>', $now)
             ->get();
 
-        // Check event of each notification
+        //Check event of each notification
         foreach ($notifications as $notification) {
             $event = Event::find($notification->event_id);
             if ($event) {
