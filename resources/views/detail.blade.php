@@ -2,6 +2,15 @@
 
 @section('title', $event->name . '| Event Zone FIT-TDC')
 
+@section('meta')
+<meta property="og:url" content="{{ url()->current() }}" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{ $event->name . ' | Event Zone FIT-TDC' }}" />
+<meta property="og:description" content="{{ Str::limit(strip_tags($event->description), 100, '...') }}" />
+<meta property="og:image" content="{{ url($event->event_photo) }}" />
+<meta property="fb:app_id" content="161794371174838" />
+@endsection
+
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/ckeditor.css') }}">
 <div class="w-[92%] container mx-auto detail mt_container">

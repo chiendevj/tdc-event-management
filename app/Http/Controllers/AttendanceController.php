@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\EventCode;
 use App\Models\EventRegister;
+use App\Models\Form;
+use App\Models\Question;
+use App\Models\Response;
+use App\Models\ResponseAnswer;
 use App\Models\Student;
 use App\Models\StudentEvent;
 use Illuminate\Http\Request;
@@ -26,7 +30,15 @@ class AttendanceController extends Controller
             'code' =>  $code,
         ];
 
-        return view('form.attendance', ['event' => $event]);
+        // Find the form associated with the event
+        $form = Form::where('event_id', $event['id'])->first();
+
+        $questions = $form ? $form->questions()->with('answers')->orderBy('id')->get() : null;
+
+        return view('form.attendance', [
+            'event' => $event,
+            'questions' => $questions
+        ]);
     }
 
     public function submitAttendance(Request $request)
@@ -76,11 +88,47 @@ class AttendanceController extends Controller
         $eventCode->status = true;
         $eventCode->save();
 
+        //Lưu câu trả lời của sinh viên nếu có
+        $response = new Response();
+        $response->form_id = $request->input('form_id');
+        $response->student_id =  $studentId;
+        $response->save();
+
+        $questions = $request->input('questions');
+        Log::info($questions);
+        foreach ($questions as $question) {
+            $question_id = $question['question_id'];
+
+            // For radio/checkbox
+            if (isset($question['answers']) && is_array($question['answers'])) {
+                foreach ($question['answers'] as $answer_id) {
+
+                    $responseAnswer = new ResponseAnswer();
+                    $responseAnswer->response_id = $response->id;
+                    $responseAnswer->question_id = $question_id;
+                    $responseAnswer->answer_id = $answer_id;
+                    $responseAnswer->save();
+                }
+            }
+
+            // for text
+            if (isset($question['answer_text']) && !empty($question['answer_text'])) {
+                $responseAnswer = new ResponseAnswer();
+                $responseAnswer->response_id = $response->id;
+                $responseAnswer->question_id = $question_id;
+                $responseAnswer->answer_text = $question['answer_text'];
+                $responseAnswer->save();
+            }
+        }
+
+
+
         return view('form.success', ['title' => "Điểm danh"])->with('success', "Điểm danh thành công");;
     }
 
     // Sinh viên đăng kí tham gia sự kiện
-    public function register($name, $id) {
+    public function register($name, $id)
+    {
         $event = Event::find($id);
         return view('form.register', ['event' => $event]);
     }

@@ -22,26 +22,63 @@
                 </h2>
                 <form action="{{ route('submit.attendance') }}" method="post">
                     @csrf
-                    <div class="mt-4">
+                    <div class="mt-4 info">
                         <label for="">Mã số sinh viên <span>*</span></label>
                         <input type="text" name="student_id" placeholder="Nhập mã số sinh viên của bạn">
                         <p id="studentIdError" class="block text-[12px] text-red-500"></p>
                     </div>
-                    <div class="mt-4 name_block">
+                    <div class="mt-4 name_block info">
                         <label for="">Họ và tên <span>*</span></label>
                         <input type="text" readonly name="fullname" placeholder="Nhập họ và tên của bạn">
                         <p id="fullnameError" class="block text-[12px] text-red-500"></p>
                     </div>
-                    <div class="mt-4 birthday_block">
+                    <div class="mt-4 birthday_block info">
                         <label for="">Ngày sinh <span>*</span> </label>
                         <input type="text" readonly name="birthday" placeholder="Nhập ngày sinh của bạn">
                     </div>
-                    <div class="mt-4 class_block">
+                    <div class="mt-4 class_block info">
                         <label for="">Lớp <span>*</span></label>
                         <input type="text" readonly name="class" placeholder="Nhập lớp của bạn">
                         <p id="classError" class="block text-[12px] text-red-500"></p>
                     </div>
-                    <div class="mt-4">
+                    <div class="question-component">
+                        @if ($questions)
+                            @foreach ($questions as $question)
+                                <div class="question-item {{ $question->require ? 'question-item-required' : '' }}">
+                                    <div class="question">{{ $question->text }} <span
+                                            class="require-question {{ $question->require ? '' : 'hidden' }}">*</span></div>
+                                    <input type="hidden" id="form_id" name="form_id" value="{{ $question->form_id }}">
+                                    <input type="hidden" id="question_id"
+                                        name="questions[{{ $question->id }}][question_id]" value="{{ $question->id }}">
+                                    @if ($question->type === 'radio' || $question->type === 'checkbox')
+                                        <div class="answers">
+                                            @foreach ($question->answers as $answer)
+                                                <div class="answer">
+                                                    <input class="type-question" type="{{ $question->type }}"
+                                                        name="questions[{{ $question->id }}][answers][]"
+                                                        id="answer_{{ $answer->id }}" value="{{ $answer->id }}">
+                                                    <label for="answer_{{ $answer->id }}">{{ $answer->text }}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                    <!-- Hiển thị input text nếu câu hỏi là dạng trả lời ngắn -->
+                                    @if ($question->type === 'text')
+                                        <div class="answers">
+                                            <input class="type-question answer-text" type="text"
+                                                name="questions[{{ $question->id }}][answer_text]"
+                                                id="answer_text_{{ $question->id }}" value="">
+                                        </div>
+                                    @endif
+
+                                    <p class="required-message hidden text-[12px] text-red-500 pt-[12px]"><i
+                                            class="fa-regular fa-circle-exclamation pr-2"></i> Đây ra một câu hỏi bắt buộc
+                                    </p>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="mt-4 info">
                         <input type="hidden" name="event_id" value="{{ $event['id'] }}">
                         <input type="hidden" name="code" value="{{ $event['code'] }}">
                         <button class="btn-confirm-info" type="button">Xác minh thông tin</button>
@@ -62,45 +99,84 @@
         const studentIdInput = document.querySelector('input[name="student_id"]');
         const classInput = document.querySelector('input[name="class"]');
         const birthdayInput = document.querySelector('input[name="birthday"]');
-        const fullnameError = document.getElementById('fullnameError');
         const studentIdError = document.getElementById('studentIdError');
-        const classError = document.getElementById('classError');
         const nameBlock = document.querySelector('.name_block');
         const classBlock = document.querySelector('.class_block');
         const birthdayBlock = document.querySelector('.birthday_block');
         const btnConfirmInfo = document.querySelector('.btn-confirm-info');
         const btnCancelConfirm = document.querySelector('.btn-cancel-confirm');
+        const questionComponent = document.querySelector('.question-component');
+        questionComponent.style.display = 'none'
         let checkInfor = false;
+
 
         // Định nghĩa các biểu thức regex và thông báo lỗi
         const regexPatterns = {
-            fullname: /^[a-zA-ZÀ-ỹ\s]+$/u,
             studentId: /^\d{5}[A-Z][A-Z]\d{4}$/,
-            class: /^[A-Z][A-Z]\d{2}[A-Z][A-Z]\d{2}$/
         };
 
         const errorMessages = {
-            fullname: 'Họ và tên không hợp lệ. Vui lòng chỉ nhập chữ cái và dấu cách.',
-            studentId: 'Mã số sinh viên không hợp lệ. Vui lòng chỉ nhập chữ cái và số.',
-            class: 'Lớp không hợp lệ. Vui lòng chỉ nhập chữ cái và số.'
+            studentId: 'Mã số sinh viên không hợp lệ. Vui lòng chỉ nhập chữ cái và số.'
         };
 
 
         document.querySelector('form').addEventListener('submit', function(event) {
 
-            if (!studentIdInput.value || !fullnameInput.value || !classInput.value) {
+            if (!studentIdInput.value) {
                 event.preventDefault();
-                fullnameError.innerHTML = "Vui lòng nhập họ và tên";
-                fullnameInput.style.borderBottom = '1px solid red';
 
                 studentIdError.innerHTML = "Vui lòng nhập mã số sinh viên";
                 studentIdInput.style.borderBottom = '1px solid red';
 
-                classError.innerHTML = "Vui lòng nhập lớp";
-                classInput.style.borderBottom = '1px solid red';
                 return;
             }
+
+            validateRequireQuestion(event);
+
         });
+
+        //Check require question
+        function validateRequireQuestion(event) {
+            let isValid = true;
+            let questionItemsRequired = document.querySelectorAll('.question-item-required');
+
+            questionItemsRequired.forEach(function(questionItem) {
+                console.log("question", questionItem);
+
+                let inputs = questionItem.querySelectorAll('.type-question')
+                console.log(inputs);
+
+                let hasAnswer = false;
+
+                inputs.forEach(function(input) {
+                    if (input.type == 'radio' || input.type == 'checkbox') {
+                        if (input.checked) {
+                            hasAnswer = true;
+                        }
+                    } else if (input.type == 'text' && input.value.trim() != '') {
+                        hasAnswer = true;
+                    }
+                });
+
+                let errorMessage = questionItem.querySelector('.required-message');
+                console.log(errorMessage);
+                console.log(hasAnswer);
+
+
+
+                if (!hasAnswer) {
+                    errorMessage.classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    errorMessage.classList.add('hidden')
+                    isValid = true;
+                }
+            });
+
+            if (isValid == false) {
+                event.preventDefault();
+            }
+        }
 
         // Function kiểm tra hợp lệ của mỗi trường
         function validateSubmit(input, regexPattern, errorMessage, errorElement) {
@@ -121,21 +197,10 @@
             input.style.borderBottom = isValid ? '' : '1px solid red';
         }
 
-        // Sự kiện input cho fullname
-        fullnameInput.addEventListener('input', function() {
-            validateInput(this, regexPatterns.fullname, errorMessages.fullname, fullnameError);
-        });
-
         // Sự kiện input cho studentId
         studentIdInput.addEventListener('input', function() {
             this.value = this.value.toUpperCase();
             validateInput(this, regexPatterns.studentId, errorMessages.studentId, studentIdError);
-        });
-
-        // Sự kiện input cho class
-        classInput.addEventListener('input', function() {
-            this.value = this.value.toUpperCase();
-            validateInput(this, regexPatterns.class, errorMessages.class, classError);
         });
 
         // Sự kiện click cho nút xác minh thông tin
@@ -167,7 +232,8 @@
                     studentIdError.innerHTML = "Vui lòng nhập mã số sinh viên";
                     studentIdInput.style.borderBottom = '1px solid red';
                 }
-            }else {
+            } else {
+                questionComponent.style.display = 'flex'
                 document.querySelector('.btn-attended').classList.remove('hidden');
                 btnCancelConfirm.classList.add('hidden');
                 btnConfirmInfo.classList.add('hidden');

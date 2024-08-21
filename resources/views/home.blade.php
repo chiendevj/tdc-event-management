@@ -2,6 +2,15 @@
 
 @section('title', 'Event Zone | FIT-TDC | Khoa Công nghệ thông tin - Cao đẳng Công nghệ Thủ Đức')
 
+@section('meta')
+<meta property="og:url" content="http://event.fittdc.info/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Event Zone | FIT-TDC | Khoa Công nghệ thông tin - Cao đẳng Công nghệ Thủ Đức" />
+<meta property="og:description" content="Các sự kiện nổi bật tại Khoa Công nghệ thông tin - Cao đẳng Công nghệ Thủ Đức" />
+<meta property="og:image" content="{{ url(asset('assets/images/fb_share_image.jpg')) }}" />
+<meta property="fb:app_id" content="161794371174838" />
+@endsection
+
 @section('content')
     {{-- Notification bar --}}
     <div class="fixed bottom-5 right-5 z-50 btn-show-notify hidden">

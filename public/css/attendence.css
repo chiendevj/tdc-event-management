@@ -65,7 +65,7 @@
     gap: 20px;
 }
 
-.attendence-box form div {
+.attendence-box form .info {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -142,6 +142,60 @@
     margin: 0 5px;
 }
 
+/* Question component */
+.question-component{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+} 
+.question-component .question-item {
+    box-shadow: 0 0 5px #ccc;
+    border-radius: 7px;
+    padding: 20px 24px;
+}
+
+.question-component .question-item .question {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.question-component .question-item .question {
+    display: flex;
+    font-size: 14px;
+}
+
+.question-item .question .require-question {
+    color: #FF0000;
+    padding-left: 5px;
+}
+
+.question-item .answers {
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+.question-item .answers .answer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px
+}
+
+.question-item .answers .answer label {
+    font-weight: normal;
+    width: 100%;
+    font-size: 13px;
+}
+
+.question-item .answers .answer-text {
+    width: 100%;
+}
+
+.btn-cancel-confirm, .btn-confirm-info, .btn-attended {
+    font-size: 14px;
+}
+
 @media (min-width: 768px) {
     .background-tdc-attendence .attendence-form-title {
         font-size: 40px;
@@ -160,6 +214,21 @@
         border-radius: 50%;
         background-color: var(--blue);
         margin: 0 10px;
+    }
+
+    .question-component .question-item .question {
+        display: flex;
+        font-size: 16px;
+    }
+
+    .question-item .answers .answer label {
+        font-weight: normal;
+        width: 100%;
+        font-size: 15px;
+    }
+
+    .btn-cancel-confirm, .btn-confirm-info, .btn-attended {
+        font-size: 16px;
     }
 }
 

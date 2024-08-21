@@ -3,8 +3,9 @@
 @section('title', 'Create QR')
 
 @section('content')
-    <div class="container mx-auto md:w-[50%]">
-        <div class="py-3 px-5 shadow-[0_0_5px_rgba(0,0,0,0.3)] mt-3 rounded-[5px]">
+    <div class="container mx-auto w-[92%] md:w-[50%] pb-[100px]">
+        @include('components.admin.nav-qr-question', ['id' => $eventId])
+        <div class="py-3 px-5 shadow-[0_0_5px_rgba(0,0,0,0.3)] mt-5 rounded-[5px]">
             <form id="qr-code-form" action="{{ route('qr-codes.store', ['id' => $eventId]) }}" method="POST">
                 @csrf
                 <label for="quantity" class="block pb-3"> <span class="font-medium">Số lượng mã cần tạo</span></label>

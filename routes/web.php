@@ -14,6 +14,8 @@ use App\Http\Middleware\DynamicAdminUrl;
 use App\Http\Controllers\AcademicPeriodController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\FormController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SocialShareController;
 use App\Http\Controllers\StatisticalController;
@@ -161,12 +163,26 @@ if (Schema::hasTable('settings')) {
                 Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
                 Route::get('/api/events/{id}/participants', [EventController::class, 'getParticipants'])->name("events.participants");
                 Route::post('admin/dashboard/events/export', [EventController::class, 'exportEvents'])->name('events.export.excel.list');
+                
                 // Route for generate qr code
                 Route::get('admin/dashboard/events/{id}/qr-codes', [QrCodeGeneratorController::class, 'create'])->name("qr-codes.create");
                 Route::get('admin/dashboard/events/{id}/qr-codes/show', [QrCodeGeneratorController::class, 'show'])->name("qr-codes.show");
                 Route::post('admin/dashboard/events/{id}/qr-codes', [QrCodeGeneratorController::class, 'store'])->name("qr-codes.store");
                 Route::delete('admin/dashboard/events/{id}/qr-codes', [QrCodeGeneratorController::class, 'deleteQRByDate'])->name("qr-codes.delete");
                 Route::delete('admin/dashboard/events/{event_id}/qr-codes/delete', [QrCodeGeneratorController::class, 'deleteByEventId'])->name("qr-codes.deleteByEventId");
+
+                //Route for generate form for event
+                Route::get('admin/dashboard/events/{id}/form', [FormController::class, 'create'])->name("event.create.form");
+                Route::post('admin/dashboard/events/form', [FormController::class, 'store'])->name("event.store.form");
+                Route::get('admin/dashboard/events/{id}/form/delete', [FormController::class, 'destroy'])->name("event.delete.form");
+                // Route question
+                Route::get('admin/dashboard/events/show-question/{id}', [QuestionController::class, 'show'])->name("event.show.question");
+                Route::post('admin/dashboard/events/save-question', [QuestionController::class, 'store'])->name("event.store.question");
+                Route::put('admin/dashboard/events/edit-question/{id}', [QuestionController::class, 'update'])->name("event.update.question");
+                Route::delete('admin/dashboard/events/delete-question/{id}', [QuestionController::class, 'destroy'])->name("event.delete.question");
+                //Route statistic, export annd delete
+                Route::get('admin/dashboard/events/{id}/form/statistic', [FormController::class, 'getStatistic'])->name("event.statistic.form");
+                Route::get('admin/dashboard/events/{id}/form/export', [FormController::class, 'export'])->name("event.export.form");
 
                 // Route for load more events, search events
                 Route::get('/api/events/more', [EventController::class, 'loadmore'])->name("events.more");
