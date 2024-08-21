@@ -8,8 +8,10 @@ use App\Exports\ParticipatedEventsExport;
 use App\Exports\StudentRegisterEventExport;
 use App\Models\AcademicPeriod;
 use App\Models\Event;
+use App\Models\EventRegister;
 use App\Models\Notification;
 use App\Models\Student;
+use App\Models\StudentEvent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -156,7 +158,7 @@ class EventController extends Controller
 
         // Set the registration link for the event
         if ($event) {
-            $event->registration_link = url('/sukien/' . $event->id . '/dangky');
+            $event->registration_link = url('/su-kien/' . Str::slug($request->name) . '-' . $event->id . '/dangky');
 
             // Determine the academic year and semester based on the event start date
             $eventStartDate = \Carbon\Carbon::parse($event->event_start);
@@ -219,15 +221,9 @@ class EventController extends Controller
     {
         $upcomingEvents  = Event::where('status', 'like', 'Sắp diễn ra')
             ->where('is_trash', '<>', 1)
-            ->paginate(2, ['*'], 'upcoming_page');
+            ->get();
 
-        $featuredEvents  = Event::select('events.*', DB::raw('COUNT(event_student.student_id) as student_count'))
-            ->leftJoin('event_student', 'events.id', '=', 'event_student.event_id')
-            ->groupBy('events.id')
-            ->orderByDesc('student_count')
-            ->paginate(2, ['*'], 'featured_page');
-
-        return view('home', compact('upcomingEvents', 'featuredEvents'));
+        return view('home', compact('upcomingEvents'));
     }
 
     /**
@@ -238,11 +234,9 @@ class EventController extends Controller
      * @param \Illuminate\Http\Request $request The HTTP request object.
      * @return \Illuminate\Http\JsonResponse The JSON response containing the upcoming events.
      */
-    public function fetchUpcomingEvents(Request $request)
+    public function fetchUpcomingEvents()
     {
-        $page = $request->input('page', 1);
-        $events = Event::where('status', 'like', 'Sắp diễn ra')->where('is_trash', '<>', 1)
-            ->paginate(8, ['*'], 'page', $page);
+        $events = Event::where('status', 'like', 'Sắp diễn ra')->where('is_trash', '<>', 1)->get();
         return response()->json($events);
     }
 
@@ -268,12 +262,22 @@ class EventController extends Controller
         return response()->json($events);
     }
 
+    public function getEventBySearch(Request $request)
+    {
+        $key = '%' . $request->input('key') . '%';
+        $events = Event::where('name', 'like', $key)
+            ->orWhere('status', 'like', $key)
+            ->orWhere('location', 'like', $key)
+            ->get();
+        return response()->json($events);
+    }
+
     public function getAllEventUser()
     {
         $events = Event::select('events.*')
             ->orderByDesc('event_start')
             ->where('is_trash', '<>', 1)
-            ->paginate(8, ['*'], 'page');
+            ->paginate(9, ['*'], 'page');
         return response()->json($events);
     }
 
@@ -292,6 +296,14 @@ class EventController extends Controller
         $events = Event::orderBy('event_start', 'desc')
             ->where('is_trash', '<>',  1)
             ->paginate($limit, ['*'], 'page', $request->page);
+
+
+        $events->getCollection()->transform(function ($event) {
+            $event->attended_count = $event->students()->count();
+            $event->registed_count = $event->eventRegisters()->count();
+            $event->code_count = $event->eventCodes()->count();
+            return $event;
+        });
 
         return response()->json([
             'data' => $events,
@@ -358,7 +370,7 @@ class EventController extends Controller
      * @param int $id The ID of the event.
      * @return \Illuminate\View\View The view displaying the event details.
      */
-    public function detail($id)
+    public function detail($name, $id)
     {
         $event = Event::find($id);
         $registrationCode = QrCode::generate($event->registration_link);
@@ -588,6 +600,36 @@ class EventController extends Controller
             }
         }
 
+        // Check if the event status is "Đã hủy", then create a notification
+        if ($request->status == 'Đã hủy') {
+            // Create a notification for the event cancellation
+            $notification = new Notification();
+            $notification->event_id = $event->id;
+            $notification->title = 'Thông báo hủy sự kiện';
+            $eventDate = \Carbon\Carbon::parse($request->event_start)->format('d/m/Y');
+            $expires = \Carbon\Carbon::parse($request->event_start)->format('m/d/Y');
+
+            $photo = url($event->event_photo);
+
+            $notification->content = "<img src='$photo' alt='Ảnh sự kiện' class='my-4 rounded-lg'/>
+            <p>Kính gửi quý thầy cô và các em học sinh,</p>
+            <p>Chúng tôi rất tiếc phải thông báo rằng sự kiện <strong>$event->name</strong> dự kiến diễn ra
+                vào ngày <strong>$eventDate</strong> tại <strong>Trường Cao Đẳng Công Nghệ Thủ Đức</strong> sẽ bị hủy bỏ do
+                <strong>một số lý do ngoài ý muốn.</strong>.</p>
+            <p>Chúng tôi xin lỗi về bất kỳ sự bất tiện nào có thể gây ra và rất biết ơn sự thông cảm của quý thầy cô và
+                các em học sinh trong tình huống này. Chúng tôi đang làm việc để lên lịch lại sự kiện và sẽ thông báo
+                đến mọi người sớm nhất có thể.</p>
+            <p>Nếu cần thêm thông tin hoặc có bất kỳ câu hỏi nào, xin vui lòng liên hệ với chúng tôi qua <strong>email:
+              eventfit@tdc.edu.vn</strong> hoặc số điện thoại: <strong>(028) 22 158 642, Nội bộ: 309</strong>.</p>
+            <p>Một lần nữa, chúng tôi xin chân thành cảm ơn quý thầy cô và các em học sinh đã hiểu và thông cảm.</p>
+            <p>Trân trọng,<br>
+                <strong>Ban Tổ Chức Sự kiện Khoa Công Nghệ Thông Tin, Trường Cao Đằng Công Nghệ Thủ Đức</strong>
+            </p>";
+
+            $notification->expires_at = $expires;
+            $notification->save();
+        }
+
 
         if ($request->hasFile('event_photo')) {
             $file = $request->file('event_photo');
@@ -794,6 +836,7 @@ class EventController extends Controller
 
         // Create a notification for the event cancellation
         $notification = new Notification();
+        $notification->event_id = $event->id;
         $notification->title = 'Thông báo hủy sự kiện';
         $eventDate = \Carbon\Carbon::parse($event->event_start)->format('d/m/Y');
 

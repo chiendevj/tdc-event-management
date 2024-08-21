@@ -4,7 +4,7 @@
             <!-- Logo và Mô tả -->
             <div class="w-full md:w-1/2 mb-6">
                 <h1 class="text-lg text-white font-semibold">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('login') }}">
                         <img src="{{ asset('assets/logo/fit_circle.png') }}" alt="FIT TDC" class="w-[50px] h-[50px] rounded-full">
                     </a>
                 </h1>

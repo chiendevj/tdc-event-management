@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
+            $table->integer('event_id')->nullable(); // ID sự kiện
             $table->timestamp('expires_at')->nullable(); // Thời gian hết hạn
             $table->boolean('status')->default(1); // Trạng thái thông báo, 1: Hiển thị, 0: Không hiển thị
             $table->timestamps();

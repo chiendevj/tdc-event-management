@@ -1,0 +1,58 @@
+.statistic-title {
+    font-weight: bold;
+    text-align: center;
+    color: var(--dark-bg);
+    font-size: 23px;
+    margin: 20px 0 10px 0;
+}
+
+.event-title {
+    font-weight: bold;
+    text-align: center;
+    color: var(--dark-bg);
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.form-statistic {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-statistic .statistic-item {
+    box-shadow: 0 0 5px #ccc;
+    border-radius: 7px;
+    padding: 20px 24px;
+}
+
+.form-statistic .quantity-answer {
+    font-size: 13px;
+    opacity: 0.8;
+    margin-top: 10px;
+}
+
+.form-statistic .answers-component {
+    margin-top: 10px;
+}
+.form-statistic .answers-component .answer {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: .2px;
+    line-height: 20px;
+    color: rgb(32, 33, 36);
+    background-color: rgb(248, 249, 250);
+    border-radius: 4px;
+    margin: 4px 0 0;
+    padding: 10px;
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        display: flex;
+        justify-content: center;
+        height: 300px;
+    
+    }
+}

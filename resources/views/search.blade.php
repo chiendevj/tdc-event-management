@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tra cứu')
+@section('title', 'Tra cứu | Event Zone | FIT-TDC | Khoa Công nghệ thông tin - Cao đẳng Công nghệ Thủ Đức')
 
 @section('content')
     <div class="min-h-screen bg-gray-100 flex items-center justify-center">

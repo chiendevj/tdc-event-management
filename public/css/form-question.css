@@ -1,0 +1,482 @@
+/* Create form */
+.create_form {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    width: 100%;
+    padding: 80px 0;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 5px #ccc;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 50px;
+    cursor: pointer;
+}
+
+.create_form h2 {
+    font-weight: bold;
+    text-transform: uppercase;
+    padding-top: 20px;
+    font-size: 14px;
+}
+
+.create_form:hover h2 {
+    color: #4296f4;
+}
+
+.create_form img {
+    width: 100px;
+    animation: moveUpDown 1.5s linear infinite;
+}
+
+@keyframes moveUpDown {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+
+}
+
+/* Form question */
+
+.form-question .form-title {
+    border-radius: 5px;
+    position: relative;
+    padding: 30px 24px;
+    box-shadow: 0 0 5px #ccc;
+}
+
+.form-question .form-title::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background-color: var(--dark-bg);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.form-question .form-title h2 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.form-question .form-item {
+    border-radius: 5px;
+    position: relative;
+    padding: 20px 24px;
+    box-shadow: 0 0 5px #ccc;
+    margin-top: 20px;
+}
+
+
+.form-item .input-question {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+
+.form-item .item-input {
+    outline: none;
+    background-color: #f8f9fa;
+    padding: 16px;
+    width: 100%;
+}
+
+.form-item .item-input:hover {
+    background-color: #f1f3f4;
+}
+
+
+.form-item .input-question:hover .input-line-1 {
+    transform: scaleX(1);
+    transition: all .25s ease-out;
+    visibility: visible;
+}
+
+.form-item input:focus +  .input-line-1 {
+    transform: scaleX(1);
+    transition: all .25s ease-out;
+    visibility: visible;
+}
+
+.input-line {
+    position: absolute;
+    background-color: #ccc;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+}
+
+.input-line-1 {
+    position: absolute;
+    background-color: var(--dark-bg);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    transform: scaleX(0);
+    visibility: hidden;
+}
+
+/* Custom dropdown */
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.custom-select {
+    position: relative;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.selected-item {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+}
+
+.icon-dropdown {
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+}
+
+
+.options {
+    position: absolute;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    display: none;
+    list-style: none;
+    margin-top: 5px;
+    padding: 0;
+    z-index: 1;
+}
+
+.options li {
+    padding: 10px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.options li:hover {
+    background-color: #f0f0f0;
+}
+
+.active-item {
+    background-color: #edf4fd;
+}
+
+.custom-select.active .options {
+    display: block;
+}
+
+
+/* Item Chooses */
+.form-item .item-options {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.options-question {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.item-options .option {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.item-options .option .input-content input {
+    outline: none;
+    padding: 5px;
+    width: 100%;
+}
+
+.form-item .input-content {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    font-size: 15px;
+}
+
+.form-item .input-content .input-line {
+    visibility: hidden;
+}
+
+.form-item .option:hover .input-line {
+    visibility: visible;
+}
+
+.form-item .option:focus .input-line {
+    visibility: hidden;
+}
+
+
+.form-item input:focus +  .input-line-1 {
+    transform: scaleX(1);
+    transition: all .25s ease-out;
+    visibility: visible;
+}
+
+.input-type {
+    height: 18px;
+    width: 18px;
+}
+.input-type input {
+    height: 18px;
+    width: 18px;
+}
+
+.add-option {
+    font-size: 13px;
+    color: #888;
+}
+
+.add-option:hover {
+    border-bottom: 1px solid #ccc;
+}
+
+/* Item setting */
+.setting-item {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+}
+
+.setting-item .item-right {
+    display: flex;
+    gap: 20px;
+    justify-content: end;
+}
+
+.setting-item .item-left .btn-question {
+    color: #fff;
+    padding: 5px 18px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px #ccc;
+    width: 50px;
+    font-size: 14px;
+}
+
+.setting-item .item-left .btn-question-save {
+    background-color: #38bdf8;
+    
+}
+
+.setting-item .item-left .btn-question-save:hover {
+    background-color: #0ea5e9;
+}
+
+.setting-item .item-left .btn-question-edit {
+    background-color: #4ade80;
+}
+
+.setting-item .item-left .btn-question-edit:hover {
+    background-color: #22c55e;
+}
+
+.setting-item .item-left {
+    display: flex;
+    gap: 20px;
+    justify-content: start;
+}
+
+
+.border-left {
+    border: 1px solid #ccc;
+    height: 30px;
+}
+
+.delete i {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.delete {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete:hover {
+    background-color: #f1f3f4;
+}
+
+.delete:hover i {
+    color: rgba(0, 0, 0);
+}
+
+.required-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.required-item span {
+    font-size: 13px;
+}
+
+/* Switch */
+.switch {
+    --button-width: 30px;
+    --button-height: 15px;
+    --toggle-diameter: 10px;
+    --button-toggle-offset: calc((var(--button-height) - var(--toggle-diameter)) / 2);
+    --toggle-shadow-offset: 10px;
+    --toggle-wider: 3em;
+    --color-grey: #cccccc;
+    --color-green: #4296f4;
+   }
+   
+   .slider {
+    display: inline-block;
+    width: var(--button-width);
+    height: var(--button-height);
+    background-color: var(--color-grey);
+    border-radius: calc(var(--button-height) / 2);
+    position: relative;
+    transition: 0.3s all ease-in-out;
+   }
+   
+   .slider::after {
+    content: "";
+    display: inline-block;
+    width: var(--toggle-diameter);
+    height: var(--toggle-diameter);
+    background-color: #fff;
+    border-radius: calc(var(--toggle-diameter) / 2);
+    position: absolute;
+    top: var(--button-toggle-offset);
+    transform: translateX(var(--button-toggle-offset));
+    box-shadow: var(--toggle-shadow-offset) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, 0.1);
+    transition: 0.3s all ease-in-out;
+   }
+   
+   .switch input[type="checkbox"]:checked + .slider {
+    background-color: var(--color-green);
+   }
+   
+   .switch input[type="checkbox"]:checked + .slider::after {
+    transform: translateX(calc(var(--button-width) - var(--toggle-diameter) - var(--button-toggle-offset)));
+    box-shadow: calc(var(--toggle-shadow-offset) * -1) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, 0.1);
+   }
+   
+   .switch input[type="checkbox"] {
+    display: none;
+   }
+   
+   .switch input[type="checkbox"]:active + .slider::after {
+    width: var(--toggle-wider);
+   }
+   
+   .switch input[type="checkbox"]:checked:active + .slider::after {
+    transform: translateX(calc(var(--button-width) - var(--toggle-wider) - var(--button-toggle-offset)));
+   }
+   
+
+/* add-question */
+.add-question {
+    border-radius: 5px;
+    box-shadow: 0 0 5px #ccc;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.add-question:hover {
+    color: #4296f4;
+}
+
+/* Function of form */
+
+.form-function {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 20px;
+    justify-content: end;
+}
+
+.form-function .btn-function {
+    padding: 10px 50px;
+    box-shadow: 0 0 5px #ccc;
+    border-radius: 7px;
+    border: 1px solid #fff;
+}
+
+.form-function .btn-function:hover {
+    border: 1px solid var(--dark-bg);
+    color: var(--dark-bg);
+}
+.form-function .btn-save-all {
+    
+}
+
+.form-function .btn-statistical {
+
+}
+
+/* Laptop */
+@media (min-width: 768px) {
+    .form-question .form-title h2 {
+        font-size: 20px;
+    }
+
+    .custom-select-wrapper {
+        margin-top: 0px;
+    }
+
+    .setting-item {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 10px;
+    
+    }
+
+    .create_form h2 {
+        font-size: 18px;
+    }
+
+    .create_form img {
+        width: 150px;
+    }
+
+    
+}

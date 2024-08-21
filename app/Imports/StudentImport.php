@@ -19,7 +19,7 @@ class StudentImport implements ToModel, WithHeadingRow
             return Student::firstOrCreate(
                 ['id' => $row['ma_sinh_vien']],
                 [
-                    'fullname' => $row['ho_lot'] . ' ' . $row['ten'],
+                    'fullname' => trim($row['ho_lot']) . ' ' . trim($row['ten']),
                     'classname' => $row['ma_lop'],
                     'email' => $row['email'],
                     'birth' => $row['ngay_sinh'],

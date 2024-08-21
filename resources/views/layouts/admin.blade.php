@@ -21,6 +21,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- Main css --}}
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin-event.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/form-question.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/form-statistic.css') }}">
     <link rel="shortcut icon" href="{{ asset('assets/logo/logo_removebg.png') }}" type="image/x-icon">
     {{-- Fontawsome icons --}}
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.2/css/all.css">
